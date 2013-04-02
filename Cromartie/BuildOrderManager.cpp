@@ -318,6 +318,13 @@ void BuildOrderManagerClass::toggleOrder(Order type)
 		mControlValues[type] = true;
 }
 
+void BuildOrderManagerClass::addBuildOrder(BuildOrder buildOrder, bool setCurrent)
+{
+	buildPaused = false;
+	mBuildOrders[BuildOrderID::LoadIn] = buildOrder;
+	if(setCurrent)
+		changeCurrentBuild(BuildOrderID::LoadIn);
+}
 void BuildOrderManagerClass::checkBuildStatus()
 {
 	

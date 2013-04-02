@@ -38,8 +38,6 @@
 #include "FastDelegate.h"
 #include "Hypothalamus.h"
 
-#include "GA/GA.h";
-
 using namespace fastdelegate;
 
 Cromartie::Cromartie()
@@ -73,10 +71,6 @@ void Cromartie::onStart()
 	BWAPI::Broodwar->setLocalSpeed(20);
 
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
-
-	BWAPI::Broodwar->sendText("Starting GA...");
-
-	BWAPI::Broodwar->sendText("GA started!");
 
 	registerListeners();
 }

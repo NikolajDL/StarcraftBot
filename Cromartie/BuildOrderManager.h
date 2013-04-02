@@ -23,6 +23,7 @@ public:
 	bool getOrder(Order type) const { return (mControlValues.count(type) != 0 ? mControlValues.find(type)->second : false); }
 	void toggleOrder(Order type);
 	const BuildOrder &getCurrentBuild() { return mBuildOrders[mCurrentBuild]; }
+	void addBuildOrder(BuildOrder buildOrder, bool setCurrent = true);
 
 	void toggleDebugInfo() { mShowDebugInfo = !mShowDebugInfo; }
 
