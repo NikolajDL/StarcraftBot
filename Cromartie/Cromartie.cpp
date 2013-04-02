@@ -98,7 +98,6 @@ void Cromartie::onFrame()
 		mOnBegin = true;
 		EQUEUE( new OnStartEvent() );
 		EQUEUE( new PauseBuildOrderEvent() );
-		EQUEUE( new ChangeBuildOrderEvent(BuildOrderID::ForgeExpand) );
 	}
 	
 

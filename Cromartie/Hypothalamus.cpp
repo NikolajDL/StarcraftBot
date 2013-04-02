@@ -46,7 +46,7 @@ void HypothalamusClass::vocalCommand(std::string command)
 		else if(commandParts[0] == "a" || commandParts[0] == "army")
 			parseArmyBehaviourCommand(commandParts[1]);
 		else if(commandParts[0] == "p" || commandParts[0] == "produce")
-			parseArmyBehaviourCommand(commandParts[1]);
+			parseProductionCommand(commandParts[1]);
 
 	}else if(commandParts.size() == 1)	// one part command
 	{
