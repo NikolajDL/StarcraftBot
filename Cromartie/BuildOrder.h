@@ -227,6 +227,7 @@ struct BuildOrderIDDef
 	{
 		None,
 		Finished,
+		LoadIn,
 		ForgeExpand,
 		StargateArcon,
 		ArconTiming,
@@ -253,6 +254,7 @@ typedef SafeEnum<BuildOrderIDDef> BuildOrderID;
 static const char * BuildOrderIDStrings[] = {
 	"None",
 	"Finished",
+	"LoadIn",
 	"ForgeExpand",
 	"StargateArcon",
 	"ArconTiming",
