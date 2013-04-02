@@ -87,6 +87,28 @@ struct UnitDiscoveredEvent : public BaseEventData
 	
 	BWAPI::Unit* m_Unit;
 };
+struct UnitCompleteEvent : public BaseEventData
+{
+    static const EventType sk_EventType;
+    virtual const EventType & GetEventType( void ) const
+    {
+        return sk_EventType;
+    }
+	
+	virtual const std::string ToString( void ) const
+    {
+		return StringBuilder() << "Unit Complete. Type: " << m_Unit->getType().c_str() << " ID: " 
+			<< boost::lexical_cast<std::string>(m_Unit->getID()).c_str();
+    }
+
+	explicit UnitCompleteEvent( BWAPI::Unit* unit)
+        : m_Unit( unit )
+		, BaseEventData(BWAPI::Broodwar->getFrameCount())
+    {
+    }
+	
+	BWAPI::Unit* m_Unit;
+};
 
 struct UnitDestroyedEvent : public BaseEventData
 {
@@ -184,6 +206,27 @@ struct ChangeBuildOrderEvent : public BaseEventData
     }
 	
 	BuildOrderID mBuildOrder;
+};
+struct AddBuildOrderEvent : public BaseEventData
+{
+    static const EventType sk_EventType;
+    virtual const EventType & GetEventType( void ) const
+    {
+        return sk_EventType;
+    }
+	
+	virtual const std::string ToString( void ) const
+    {
+		return StringBuilder() << "Add build. Build order: " << mBuildOrder->getName();
+    }
+
+	explicit AddBuildOrderEvent( BuildOrder *buildOrder)
+        : mBuildOrder( buildOrder )
+		, BaseEventData(BWAPI::Broodwar->getFrameCount())
+    {
+    }
+	
+	BuildOrder* mBuildOrder;
 };
 struct PauseBuildOrderEvent : public BaseEventData
 {

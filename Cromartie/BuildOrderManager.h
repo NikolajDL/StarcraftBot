@@ -13,6 +13,7 @@ public:
 	BuildOrderManagerClass(bool startPaused);
 	
 	void changeCurrentBuildEvent(IEventDataPtr evnt);
+	void addBuildEvent(IEventDataPtr evnt);
 
 	void onBegin();
 	void onEnd(bool isWinner);

@@ -37,6 +37,14 @@ void BuildOrderManagerClass::changeCurrentBuildEvent(IEventDataPtr evnt)
 	changeCurrentBuild(buildOrder);
 }
 
+void BuildOrderManagerClass::addBuildEvent(IEventDataPtr evnt)
+{
+	// Cast to correct eventtype
+	std::tr1::shared_ptr<AddBuildOrderEvent> pEventData = std::tr1::static_pointer_cast<AddBuildOrderEvent>(evnt);
+	BuildOrder buildOrder = *pEventData->mBuildOrder;
+
+	addBuildOrder(buildOrder);
+}
 
 void BuildOrderManagerClass::onBegin()
 {
