@@ -4,14 +4,14 @@
 #include "AttackGene.h"
 #include "BuildGene.h"
 #include "State.h"
-#include "UnitType.h"
+#include "../Interface.h"
 
 class StarcraftRules
 {
 private:
-	static std::vector<UnitType> getValidBuildings(const State& s);
-	static std::vector<UnitType> getValidUnits(const State& s);
-	static std::vector<UpgradeType> getValidUpgrades(const State& s);
+	static std::vector<BWAPI::UnitType> getValidBuildings(const State& s);
+	static std::vector<BWAPI::UnitType> getValidUnits(const State& s);
+	static std::vector<BWAPI::UpgradeType> getValidUpgrades(const State& s);
 public:
 	static std::tr1::shared_ptr<CombatGene> getValidCombatGene(const State& s, bool& found);
 	static std::tr1::shared_ptr<ResearchGene> getValidResearchGene(const State& s, bool& found);

@@ -5,7 +5,7 @@ ResearchGene::ResearchGene(void)
 {
 }
 
-ResearchGene::ResearchGene(UpgradeType upgrade) : upgradeType(upgrade)
+ResearchGene::ResearchGene(BWAPI::UpgradeType upgrade) : upgradeType(upgrade)
 {
 }
 
@@ -13,7 +13,7 @@ ResearchGene::~ResearchGene(void)
 {
 }
 
-UpgradeType ResearchGene::getUpgradeType(void) const
+BWAPI::UpgradeType ResearchGene::getUpgradeType(void) const
 {
 	return this->upgradeType;
 }

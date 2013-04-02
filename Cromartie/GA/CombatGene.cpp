@@ -5,7 +5,7 @@ CombatGene::CombatGene(void)
 {
 }
 
-CombatGene::CombatGene(UnitType type, int count) : unitType(type), amount(count)
+CombatGene::CombatGene(BWAPI::UnitType type, int count) : unitType(type), amount(count)
 {
 }
 
@@ -13,7 +13,7 @@ CombatGene::~CombatGene(void)
 {
 }
 
-UnitType CombatGene::getUnitType(void)
+BWAPI::UnitType CombatGene::getUnitType(void)
 {
 	return unitType;
 }

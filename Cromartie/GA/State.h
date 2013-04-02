@@ -1,22 +1,25 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include "UnitType.h"
+#include "../Interface.h"
 #include "Gene.h"
+
+using namespace std;
+
 class State
 {
 private:
-	std::vector<UnitType> buildingSequence;
+	std::vector<BWAPI::UnitType> buildingSequence;
 	std::vector<std::tr1::shared_ptr<Gene>> genes;
 	double fitness;
 public:
-	State(std::vector<UnitType> buildSequence);
+	State(std::vector<BWAPI::UnitType> buildSequence);
 	~State(void);
 	void addGene(std::tr1::shared_ptr<Gene> g);
 	void replaceGeneAt(int at, std::tr1::shared_ptr<Gene> gene);
 	double getFitness(void) const;
 	void setFitness(double value);
-	std::vector<UnitType> getBuildingSequence(void) const;
+	std::vector<BWAPI::UnitType> getBuildingSequence(void) const;
 	const std::vector<std::tr1::shared_ptr<Gene>>& getGenes(void) const;
 };
 
@@ -24,7 +27,8 @@ public:
 inline bool operator==(const State& a, const State& b)
 {
 	bool match = true;
-	int seqSize = std::min(a.getBuildingSequence().size(), b.getBuildingSequence().size());
+	// TODO: Fix this
+	int seqSize = min(a.getBuildingSequence().size(), b.getBuildingSequence().size());
 	for(int j=0; j<seqSize; j++)
 	{
 		if(a.getBuildingSequence().at(j).getName() != b.getBuildingSequence().at(j).getName())
