@@ -1,0 +1,630 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{e3530915-b46c-4700-9a05-960a1492d8cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AOE Threat Tracker">
+      <UniqueIdentifier>{0e75cc62-c3dd-4776-bea6-56dd08286f09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Tracker">
+      <UniqueIdentifier>{992ec457-e4c3-462d-b962-efea5cf7a419}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocket Path Manager">
+      <UniqueIdentifier>{eec5c1c5-68ea-461d-948f-2dbc70a3f7f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Border Tracker">
+      <UniqueIdentifier>{ff992a6c-3a0e-4958-befe-bb9fa14d4dbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Build Order Manager">
+      <UniqueIdentifier>{22a14f26-058e-4e2a-8c58-07ec9db7a44d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Building Placer">
+      <UniqueIdentifier>{bbfd9ee5-72b7-43d9-a3b0-a44a0aec324b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawing">
+      <UniqueIdentifier>{d1227a76-a234-4eae-8d21-62f092ccad70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Filters/Conditions">
+      <UniqueIdentifier>{053e5dea-b17b-481d-a53a-21d29ef63b6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Path Finding">
+      <UniqueIdentifier>{b118337a-a90c-4c52-9058-b27aef97554f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scout Manager">
+      <UniqueIdentifier>{d5865a88-91ee-46f0-8bd5-15e70d8b4f50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Squad Manager">
+      <UniqueIdentifier>{b3c8f419-fcb1-46fb-9ef0-aea137a62af1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Task Manager">
+      <UniqueIdentifier>{8344393c-d388-4b44-bc13-0f3acd598b57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain Analysis">
+      <UniqueIdentifier>{c4b32677-4138-4d5a-8585-22bec8596052}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Unit Tracker">
+      <UniqueIdentifier>{1fca416f-6b62-47a2-bc84-add31e2db8bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{2a6f2b82-6dd7-44a8-92f1-ebd96b934de0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Task Manager\Tasks">
+      <UniqueIdentifier>{5125d68e-1288-46ca-8098-d684bd6b18ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Squad Manager\Micro Actions">
+      <UniqueIdentifier>{3276443c-9f5b-4351-a4a1-73fb82a52628}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Squad Manager\Squads">
+      <UniqueIdentifier>{668e8930-b95e-4ea9-803e-5c0186e0dc6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event Manager">
+      <UniqueIdentifier>{c0856487-f411-41ae-a98b-d0f1ec542b5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event Manager\Events">
+      <UniqueIdentifier>{23132d3f-0955-4860-a0b6-d0afd8d62353}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event Manager\Listeners">
+      <UniqueIdentifier>{192b626a-4e56-4e16-b369-5f2bf0a49860}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WallTracker.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="DLL.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpansionManager.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMemory.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgressDetection.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="LatencyTracker.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="MacroManager.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerTracker.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="PylonPowerTracker.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="SupplyManager.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Cromartie.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="AOEThreat.cpp">
+      <Filter>AOE Threat Tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="AOEThreatTracker.cpp">
+      <Filter>AOE Threat Tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseTracker.cpp">
+      <Filter>Base Tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="Base.cpp">
+      <Filter>Base Tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockedPathManager.cpp">
+      <Filter>Blocket Path Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="MineBlockingMineralTask.cpp">
+      <Filter>Blocket Path Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="BorderPosition.cpp">
+      <Filter>Border Tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="BorderTracker.cpp">
+      <Filter>Border Tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadOtherBuilds.cpp">
+      <Filter>Build Order Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadProtossBuilds.cpp">
+      <Filter>Build Order Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildOrder.cpp">
+      <Filter>Build Order Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildOrderManager.cpp">
+      <Filter>Build Order Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ReservedLocation.cpp">
+      <Filter>Building Placer</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildingPlacer.cpp">
+      <Filter>Building Placer</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawBuffer.cpp">
+      <Filter>Drawing</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawingHelper.cpp">
+      <Filter>Drawing</Filter>
+    </ClCompile>
+    <ClCompile Include="Condition.cpp">
+      <Filter>Filters/Conditions</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitFilter.cpp">
+      <Filter>Filters/Conditions</Filter>
+    </ClCompile>
+    <ClCompile Include="MapHelper.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitHelper.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTracker.cpp">
+      <Filter>Unit Tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Unit Tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitGroup.cpp">
+      <Filter>Unit Tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitInformation.cpp">
+      <Filter>Unit Tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitPredictor.cpp">
+      <Filter>Unit Tracker</Filter>
+    </ClCompile>
+    <ClCompile Include="Chokepoint.cpp">
+      <Filter>Terrain Analysis</Filter>
+    </ClCompile>
+    <ClCompile Include="Region.cpp">
+      <Filter>Terrain Analysis</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainAnalysis.cpp">
+      <Filter>Terrain Analysis</Filter>
+    </ClCompile>
+    <ClCompile Include="Requirement.cpp">
+      <Filter>Task Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="RequirementGroup.cpp">
+      <Filter>Task Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceTracker.cpp">
+      <Filter>Task Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskManager.cpp">
+      <Filter>Task Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskPump.cpp">
+      <Filter>Task Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="TrainTask.cpp">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstructionTask.cpp">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="GatherTask.cpp">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="IdleTask.cpp">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="MorphTask.cpp">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="TechTask.cpp">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="UpgradeTask.cpp">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="Behaviour.cpp">
+      <Filter>Squad Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Goal.cpp">
+      <Filter>Squad Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SquadManager.cpp">
+      <Filter>Squad Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="MineDragAction.cpp">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="ArbiterAction.cpp">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="ArconZealotKillUnDetected.cpp">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicUnitAction.cpp">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="DetectorAction.cpp">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="DropAction.cpp">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="GoalAction.cpp">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="TrainInterceptorAction.cpp">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="TrainScarabAction.cpp">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="PsiStormAction.cpp">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultSquad.cpp">
+      <Filter>Squad Manager\Squads</Filter>
+    </ClCompile>
+    <ClCompile Include="DefenseSquad.cpp">
+      <Filter>Squad Manager\Squads</Filter>
+    </ClCompile>
+    <ClCompile Include="AdvancedGroup.cpp">
+      <Filter>Squad Manager\Squads</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkerScoutTask.cpp">
+      <Filter>Scout Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ObserverScoutTask.cpp">
+      <Filter>Scout Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoutData.cpp">
+      <Filter>Scout Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoutManager.cpp">
+      <Filter>Scout Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="WalkPositionPath.cpp">
+      <Filter>Path Finding</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildTilePath.cpp">
+      <Filter>Path Finding</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFinder.cpp">
+      <Filter>Path Finding</Filter>
+    </ClCompile>
+    <ClCompile Include="PositionPath.cpp">
+      <Filter>Path Finding</Filter>
+    </ClCompile>
+    <ClCompile Include="RegionPath.cpp">
+      <Filter>Path Finding</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
+      <Filter>Event Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="EventRecorder.cpp">
+      <Filter>Event Manager\Listeners</Filter>
+    </ClCompile>
+    <ClCompile Include="GenericEvents.cpp">
+      <Filter>Event Manager\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="HashedString.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Hypothalamus.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="WallTracker.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpansionManager.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMemory.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgressDetection.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="LatencyTracker.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="MacroManager.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerTracker.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="PylonPowerTracker.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="SupplyManager.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Cromartie.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="AOEThreat.h">
+      <Filter>AOE Threat Tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="AOEThreatTracker.h">
+      <Filter>AOE Threat Tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseTracker.h">
+      <Filter>Base Tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="Base.h">
+      <Filter>Base Tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockedPathManager.h">
+      <Filter>Blocket Path Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="MineBlockingMineralTask.h">
+      <Filter>Blocket Path Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderPosition.h">
+      <Filter>Border Tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderTracker.h">
+      <Filter>Border Tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildOrder.h">
+      <Filter>Build Order Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildOrderManager.h">
+      <Filter>Build Order Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ReservedLocation.h">
+      <Filter>Building Placer</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildingPlacer.h">
+      <Filter>Building Placer</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawBuffer.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawingHelper.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferedBox.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferedCircle.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferedDot.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferedEllipse.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferedItem.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferedLine.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferedText.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferedTriangle.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="Condition.h">
+      <Filter>Filters/Conditions</Filter>
+    </ClInclude>
+    <ClInclude Include="OperatorType.h">
+      <Filter>Filters/Conditions</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitFilter.h">
+      <Filter>Filters/Conditions</Filter>
+    </ClInclude>
+    <ClInclude Include="MapHelper.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="RectangleArray.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="WalkPosition.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="TypeSafeEnum.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitHelper.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitPredictor.h">
+      <Filter>Unit Tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTracker.h">
+      <Filter>Unit Tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Unit Tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitGroup.h">
+      <Filter>Unit Tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitInformation.h">
+      <Filter>Unit Tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="Chokepoint.h">
+      <Filter>Terrain Analysis</Filter>
+    </ClInclude>
+    <ClInclude Include="Region.h">
+      <Filter>Terrain Analysis</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainAnalysis.h">
+      <Filter>Terrain Analysis</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskManager.h">
+      <Filter>Task Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Requirement.h">
+      <Filter>Task Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="RequirementGroup.h">
+      <Filter>Task Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceTracker.h">
+      <Filter>Task Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Task.h">
+      <Filter>Task Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskPump.h">
+      <Filter>Task Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="TrainTask.h">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstructionTask.h">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="GatherTask.h">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleTask.h">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="MorphTask.h">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="TechTask.h">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="UpgradeTask.h">
+      <Filter>Task Manager\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="Behaviour.h">
+      <Filter>Squad Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Goal.h">
+      <Filter>Squad Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="SquadManager.h">
+      <Filter>Squad Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="MineDragAction.h">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ArbiterAction.h">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ArconZealotKillUnDetected.h">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicUnitAction.h">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="DetectorAction.h">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="DropAction.h">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="GoalAction.h">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="MicroAction.h">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="TrainInterceptorAction.h">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="TrainScarabAction.h">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="PsiStormAction.h">
+      <Filter>Squad Manager\Micro Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultSquad.h">
+      <Filter>Squad Manager\Squads</Filter>
+    </ClInclude>
+    <ClInclude Include="DefenseSquad.h">
+      <Filter>Squad Manager\Squads</Filter>
+    </ClInclude>
+    <ClInclude Include="AdvancedGroup.h">
+      <Filter>Squad Manager\Squads</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseSquad.h">
+      <Filter>Squad Manager\Squads</Filter>
+    </ClInclude>
+    <ClInclude Include="WorkerScoutTask.h">
+      <Filter>Scout Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ObserverScoutTask.h">
+      <Filter>Scout Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoutData.h">
+      <Filter>Scout Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoutManager.h">
+      <Filter>Scout Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="WalkPositionPath.h">
+      <Filter>Path Finding</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildTilePath.h">
+      <Filter>Path Finding</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFinder.h">
+      <Filter>Path Finding</Filter>
+    </ClInclude>
+    <ClInclude Include="PositionPath.h">
+      <Filter>Path Finding</Filter>
+    </ClInclude>
+    <ClInclude Include="RegionPath.h">
+      <Filter>Path Finding</Filter>
+    </ClInclude>
+    <ClInclude Include="IEventData.h">
+      <Filter>Event Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEventData.h">
+      <Filter>Event Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Event Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="EventRecorder.h">
+      <Filter>Event Manager\Listeners</Filter>
+    </ClInclude>
+    <ClInclude Include="GenericEvents.h">
+      <Filter>Event Manager\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="FastDelegate.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="FastDelegateBind.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="HashedString.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Hypothalamus.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
