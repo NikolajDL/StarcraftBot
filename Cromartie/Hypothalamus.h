@@ -16,6 +16,7 @@ public:
 
 	void buildUnit(BWAPI::UnitType unit, BuildingLocation position = BuildingLocation::Base);
 	void buildUnit(BWAPI::UnitType unit, int number, BuildingLocation position = BuildingLocation::Base);
+	void upgrade(BWAPI::UpgradeType type, int level);
 	void setArmyBehaviour(ArmyBehaviour armyBehaviour);
 	void toggleOrder(Order order);
 	void addProduction(BWAPI::UnitType unit);
@@ -30,6 +31,7 @@ private:
 	void parseOrderCommand(std::string order);
 	void parseArmyBehaviourCommand(std::string armyBehaviour);
 	void parseProductionCommand(std::string unit);
+	void parseUpgradeCommand(std::string upgrade);
 };
 
 typedef Singleton<HypothalamusClass> Hypothalamus;
