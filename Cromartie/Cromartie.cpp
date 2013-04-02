@@ -84,6 +84,19 @@ void Cromartie::onStart()
 
 void Cromartie::onEnd(bool isWinner)
 {
+	
+
+	std::set<Player> players = PlayerTracker::Instance().getEnemies();
+	Player enemy;
+	std::set<Player>::iterator it=players.begin();
+    if (it != players.end())
+		enemy = *it;
+
+	int score = BWAPI::Broodwar->self()->getUnitScore();
+	int scoreOpponent = enemy->getUnitScore();
+
+	_ga.onGameEnd(isWinner, score, scoreOpponent, BWAPI::Broodwar->getFrameCount(), 60*60*24);
+
 	BuildOrderManager::Instance().onEnd(isWinner);
 	GameMemory::Instance().onEnd();
 }
@@ -102,7 +115,7 @@ void Cromartie::onFrame()
 	if(!mOnBegin)
 	{
 		BWAPI::Broodwar->sendText("Starting GA...");
-		//_ga.onStarcraftStart();
+		_ga.onStarcraftStart();
 		BWAPI::Broodwar->sendText("GA started!");
 		mOnBegin = true;
 		EQUEUE( new OnStartEvent() );
