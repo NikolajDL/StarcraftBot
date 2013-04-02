@@ -120,11 +120,11 @@ void Cromartie::onStart()
 
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 
-	BWAPI::Broodwar->sendText("Starting GA...");
-
+	
 
 	
-	BWAPI::Broodwar->sendText("GA started!");
+
+	
 	
 	registerListeners();
 }
