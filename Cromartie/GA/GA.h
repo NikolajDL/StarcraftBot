@@ -3,6 +3,7 @@
 #include "Chromosome.h"
 #include "State.h"
 #include "../Interface.h"
+#include "../IEventData.h"
 
 class GA
 {
@@ -29,5 +30,6 @@ public:
 	void onStarcraftStart(void);
 	void loadPopulation(void);
 	void savePopulation(void);
+	void onUnitCompleteEvent(IEventDataPtr e);
 };
 
