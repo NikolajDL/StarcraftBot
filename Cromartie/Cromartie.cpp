@@ -73,11 +73,11 @@ void Cromartie::onStart()
 
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 
-	BWAPI::Broodwar->sendText("Starting GA...");
+	
 
 	
 
-	BWAPI::Broodwar->sendText("GA started!");
+	
 
 	registerListeners();
 }
@@ -101,7 +101,9 @@ void Cromartie::onFrame()
 
 	if(!mOnBegin)
 	{
-		_ga.onStarcraftStart();
+		BWAPI::Broodwar->sendText("Starting GA...");
+		//_ga.onStarcraftStart();
+		BWAPI::Broodwar->sendText("GA started!");
 		mOnBegin = true;
 		EQUEUE( new OnStartEvent() );
 		EQUEUE( new PauseBuildOrderEvent() );
