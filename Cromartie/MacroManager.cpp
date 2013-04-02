@@ -282,7 +282,124 @@ bool macroCompare(const MacroItem &first, const MacroItem &second)
 
 void MacroManagerClass::setUnitsToProduce(std::list<UnitToProduce> &units)
 {
+	mNormalUnits.clear();
+	mLowMineralUnits.clear();
+	mLowGasUnits.clear();
+
 	mNormalUnits = units;
+	
+	for each(UnitToProduce unit in mNormalUnits)
+	{
+		double mineralToGasRatio = unit.getUnitType().gasPrice() == 0 ? 1 : double(unit.getUnitType().mineralPrice())/double(unit.getUnitType().gasPrice());
+		double gasToMineralRatio = unit.getUnitType().mineralPrice() == 0 ? 1 : double(unit.getUnitType().gasPrice())/double(unit.getUnitType().mineralPrice());
+
+		if(gasToMineralRatio < 0.4)
+			mLowGasUnits.push_back(unit);
+		else if(mineralToGasRatio < 0.4)
+			mLowMineralUnits.push_back(unit);
+	}
+
+	for(std::list<std::pair<MacroItem, TaskPointer>>::iterator it = mTechItems.begin(); it != mTechItems.end(); ++it)
+	{
+		if(!it->second->inProgress())
+			it->second->cancel();
+	}
+	mTechItems.clear();
+	mTechItemsToCreate.clear();
+
+	updateTaskLists();
+
+	std::list<UnitToProduce> normalWithExtra = mNormalUnits;
+
+	if(BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Protoss)
+	{
+		normalWithExtra.push_back(UnitToProduce(BWAPI::UnitTypes::Protoss_Observer, 1, 115));
+		normalWithExtra.push_back(UnitToProduce(BWAPI::UnitTypes::Protoss_Photon_Cannon, 1, 95));
+	}
+
+	std::set<BWAPI::TechType> techSet;
+	std::set<BWAPI::UpgradeType> upgradeSet;
+
+	for each(UnitToProduce unit in normalWithExtra)
+	{
+		for each(BWAPI::UnitType type in getNeededUnits(unit.getUnitType()))
+		{
+			mTechItemsToCreate.push_back(MacroItem(type, unit.getPriority()));
+		}
+
+		for each(BWAPI::TechType tech in unit.getUnitType().abilities())
+		{
+			techSet.insert(tech);
+		}
+
+		for each(BWAPI::UpgradeType upgrade in unit.getUnitType().upgrades())
+		{
+			upgradeSet.insert(upgrade);
+		}
+
+		if(unit.getUnitType() == BWAPI::UnitTypes::Protoss_Reaver)
+		{
+			// Scarab damage doesn't pick up under its upgrades
+			upgradeSet.insert(BWAPI::UpgradeTypes::Scarab_Damage);
+
+			// Reaver is usually used with shuttle, speed upgrade will probably help
+			upgradeSet.insert(BWAPI::UpgradeTypes::Gravitic_Drive);
+		}
+		else if(unit.getUnitType() == BWAPI::UnitTypes::Protoss_Carrier)
+			upgradeSet.insert(BWAPI::UpgradeTypes::Protoss_Air_Weapons);
+	}
+
+	for each(BWAPI::TechType tech in techSet)
+	{
+		if(mTechPriorityMap[tech] < 30)
+			continue;
+
+		mTechItemsToCreate.push_back(MacroItem(tech, mTechPriorityMap[tech]));
+
+		for each(BWAPI::UnitType type in getNeededUnits(tech))
+		{
+			mTechItemsToCreate.push_back(MacroItem(type, mTechPriorityMap[tech]));
+		}
+	}
+
+	for each(BWAPI::UpgradeType upgrade in upgradeSet)
+	{
+		if(mUpgradePriorityMap[upgrade] < 30)
+			continue;
+
+		for(int i = 1; i <= upgrade.maxRepeats(); ++i)
+		{
+			int priority = mUpgradePriorityMap[upgrade] - ((i-1)*10);
+			mTechItemsToCreate.push_back(MacroItem(upgrade, i, priority));
+
+			for each(BWAPI::UnitType type in getNeededUnits(upgrade, i))
+			{
+				mTechItemsToCreate.push_back(MacroItem(type, priority));
+			}
+		}
+	}
+
+	mTechItemsToCreate.sort(macroCompare);
+
+	//remove duplicates now so the highest is kept
+	std::set<BWAPI::UnitType> unitSet;
+	for(std::list<MacroItem>::iterator it = mTechItemsToCreate.begin(); it != mTechItemsToCreate.end();)
+	{
+		if(it->isUnitType())
+		{
+			if(unitSet.count(it->getUnitType()) != 0)
+			{
+				mTechItemsToCreate.erase(it++);
+				continue;
+			}
+			else
+				unitSet.insert(it->getUnitType());
+		}
+
+		++it;
+	}
+
+	createTechItems();
 }
 void MacroManagerClass::onChangeBuild()
 {

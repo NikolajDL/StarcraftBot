@@ -15,6 +15,10 @@ void HypothalamusClass::buildUnit(BWAPI::UnitType unit, int number, BuildingLoca
 	for(int i = 0; i < number; ++i)
 		TaskManager::Instance().build(unit, TaskType::Highest, position);
 }
+void HypothalamusClass::upgrade(BWAPI::UpgradeType type, int level)
+{
+	TaskManager::Instance().upgrade(type, level, TaskType::Highest);
+}
 void HypothalamusClass::setArmyBehaviour(ArmyBehaviour armyBehaviour)
 {
 	SquadManager::Instance().setBehaviour(armyBehaviour);
@@ -47,6 +51,8 @@ void HypothalamusClass::vocalCommand(std::string command)
 			parseArmyBehaviourCommand(commandParts[1]);
 		else if(commandParts[0] == "p" || commandParts[0] == "produce")
 			parseProductionCommand(commandParts[1]);
+		else if(commandParts[0] == "u" || commandParts[0] == "upgrade")
+			parseUpgradeCommand(commandParts[1]);
 
 	}else if(commandParts.size() == 1)	// one part command
 	{
@@ -88,6 +94,8 @@ void HypothalamusClass::parseBuildCommand(std::string building)
 		type = BWAPI::UnitTypes::Protoss_Stargate;
 	else if(building == "archives")
 		type = BWAPI::UnitTypes::Protoss_Templar_Archives;
+	else if(building == "supportbay")
+		type = BWAPI::UnitTypes::Protoss_Robotics_Support_Bay;
 	else
 		return;
 
@@ -146,7 +154,6 @@ void HypothalamusClass::parseOrderCommand(std::string order)
 		orderType = Order::MacroCanTech;
 	else if(order == "production")
 		orderType = Order::MacroProductionFacilities;
-	// skal vi bruge flere?
 	else
 		return;
 
@@ -206,4 +213,24 @@ void HypothalamusClass::parseProductionCommand(std::string unit)
 		return;
 
 	addProduction(type);
+}
+void HypothalamusClass::parseUpgradeCommand(std::string upgradeCommand)
+{
+	
+	BWAPI::UpgradeType type;
+	
+	if(upgradeCommand == "aira")
+		type = BWAPI::UpgradeTypes::Protoss_Air_Armor;
+	else if(upgradeCommand == "airw")
+		type = BWAPI::UpgradeTypes::Protoss_Air_Weapons;
+	else if(upgradeCommand == "grounda")
+		type = BWAPI::UpgradeTypes::Protoss_Ground_Armor;
+	else if(upgradeCommand == "groundw")
+		type = BWAPI::UpgradeTypes::Protoss_Ground_Weapons;
+	else if(upgradeCommand == "shields")
+		type = BWAPI::UpgradeTypes::Protoss_Plasma_Shields;
+	else
+		return;
+
+	upgrade(type, 3);
 }
