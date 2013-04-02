@@ -40,6 +40,7 @@
 
 using namespace fastdelegate;
 
+
 Cromartie::Cromartie()
 	: mOnBegin(false)
 	, mLeavingGame(0)
@@ -72,6 +73,8 @@ void Cromartie::onStart()
 
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 
+	
+
 	registerListeners();
 }
 
@@ -83,7 +86,6 @@ void Cromartie::onEnd(bool isWinner)
 
 void Cromartie::onFrame()
 {
-
 	// Enqueue bwapi events
 	for each(BWAPI::Event bwapiEvent in BWAPI::Broodwar->getEvents())
 	{
@@ -95,6 +97,7 @@ void Cromartie::onFrame()
 
 	if(!mOnBegin)
 	{
+		_ga.onStarcraftStart();
 		mOnBegin = true;
 		EQUEUE( new OnStartEvent() );
 		EQUEUE( new PauseBuildOrderEvent() );

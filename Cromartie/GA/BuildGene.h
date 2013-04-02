@@ -1,16 +1,16 @@
 #pragma once
 #include "gene.h"
-#include "UnitType.h"
+#include "../Interface.h"
 
 class BuildGene :
 	public Gene
 {
 private:
-	UnitType buildingType;
+	BWAPI::UnitType buildingType;
 public:
 	BuildGene(void);
-	BuildGene(UnitType building);
+	BuildGene(BWAPI::UnitType building);
 	~BuildGene(void);
-	UnitType getBuildingType(void);
+	BWAPI::UnitType getBuildingType(void);
 };
 

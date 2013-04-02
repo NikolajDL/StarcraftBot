@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-State::State(std::vector<UnitType> buildSequence) : buildingSequence(buildSequence), fitness(0)
+State::State(std::vector<BWAPI::UnitType> buildSequence) : buildingSequence(buildSequence), fitness(0)
 {
 }
 
@@ -18,7 +18,7 @@ State::~State(void)
 {
 }
 
-std::vector<UnitType> State::getBuildingSequence(void) const
+std::vector<BWAPI::UnitType> State::getBuildingSequence(void) const
 {
 	return this->buildingSequence;
 }

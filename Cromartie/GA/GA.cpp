@@ -6,7 +6,9 @@
 #include <fstream>
 #include <sstream> 
 
-GA::GA(void) : currentStateIndex(0), currentState(std::vector<UnitType>())
+int status; // 0 = FirstRun 1 = Running 2 = FinishedGeneration 3 = Finished
+
+GA::GA(void) : currentStateIndex(0), currentState(std::vector<BWAPI::UnitType>())
 {
 }
 
@@ -15,7 +17,7 @@ GA::~GA(void)
 {
 }
 
-void GA::onUnitComplete(UnitType unit, int score, int opponentScore)
+void GA::onUnitComplete(BWAPI::UnitType unit, int score, int opponentScore)
 {
 //	if (unit.isBuilding())
 //	{
@@ -70,7 +72,21 @@ void GA::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, i
 void GA::onStarcraftStart()
 {
 	loadGAStatus();
-	loadPopulation();
+
+	if (status == 0) // 0 = FirstRun
+	{
+		generateInitialPopulation(50);
+		status = 1; // 1 = running
+	}
+	else if (status == 1) // 1 = running
+	{
+		loadPopulation();
+	}
+	else if (status == 2) // 2 = finishedGeneration
+	{
+		loadPopulation();
+		createNextGeneration();
+	}
 
 	bool nonTestedChromosomeFound = false;
 	for (int i = 0; i < population.size(); i++)
@@ -80,25 +96,12 @@ void GA::onStarcraftStart()
 			currentChromosomeIndex = i;
 			currentChromosome = population.at(i);
 			nonTestedChromosomeFound = true;
+			break;
 		}
 	}
 	if (nonTestedChromosomeFound == false)
 	{
 		status = 2; // 2 = finishedGeneration
-	}
-
-	if (status == 0) // 0 = FirstRun
-	{
-		generateInitialPopulation(50);
-		status = 1; // 1 = running
-	}
-	else if (status == 1) // 1 = running
-	{
-		// Do nothing
-	}
-	else if (status == 2) // 2 = finishedGeneration
-	{
-		createNextGeneration();
 	}
 }
 
@@ -175,9 +178,9 @@ void GA::loadGAStatus()
 	  // Read the status of the GA
 	  myfile.good();
       std::getline (myfile,line);
-	  status = atoi(line.c_str());
+	   status = atoi(line.c_str());
 
-    myfile.close();
+      myfile.close();
   }
   else std::cout << "Unable to open file"; 
 

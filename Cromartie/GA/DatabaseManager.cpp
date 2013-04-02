@@ -228,7 +228,7 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 	while(sqlite3_step(chromosome_stmt) == SQLITE_ROW)
 	{
 		Chromosome c;
-		std::vector<UnitType> buildSequence;
+		std::vector<BWAPI::UnitType> buildSequence;
 
 		int chromosomeID = sqlite3_column_int(chromosome_stmt, 0);
 		double chromosomeFitness = sqlite3_column_double(chromosome_stmt, 1);
@@ -311,17 +311,17 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 					std::string unittype = std::string(
 						reinterpret_cast<const char*>(sqlite3_column_text(combatgene_stmt,0))); 
 					int unitamount = sqlite3_column_int(combatgene_stmt, 2);
-					s.addGene(std::tr1::shared_ptr<CombatGene>(new CombatGene(UnitType::getUnitType(unittype), unitamount)));
+					s.addGene(std::tr1::shared_ptr<CombatGene>(new CombatGene(BWAPI::UnitTypes::getUnitType(unittype), unitamount)));
 				} else if(sqlite3_step(researchgene_stmt) == SQLITE_ROW)
 				{
 					std::string upgradetype = std::string(
 						reinterpret_cast<const char*>(sqlite3_column_text(researchgene_stmt,0))); 
-					s.addGene(std::tr1::shared_ptr<ResearchGene>(new ResearchGene(UpgradeType::getUpgradeType(upgradetype))));
+					s.addGene(std::tr1::shared_ptr<ResearchGene>(new ResearchGene(BWAPI::UpgradeTypes::getUpgradeType(upgradetype))));
 				} else if(sqlite3_step(buildgene_stmt) == SQLITE_ROW)
 				{
 					std::string buildingtype = std::string(
 						reinterpret_cast<const char*>(sqlite3_column_text(buildgene_stmt,0)));
-					s.addGene(std::tr1::shared_ptr<BuildGene>(new BuildGene(UnitType::getUnitType(buildingtype))));
+					s.addGene(std::tr1::shared_ptr<BuildGene>(new BuildGene(BWAPI::UnitTypes::getUnitType(buildingtype))));
 				} else
 				{
 					std::cout << "DatabaseManager::selectAllChromosomes(): Found unknown gene type in DB with ID = " << geneID << std::endl;
