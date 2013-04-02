@@ -84,16 +84,14 @@ void Cromartie::onStart()
 
 void Cromartie::onEnd(bool isWinner)
 {
-	
-
 	std::set<Player> players = PlayerTracker::Instance().getEnemies();
 	Player enemy;
 	std::set<Player>::iterator it=players.begin();
     if (it != players.end())
 		enemy = *it;
 
-	int score = BWAPI::Broodwar->self()->getUnitScore();
-	int scoreOpponent = enemy->getUnitScore();
+	int score = BWAPI::Broodwar->self()->getUnitScore() + BWAPI::Broodwar->self()->getKillScore() + BWAPI::Broodwar->self()->getBuildingScore;
+	int scoreOpponent = enemy->getUnitScore() + enemy->getKillScore + enemy->getBuildingScore;
 
 	_ga.onGameEnd(isWinner, score, scoreOpponent, BWAPI::Broodwar->getFrameCount(), 60*60*24);
 
