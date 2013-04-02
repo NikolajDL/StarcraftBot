@@ -1,18 +1,18 @@
 #pragma once
 #include "gene.h"
-#include "UnitType.h"
+#include "../Interface.h"
 
 class CombatGene :
 	public Gene
 {
 private:
 	int amount;
-	UnitType unitType;
+	BWAPI::UnitType unitType;
 public:
 	CombatGene(void);
-	CombatGene(UnitType type, int count);
+	CombatGene(BWAPI::UnitType type, int count);
 	~CombatGene(void);
-	UnitType getUnitType(void);
+	BWAPI::UnitType getUnitType(void);
 	int getAmount(void);
 };
 

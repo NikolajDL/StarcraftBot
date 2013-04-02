@@ -4,6 +4,7 @@
 
 #include "Task.h"
 #include "EventRecorder.h"
+#include "GA/GA.h"
 
 class Cromartie : public BWAPI::AIModule
 {
@@ -23,6 +24,7 @@ public:
 private:
 	bool mOnBegin;
 
+	GA _ga;
 	int mLeavingGame;
 	bool mSaidGG;
 	EventRecorder* eventRecorderListener;

@@ -38,9 +38,8 @@
 #include "FastDelegate.h"
 #include "Hypothalamus.h"
 
-#include "GA/GA.h";
-
 using namespace fastdelegate;
+
 
 Cromartie::Cromartie()
 	: mOnBegin(false)
@@ -76,6 +75,8 @@ void Cromartie::onStart()
 
 	BWAPI::Broodwar->sendText("Starting GA...");
 
+	
+
 	BWAPI::Broodwar->sendText("GA started!");
 
 	registerListeners();
@@ -89,7 +90,6 @@ void Cromartie::onEnd(bool isWinner)
 
 void Cromartie::onFrame()
 {
-
 	// Enqueue bwapi events
 	for each(BWAPI::Event bwapiEvent in BWAPI::Broodwar->getEvents())
 	{
@@ -101,6 +101,7 @@ void Cromartie::onFrame()
 
 	if(!mOnBegin)
 	{
+		_ga.onStarcraftStart();
 		mOnBegin = true;
 		EQUEUE( new OnStartEvent() );
 		EQUEUE( new PauseBuildOrderEvent() );

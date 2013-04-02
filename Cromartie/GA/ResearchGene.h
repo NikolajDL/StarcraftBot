@@ -1,15 +1,16 @@
 #pragma once
 #include "gene.h"
-#include "UnitType.h"
+#include "../Interface.h"
+
 class ResearchGene :
 	public Gene
 {
 private:
-	UpgradeType upgradeType;
+	BWAPI::UpgradeType upgradeType;
 public:
 	ResearchGene(void);
-	ResearchGene(UpgradeType upgrade);
+	ResearchGene(BWAPI::UpgradeType upgrade);
 	~ResearchGene(void);
-	UpgradeType getUpgradeType(void) const;
+	BWAPI::UpgradeType getUpgradeType(void) const;
 };
 

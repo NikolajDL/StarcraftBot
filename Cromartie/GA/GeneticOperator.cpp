@@ -1,5 +1,4 @@
 #include "GeneticOperator.h"
-#include "UnitType.h"
 #include "BuildGene.h"
 #include "AttackGene.h"
 #include "ResearchGene.h"
@@ -230,7 +229,7 @@ Chromosome GeneticOperator::RandomChromosome(void)
 	int randomNrGene = dist(randomGen);
 
 	Chromosome c;
-	std::vector<UnitType> buildSequence;
+	std::vector<BWAPI::UnitType> buildSequence;
 	
 	for(int i=0; i<=CHROMOSOME_LENGTH; i++)
 	{
