@@ -2,6 +2,7 @@
 #include "GeneticOperator.h"
 #include "TournamentSelection.h"
 #include "DatabaseManager.h"
+#include "../GenericEvents.h"
 #include <iostream>
 #include <fstream>
 #include <sstream> 
@@ -15,6 +16,13 @@ GA::GA(void) : currentStateIndex(0), currentState(std::vector<BWAPI::UnitType>()
 
 GA::~GA(void)
 {
+}
+
+void GA::onUnitCompleteEvent(IEventDataPtr e)
+{
+	std::tr1::shared_ptr<UnitCompleteEvent> pEventData = std::tr1::static_pointer_cast<UnitCompleteEvent>(e);
+	BWAPI::Unit* unit = pEventData->m_Unit;
+
 }
 
 void GA::onUnitComplete(BWAPI::UnitType unit, int score, int opponentScore)
