@@ -315,6 +315,9 @@
     <ClCompile Include="Hypothalamus.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="ScoreHelper.cpp">
+      <Filter>GA</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WallTracker.h">
@@ -626,5 +629,8 @@
     <ClInclude Include="Hypothalamus.h">
       <Filter>Main</Filter>
     </ClInclude>
+    </ClInclude>
+    <ClInclude Include="ScoreHelper.h">
+      <Filter>GA</Filter>
   </ItemGroup>
 </Project>

@@ -25,7 +25,6 @@ public:
 	GA(void);
 	~GA(void);
 	State getCurrentState(void);
-	void onUnitComplete(BWAPI::UnitType unit, int score, int opponentScore);
 	void onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, int maxElapsedTime);
 	void onStarcraftStart(void);
 	void loadPopulation(void);
