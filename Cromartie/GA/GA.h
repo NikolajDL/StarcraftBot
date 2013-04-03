@@ -3,7 +3,7 @@
 #include "Chromosome.h"
 #include "State.h"
 #include "../Interface.h"
-#include "../GenericEvents.h"
+#include "../IEventData.h"
 
 class GA
 {
@@ -25,11 +25,11 @@ public:
 	GA(void);
 	~GA(void);
 	State getCurrentState(void);
-	void onUnitCompleteEvent(IEventDataPtr e);
 	void onUnitComplete(BWAPI::UnitType unit, int score, int opponentScore);
 	void onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, int maxElapsedTime);
 	void onStarcraftStart(void);
 	void loadPopulation(void);
 	void savePopulation(void);
+	void onUnitCompleteEvent(IEventDataPtr e);
 };
 
