@@ -40,7 +40,6 @@
 
 using namespace fastdelegate;
 
-
 Cromartie::Cromartie()
 	: mOnBegin(false)
 	, mLeavingGame(0)
@@ -120,34 +119,18 @@ void Cromartie::onStart()
 
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 
-	
-
-	
-
-	
-	
 	registerListeners();
 }
 
 void Cromartie::onEnd(bool isWinner)
 {
-	std::set<Player> players = PlayerTracker::Instance().getEnemies();
-	Player enemy;
-	std::set<Player>::iterator it=players.begin();
-    if (it != players.end())
-		enemy = *it;
-
-	//int score = BWAPI::Broodwar->self()->getUnitScore() + BWAPI::Broodwar->self()->getKillScore() + BWAPI::Broodwar->self()->getBuildingScore;
-	//int scoreOpponent = enemy->getUnitScore() + enemy->getKillScore + enemy->getBuildingScore;
-
-	//_ga.onGameEnd(isWinner, score, scoreOpponent, BWAPI::Broodwar->getFrameCount(), 60*60*24);
-
 	BuildOrderManager::Instance().onEnd(isWinner);
 	GameMemory::Instance().onEnd();
 }
 
 void Cromartie::onFrame()
 {
+
 	// Enqueue bwapi events
 	for each(BWAPI::Event bwapiEvent in BWAPI::Broodwar->getEvents())
 	{
@@ -161,9 +144,6 @@ void Cromartie::onFrame()
 
 	if(!mOnBegin)
 	{
-		BWAPI::Broodwar->sendText("Starting GA...");
-		_ga.onStarcraftStart();
-		BWAPI::Broodwar->sendText("GA started!");
 		mOnBegin = true;
 		EQUEUE( new OnStartEvent() );
 		//EQUEUE( new PauseBuildOrderEvent() );
@@ -252,6 +232,4 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::addBuildEvent, AddBuildOrderEvent::sk_EventType);
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::pauseBuild, PauseBuildOrderEvent::sk_EventType);
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::continueBuild, ContinueBuildOrderEvent::sk_EventType);
-
-	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
 }

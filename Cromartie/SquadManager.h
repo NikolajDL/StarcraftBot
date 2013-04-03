@@ -21,6 +21,8 @@ public:
 
 	std::string getArmyBehaviourName(ArmyBehaviour type);
 
+	void toggleDebug() { mDebugDraw = !mDebugDraw; }
+
 private:
 	std::map<SquadType, std::set<BaseSquadTaskPointer>> mSquads;
 

@@ -67,12 +67,6 @@
     <Filter Include="Event Manager\Listeners">
       <UniqueIdentifier>{192b626a-4e56-4e16-b369-5f2bf0a49860}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GA">
-      <UniqueIdentifier>{60b72536-37d1-440e-9b3b-40006c159c67}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GA\sqlite">
-      <UniqueIdentifier>{07161dc6-28b8-4602-8937-1a2ff814d21b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WallTracker.cpp">
@@ -320,54 +314,6 @@
     </ClCompile>
     <ClCompile Include="Hypothalamus.cpp">
       <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\AttackGene.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\BuildGene.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\Chromosome.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\CombatGene.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\DatabaseManager.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\GA.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\Gene.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\GeneticOperator.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\Main.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\ResearchGene.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\Sorting.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\StarcraftRules.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\State.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\TournamentSelection.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\UnitType.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\sqlite\sqlite3.c">
-      <Filter>GA\sqlite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -679,54 +625,6 @@
     </ClInclude>
     <ClInclude Include="Hypothalamus.h">
       <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\AttackGene.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\BuildGene.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\Chromosome.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\CombatGene.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\DatabaseManager.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\GA.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\Gene.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\GeneticOperator.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\ResearchGene.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\Sorting.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\StarcraftRules.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\State.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\TournamentSelection.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\UnitType.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\sqlite\sqlite3.h">
-      <Filter>GA\sqlite</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\sqlite\sqlite3ext.h">
-      <Filter>GA\sqlite</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
