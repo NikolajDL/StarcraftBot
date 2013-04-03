@@ -10,7 +10,7 @@
 
 int status; // 0 = FirstRun 1 = Running 2 = FinishedGeneration 3 = Finished
 
-GA::GA(void) : currentStateIndex(0), currentState(std::vector<BWAPI::UnitType>())
+GA::GA(void) : currentStateIndex(0), stateChanges(0), currentState(std::vector<BWAPI::UnitType>())
 {
 }
 
@@ -19,22 +19,29 @@ GA::~GA(void)
 {
 }
 
-void GA::onUnitCompleteEvent(IEventDataPtr e)
-{
-	std::tr1::shared_ptr<UnitCompleteEvent> pEventData = std::tr1::static_pointer_cast<UnitCompleteEvent>(e);
-	BWAPI::Unit* unit = pEventData->m_Unit;
-
-}
-
 
 void GA::onUnitCompleteEvent(IEventDataPtr e)
 {
+
 	std::tr1::shared_ptr<UnitCompleteEvent> pEventData = std::tr1::static_pointer_cast<UnitCompleteEvent>(e);
 	BWAPI::Unit* unit = pEventData->m_Unit;
 
-	if (unit->getType().isBuilding() == true)
+	std::string name = unit->getType().getName();
+
+	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
+		unit->getType().isBuilding() == true &&
+		(unit->getType().isResourceContainer() == false) &&
+		name != "Protoss Pylon")
 	{
+		if (stateChanges < 1)
+		{
+			stateChanges++;
+			BWAPI::Broodwar->sendText("Skipping state change");
+			return;
+		}
+
 		BWAPI::Broodwar->sendText("Changing state");
+		BWAPI::Broodwar->sendText(unit->getType().getName().c_str());
 		currentState.setFitness(fitness(currentState, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
 		// TODO:
 		// GeneExecuter.ExecuteState(state);

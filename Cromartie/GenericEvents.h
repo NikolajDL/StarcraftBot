@@ -109,6 +109,28 @@ struct UnitCompleteEvent : public BaseEventData
 	
 	BWAPI::Unit* m_Unit;
 };
+struct UnitMorphEvent : public BaseEventData
+{
+    static const EventType sk_EventType;
+    virtual const EventType & GetEventType( void ) const
+    {
+        return sk_EventType;
+    }
+	
+	virtual const std::string ToString( void ) const
+    {
+		return StringBuilder() << "Unit Morphed. Type: " << m_Unit->getType().c_str() << " ID: " 
+			<< boost::lexical_cast<std::string>(m_Unit->getID()).c_str();
+    }
+
+	explicit UnitMorphEvent( BWAPI::Unit* unit)
+        : m_Unit( unit )
+		, BaseEventData(BWAPI::Broodwar->getFrameCount())
+    {
+    }
+	
+	BWAPI::Unit* m_Unit;
+};
 
 struct UnitDestroyedEvent : public BaseEventData
 {

@@ -4,6 +4,7 @@ const EventType DebugStringEvent::sk_EventType( "debug_string" );
 const EventType UnitDiscoveredEvent::sk_EventType( "unit_discovered" );
 const EventType UnitDestroyedEvent::sk_EventType( "unit_destroyed" );
 const EventType UnitCompleteEvent::sk_EventType( "unit_complete" );
+const EventType UnitMorphEvent::sk_EventType( "unit_morph" );
 const EventType AnalyseTerrainAndBasesEvent::sk_EventType( "analyse_terrain_and_bases" );
 const EventType OnStartEvent::sk_EventType( "ai_starting" );
 const EventType OnUpdateEvent::sk_EventType( "ai_updating" );

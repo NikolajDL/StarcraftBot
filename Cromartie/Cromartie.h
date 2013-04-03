@@ -5,6 +5,7 @@
 #include "Task.h"
 #include "EventRecorder.h"
 #include "BuildOrder.h"
+#include "GA/GA.h"
 
 class Cromartie : public BWAPI::AIModule
 {
@@ -23,7 +24,7 @@ public:
 
 private:
 	bool mOnBegin;
-
+	GA _ga;
 	BuildOrder loadedBO; 
 	int mLeavingGame;
 	bool mSaidGG;

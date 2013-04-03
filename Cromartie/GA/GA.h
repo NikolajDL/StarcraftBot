@@ -13,6 +13,7 @@ private:
 	int currentChromosomeIndex;
 	int currentStateIndex;
 	int prev_score;
+	int stateChanges;
 	int prev_opponentScore;
 	std::vector<Chromosome> population;
 	double fitness(State state, int score, int opponentScore);

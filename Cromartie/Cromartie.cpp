@@ -39,8 +39,10 @@
 #include "GenericEvents.h"
 #include "FastDelegate.h"
 #include "Hypothalamus.h"
+#include "HypothalamusEvents.h"
 
 using namespace fastdelegate;
+
 
 Cromartie::Cromartie()
 	: mOnBegin(false)
@@ -121,6 +123,10 @@ void Cromartie::onStart()
 
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 
+	
+
+	
+	
 	registerListeners();
 }
 
@@ -129,13 +135,13 @@ void Cromartie::onEnd(bool isWinner)
 	BWAPI::Broodwar->sendText("Ending GA...");
 	_ga.onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 60*60*24);
 	BWAPI::Broodwar->sendText("GA Ended");
+
 	BuildOrderManager::Instance().onEnd(isWinner);
 	GameMemory::Instance().onEnd();
 }
 
 void Cromartie::onFrame()
 {
-
 	// Enqueue bwapi events
 	for each(BWAPI::Event bwapiEvent in BWAPI::Broodwar->getEvents())
 	{
@@ -145,14 +151,22 @@ void Cromartie::onFrame()
 			EQUEUE( new UnitDestroyedEvent(bwapiEvent.getUnit()));
 		if(bwapiEvent.getType() == BWAPI::EventType::UnitComplete)
 			EQUEUE( new UnitCompleteEvent(bwapiEvent.getUnit()));
+		if(bwapiEvent.getType() == BWAPI::EventType::UnitMorph)
+			EQUEUE( new UnitMorphEvent(bwapiEvent.getUnit()));
 	}
 
 	if(!mOnBegin)
 	{
+		BWAPI::Broodwar->sendText("Starting GA...");
+		_ga.onStarcraftStart();
+		BWAPI::Broodwar->sendText("GA started!");
 		mOnBegin = true;
 		EQUEUE( new OnStartEvent() );
 		//EQUEUE( new PauseBuildOrderEvent() );
 		EQUEUE( new AddBuildOrderEvent(&loadedBO));
+
+		// TODO: Add this :TODONE
+		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
 	}
 	
 
@@ -238,5 +252,9 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::pauseBuild, PauseBuildOrderEvent::sk_EventType);
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::continueBuild, ContinueBuildOrderEvent::sk_EventType);
 
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::buildUnitEvent, BuildUnitEvent::sk_EventType);
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::toggleOrderEvent, ToggleOrderEvent::sk_EventType);
+
 	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
+	// TODO: Insert morph listener
 }
