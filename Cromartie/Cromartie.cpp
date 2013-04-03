@@ -125,8 +125,6 @@ void Cromartie::onStart()
 	
 
 	
-
-	
 	
 	registerListeners();
 }
@@ -163,6 +161,9 @@ void Cromartie::onFrame()
 		EQUEUE( new OnStartEvent() );
 		//EQUEUE( new PauseBuildOrderEvent() );
 		EQUEUE( new AddBuildOrderEvent(&loadedBO));
+
+		// TODO: Add this
+		//Hypothalamus::Instance().toggleOrder(Order::SupplyManager);
 	}
 	
 
