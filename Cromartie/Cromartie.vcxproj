@@ -48,6 +48,7 @@
     <ClCompile Include="GoalAction.cpp" />
     <ClCompile Include="HashedString.cpp" />
     <ClCompile Include="Hypothalamus.cpp" />
+    <ClCompile Include="HypothalamusEvents.cpp" />
     <ClCompile Include="IdleTask.cpp" />
     <ClCompile Include="LatencyTracker.cpp" />
     <ClCompile Include="LoadOtherBuilds.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="HashedString.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="Hypothalamus.h" />
+    <ClInclude Include="HypothalamusEvents.h" />
     <ClInclude Include="IdleTask.h" />
     <ClInclude Include="IEventData.h" />
     <ClInclude Include="Interface.h" />

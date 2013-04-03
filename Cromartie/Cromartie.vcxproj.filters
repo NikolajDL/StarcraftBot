@@ -315,8 +315,9 @@
     <ClCompile Include="Hypothalamus.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="ScoreHelper.cpp">
-      <Filter>GA</Filter>
+    <ClCompile Include="ScoreHelper.cpp" />
+    <ClCompile Include="HypothalamusEvents.cpp">
+      <Filter>Event Manager\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -629,8 +630,9 @@
     <ClInclude Include="Hypothalamus.h">
       <Filter>Main</Filter>
     </ClInclude>
+    <ClInclude Include="ScoreHelper.h" />
+    <ClInclude Include="HypothalamusEvents.h">
+      <Filter>Event Manager\Events</Filter>
     </ClInclude>
-    <ClInclude Include="ScoreHelper.h">
-      <Filter>GA</Filter>
   </ItemGroup>
 </Project>

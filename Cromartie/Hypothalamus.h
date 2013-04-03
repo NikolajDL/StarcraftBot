@@ -8,11 +8,16 @@
 
 #include "SquadManager.h"
 #include "BuildOrder.h"
+#include "IEventData.h"
 
 // This is the part of the "virtual" brain that controls the most basic urges of Cromartie.
 class HypothalamusClass
 {
 public:
+
+	// Event handlers
+	void buildUnitEvent(IEventDataPtr evnt);
+	void toggleOrderEvent(IEventDataPtr evnt);
 
 	void buildUnit(BWAPI::UnitType unit, BuildingLocation position = BuildingLocation::Base);
 	void buildUnit(BWAPI::UnitType unit, int number, BuildingLocation position = BuildingLocation::Base);
