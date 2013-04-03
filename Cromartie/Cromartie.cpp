@@ -165,7 +165,10 @@ void Cromartie::onFrame()
 		EQUEUE( new PauseBuildOrderEvent() );
 		//EQUEUE( new AddBuildOrderEvent(&loadedBO));
 
-		//EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
+		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
+		EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
+		EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
+		EQUEUE( new ToggleOrderEvent(Order::Scout) );
 
 		EQUEUE( new ToggleDebugInfoEvent() );
 	}
@@ -265,6 +268,10 @@ void Cromartie::registerListeners()
 	// Hypothalamus event listeners
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::buildUnitEvent, BuildUnitEvent::sk_EventType);
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::toggleOrderEvent, ToggleOrderEvent::sk_EventType);
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::upgradeEvent, UpgradeEvent::sk_EventType);
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::setArmyBehaviourEvent, SetArmyBehaviourEvent::sk_EventType);
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::addProductionEvent, AddProductionEvent::sk_EventType);
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::attack, AttackEvent::sk_EventType);
 
 	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
 	ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 

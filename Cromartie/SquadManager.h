@@ -23,6 +23,8 @@ public:
 
 	void toggleDebug() { mDebugDraw = !mDebugDraw; }
 
+	void attack();
+
 private:
 	std::map<SquadType, std::set<BaseSquadTaskPointer>> mSquads;
 

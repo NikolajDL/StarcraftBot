@@ -16,6 +16,12 @@ SquadManagerClass::SquadManagerClass()
 	mDefaultSquad = createSquad(SquadType::DefaultSquad);
 }
 
+void SquadManagerClass::attack()
+{
+	mDefaultSquad->setShouldAttack(true);
+
+}
+
 void SquadManagerClass::update()
 {
 	for(std::map<Base, DefenseSquadPointer>::iterator it = mDefenseSquads.begin(); it != mDefenseSquads.end();)

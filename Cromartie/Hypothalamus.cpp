@@ -83,6 +83,8 @@ void HypothalamusClass::vocalCommand(std::string command)
 	{
 		if(commandParts[0] == "debug")
 			EQUEUE( new ToggleDebugInfoEvent() );
+		else if(commandParts[0] == "attack")
+			SquadManager::Instance().attack();
 	}
 }
 
