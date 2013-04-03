@@ -373,6 +373,7 @@
     <ClCompile Include="GA\sqlite\sqlite3.c">
       <Filter>GA\sqlite</Filter>
     </ClCompile>
+    <ClCompile Include="StateExecutor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WallTracker.h">
@@ -736,5 +737,6 @@
     <ClInclude Include="GA\sqlite\sqlite3ext.h">
       <Filter>GA\sqlite</Filter>
     </ClInclude>
+    <ClInclude Include="StateExecutor.h" />
   </ItemGroup>
 </Project>
