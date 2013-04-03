@@ -13,6 +13,7 @@ private:
 	std::vector<std::tr1::shared_ptr<Gene>> genes;
 	double fitness;
 public:
+	State(void);
 	State(std::vector<BWAPI::UnitType> buildSequence);
 	~State(void);
 	void addGene(std::tr1::shared_ptr<Gene> g);

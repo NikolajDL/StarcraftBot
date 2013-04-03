@@ -4,6 +4,7 @@
 #include "State.h"
 #include "../Interface.h"
 #include "../IEventData.h"
+#include "../StateExecutor.h"
 
 class GA
 {
@@ -15,6 +16,7 @@ private:
 	int prev_score;
 	int stateChanges;
 	int prev_opponentScore;
+	StateExecutor stateExecutor;
 	std::vector<Chromosome> population;
 	double fitness(State state, int score, int opponentScore);
 	void loadGAStatus(void);
