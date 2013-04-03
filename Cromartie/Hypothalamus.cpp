@@ -6,6 +6,29 @@
 #include "MacroManager.h"
 #include "BuildOrderManager.h"
 
+#include "HypothalamusEvents.h"
+
+void HypothalamusClass::buildUnitEvent(IEventDataPtr evnt)
+{
+	
+	std::tr1::shared_ptr<BuildUnitEvent> pEventData = std::tr1::static_pointer_cast<BuildUnitEvent>(evnt);
+	BWAPI::UnitType* unit = pEventData->mUnit;
+	int number = pEventData->mNumber;
+	BuildingLocation location = pEventData->mLocation;
+
+	if(number>=1)
+		buildUnit(*unit, number, location);
+	else
+		buildUnit(*unit, location);
+}
+void HypothalamusClass::toggleOrderEvent(IEventDataPtr evnt)
+{
+	std::tr1::shared_ptr<ToggleOrderEvent> pEventData = std::tr1::static_pointer_cast<ToggleOrderEvent>(evnt);
+	Order order = pEventData->mOrder;
+
+	toggleOrder(order);
+}
+
 void HypothalamusClass::buildUnit(BWAPI::UnitType unit, BuildingLocation position)
 {
 	TaskManager::Instance().build(unit, TaskType::Highest, position);

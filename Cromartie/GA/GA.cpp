@@ -19,6 +19,13 @@ GA::~GA(void)
 {
 }
 
+void GA::onUnitCompleteEvent(IEventDataPtr e)
+{
+	std::tr1::shared_ptr<UnitCompleteEvent> pEventData = std::tr1::static_pointer_cast<UnitCompleteEvent>(e);
+	BWAPI::Unit* unit = pEventData->m_Unit;
+
+}
+
 
 void GA::onUnitCompleteEvent(IEventDataPtr e)
 {
