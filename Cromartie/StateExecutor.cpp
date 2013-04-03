@@ -18,7 +18,7 @@ void StateExecutor::ExecuteState(const State state)
 {
 	for (int i = 0; i < state.getGenes().size();i ++)
 	{
-		std::tr1::shared_ptr<Gene> g = state.getGenes().at(j);
+		std::tr1::shared_ptr<Gene> g = state.getGenes().at(i);
 
 		if(typeid(*g) != typeid(BuildGene))
 		{
