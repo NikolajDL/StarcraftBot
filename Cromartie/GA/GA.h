@@ -22,6 +22,7 @@ private:
 	void makeGAStatusFile(void);
 	void generateInitialPopulation(int size);
 	void createNextGeneration(void);
+	void changeState(void);
 public:
 	GA(void);
 	~GA(void);
@@ -31,5 +32,6 @@ public:
 	void loadPopulation(void);
 	void savePopulation(void);
 	void onUnitCompleteEvent(IEventDataPtr e);
+	void onMorph(IEventDataPtr e);
 };
 
