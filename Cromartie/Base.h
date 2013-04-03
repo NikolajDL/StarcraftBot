@@ -71,6 +71,8 @@ public:
 
 	unsigned int getActivateTime() const { return mActivateTime; }
 
+	void toggleDebug(bool debug) { mShowDebug = debug; }
+
 private:
 	Position mCenterPosition;
 	TilePosition mCenterTilePosition;
@@ -79,6 +81,7 @@ private:
 	UnitGroup mGeysers;
 	UnitGroup mRefineries;
 
+	bool mShowDebug; 
 	bool mActive;
 	bool mActiveInFuture;
 	unsigned int mActivateTime;

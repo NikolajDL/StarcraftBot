@@ -286,3 +286,21 @@ struct ContinueBuildOrderEvent : public BaseEventData
     {
     }
 };
+struct ToggleDebugInfoEvent : public BaseEventData
+{
+    static const EventType sk_EventType;
+    virtual const EventType & GetEventType( void ) const
+    {
+        return sk_EventType;
+    }
+	
+	virtual const std::string ToString( void ) const
+    {
+		return StringBuilder() << "Toggle debug information!";
+    }
+
+	explicit ToggleDebugInfoEvent( )
+        : BaseEventData(BWAPI::Broodwar->getFrameCount())
+    {
+    }
+};

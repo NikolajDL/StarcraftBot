@@ -12,3 +12,4 @@ const EventType ChangeBuildOrderEvent::sk_EventType( "change_build_order" );
 const EventType PauseBuildOrderEvent::sk_EventType( "build_order_paused" );
 const EventType ContinueBuildOrderEvent::sk_EventType( "build_order_continued" );
 const EventType AddBuildOrderEvent::sk_EventType( "build_order_added" );
+const EventType ToggleDebugInfoEvent::sk_EventType( "toggle_debug_info" );

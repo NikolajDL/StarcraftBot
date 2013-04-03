@@ -20,6 +20,7 @@ BaseClass::BaseClass(Region region, std::set<TilePosition> tiles, bool startLoca
 	, mIsUnderAttack(false)
 	, mIsContested(false)
 	, mTechBuildings(0)
+	, mShowDebug(false)
 {
 }
 
@@ -189,7 +190,8 @@ void BaseClass::update()
 		}
 	}
 
-	//drawDebugInfo();
+	if(mShowDebug)
+		drawDebugInfo();
 }
 
 bool BaseClass::depotCompare(const Unit &depotOne, const Unit &depotTwo)

@@ -29,7 +29,9 @@ public:
 
 	Base getBase(TilePosition location) { return mTileToBase[location]; }
 
+	void toggleDebug();
 private:
+	bool mShowDebug;
 	std::set<Base> mBases;
 	std::map<TilePosition, Base> mTileToBase;
 };

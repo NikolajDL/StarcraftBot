@@ -5,8 +5,10 @@
 #include "TaskManager.h"
 #include "MacroManager.h"
 #include "BuildOrderManager.h"
+#include "EventManager.h"
 
 #include "HypothalamusEvents.h"
+#include "GenericEvents.h"
 
 void HypothalamusClass::buildUnitEvent(IEventDataPtr evnt)
 {
@@ -79,7 +81,8 @@ void HypothalamusClass::vocalCommand(std::string command)
 
 	}else if(commandParts.size() == 1)	// one part command
 	{
-		
+		if(commandParts[0] == "debug")
+			EQUEUE( new ToggleDebugInfoEvent() );
 	}
 }
 
