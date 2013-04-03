@@ -15,10 +15,21 @@ StateExecutor::~StateExecutor(void)
 {
 }
 
-
-void StateExecutor::ExecuteState(const State state)
+void StateExecutor::executeNextGene()
 {
-	for (int i = 0; i < state.getGenes().size();i ++)
+
+}
+
+void StateExecutor::unitComplete(BWAPI::UnitType unit)
+{
+}
+
+void StateExecutor::SetState(const State state)
+{
+	currentGene = 0;
+	currentState = state;
+
+	/*for (int i = 0; i < state.getGenes().size();i ++)
 	{
 		std::tr1::shared_ptr<Gene> g = state.getGenes().at(i);
 
@@ -45,5 +56,5 @@ void StateExecutor::ExecuteState(const State state)
 				EQUEUE(new BuildUnitEvent(&cg.getUnitType()));
 			}
 		}
-	}
+	}*/
 }

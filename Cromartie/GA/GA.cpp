@@ -42,6 +42,13 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 	std::string name = unit->getType().getName();
 
 	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
+		unit->getType().isBuilding() == false &&
+		(unit->getType().isResourceContainer() == false))
+	{
+
+	}
+
+	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
 		unit->getType().isBuilding() == true &&
 		(unit->getType().isResourceContainer() == false) &&
 		name != "Protoss Pylon")
@@ -62,8 +69,10 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 void GA::changeState()
 {
 	currentState.setFitness(fitness(currentState, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
+	currentStateIndex++;
+	currentState = getCurrentState();
 	// TODO:
-	// GeneExecuter.ExecuteState(state);
+	stateExecutor.SetState(currentState);
 }
 
 State GA::getCurrentState()

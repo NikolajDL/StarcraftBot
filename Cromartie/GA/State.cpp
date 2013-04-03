@@ -9,6 +9,9 @@
 #include <typeinfo>
 #include <iostream>
 
+State::State(void)
+{
+}
 
 State::State(std::vector<BWAPI::UnitType> buildSequence) : buildingSequence(buildSequence), fitness(0)
 {
