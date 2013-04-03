@@ -3,9 +3,10 @@
 #include "TournamentSelection.h"
 #include "DatabaseManager.h"
 #include "../GenericEvents.h"
+#include "../ScoreHelper.h"
 #include <iostream>
 #include <fstream>
-#include <sstream> 
+#include <sstream>
 
 int status; // 0 = FirstRun 1 = Running 2 = FinishedGeneration 3 = Finished
 
@@ -18,12 +19,6 @@ GA::~GA(void)
 {
 }
 
-void GA::onUnitCompleteEvent(IEventDataPtr e)
-{
-	std::tr1::shared_ptr<UnitCompleteEvent> pEventData = std::tr1::static_pointer_cast<UnitCompleteEvent>(e);
-	BWAPI::Unit* unit = pEventData->m_Unit;
-
-}
 
 void GA::onUnitCompleteEvent(IEventDataPtr e)
 {
@@ -32,19 +27,11 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 
 	if (unit->getType().isBuilding() == true)
 	{
-		//currentState.setFitness(fitness(currentState, score, opponentScore));
+		BWAPI::Broodwar->sendText("Changing state");
+		currentState.setFitness(fitness(currentState, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
+		// TODO:
 		// GeneExecuter.ExecuteState(state);
 	}
-}
-
-void GA::onUnitComplete(BWAPI::UnitType unit, int score, int opponentScore)
-{
-//	if (unit.isBuilding())
-//	{
-		
-//	}
-	
-	// GeneExecuter.ExecuteState(state);
 }
 
 State GA::getCurrentState()

@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "ScoreHelper.h"
+
 #include "DrawBuffer.h"
 #include "TerrainAnalysis.h"
 #include "UnitTracker.h"
@@ -131,7 +133,9 @@ void Cromartie::onStart()
 
 void Cromartie::onEnd(bool isWinner)
 {
-	//_ga.onGameEnd(isWinner, score, scoreOpponent, BWAPI::Broodwar->getFrameCount(), 60*60*24);
+	BWAPI::Broodwar->sendText("Ending GA...");
+	_ga.onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 60*60*24);
+	BWAPI::Broodwar->sendText("GA Ended");
 
 	BuildOrderManager::Instance().onEnd(isWinner);
 	GameMemory::Instance().onEnd();
