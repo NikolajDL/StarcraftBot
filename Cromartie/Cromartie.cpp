@@ -39,6 +39,7 @@
 #include "GenericEvents.h"
 #include "FastDelegate.h"
 #include "Hypothalamus.h"
+#include "HypothalamusEvents.h"
 
 using namespace fastdelegate;
 
@@ -162,8 +163,8 @@ void Cromartie::onFrame()
 		//EQUEUE( new PauseBuildOrderEvent() );
 		EQUEUE( new AddBuildOrderEvent(&loadedBO));
 
-		// TODO: Add this
-		//Hypothalamus::Instance().toggleOrder(Order::SupplyManager);
+		// TODO: Add this :TODONE
+		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
 	}
 	
 
@@ -248,6 +249,9 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::addBuildEvent, AddBuildOrderEvent::sk_EventType);
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::pauseBuild, PauseBuildOrderEvent::sk_EventType);
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::continueBuild, ContinueBuildOrderEvent::sk_EventType);
+
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::buildUnitEvent, BuildUnitEvent::sk_EventType);
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::toggleOrderEvent, ToggleOrderEvent::sk_EventType);
 
 	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
 }
