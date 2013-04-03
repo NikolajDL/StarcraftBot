@@ -31,5 +31,6 @@ public:
 	void loadPopulation(void);
 	void savePopulation(void);
 	void onUnitCompleteEvent(IEventDataPtr e);
+	void onMorph(void);
 };
 
