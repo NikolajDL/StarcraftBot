@@ -61,10 +61,9 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 
 void GA::changeState()
 {
-		
-		currentState.setFitness(fitness(currentState, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
-		// TODO:
-		// GeneExecuter.ExecuteState(state);
+	currentState.setFitness(fitness(currentState, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
+	// TODO:
+	// GeneExecuter.ExecuteState(state);
 }
 
 State GA::getCurrentState()
