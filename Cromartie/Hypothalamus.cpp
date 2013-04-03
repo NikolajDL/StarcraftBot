@@ -31,6 +31,32 @@ void HypothalamusClass::toggleOrderEvent(IEventDataPtr evnt)
 	toggleOrder(order);
 }
 
+void HypothalamusClass::upgradeEvent(IEventDataPtr evnt)
+{
+	std::tr1::shared_ptr<UpgradeEvent> pEventData = std::tr1::static_pointer_cast<UpgradeEvent>(evnt);
+	BWAPI::UpgradeType type = pEventData->mUpgrade;
+	int level = pEventData->mLevel;
+
+	upgrade(type, level);
+}
+void HypothalamusClass::setArmyBehaviourEvent(IEventDataPtr evnt)
+{
+	std::tr1::shared_ptr<SetArmyBehaviourEvent> pEventData = std::tr1::static_pointer_cast<SetArmyBehaviourEvent>(evnt);
+
+	setArmyBehaviour(pEventData->mArmyBehaviour);
+}
+void HypothalamusClass::addProductionEvent(IEventDataPtr evnt)
+{
+	std::tr1::shared_ptr<AddProductionEvent> pEventData = std::tr1::static_pointer_cast<AddProductionEvent>(evnt);
+
+	addProduction(*pEventData->mUnit);
+}
+void HypothalamusClass::attack()
+{
+	SquadManager::Instance().attack();
+}
+
+
 void HypothalamusClass::buildUnit(BWAPI::UnitType unit, BuildingLocation position)
 {
 	TaskManager::Instance().build(unit, TaskType::Highest, position);

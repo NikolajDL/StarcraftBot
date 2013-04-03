@@ -3,6 +3,10 @@ boost/
 # ...and Starcraft
 Starcraft/
 
+
+# Vi gider ik de skide merge backup filer
+*.orig
+
 #################
 ## Eclipse
 #################
