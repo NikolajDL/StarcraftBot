@@ -19,10 +19,23 @@ GA::~GA(void)
 {
 }
 
+void GA::onMorph(IEventDataPtr e)
+{
+	std::tr1::shared_ptr<UnitMorphEvent> pEventData = std::tr1::static_pointer_cast<UnitMorphEvent>(e);
+	BWAPI::Unit* unit = pEventData->m_Unit;
+
+	std::string name = unit->getType().getName();
+
+	if (name == "Protoss Assimilator")
+	{
+		BWAPI::Broodwar->sendText("Changing state");
+		BWAPI::Broodwar->sendText(unit->getType().getName().c_str());
+		changeState();
+	}
+}
 
 void GA::onUnitCompleteEvent(IEventDataPtr e)
 {
-
 	std::tr1::shared_ptr<UnitCompleteEvent> pEventData = std::tr1::static_pointer_cast<UnitCompleteEvent>(e);
 	BWAPI::Unit* unit = pEventData->m_Unit;
 
@@ -42,10 +55,16 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 
 		BWAPI::Broodwar->sendText("Changing state");
 		BWAPI::Broodwar->sendText(unit->getType().getName().c_str());
+		changeState();
+	}
+}
+
+void GA::changeState()
+{
+		
 		currentState.setFitness(fitness(currentState, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
 		// TODO:
 		// GeneExecuter.ExecuteState(state);
-	}
 }
 
 State GA::getCurrentState()

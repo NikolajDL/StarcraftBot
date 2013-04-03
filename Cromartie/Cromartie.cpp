@@ -162,11 +162,11 @@ void Cromartie::onFrame()
 		BWAPI::Broodwar->sendText("GA started!");
 		mOnBegin = true;
 		EQUEUE( new OnStartEvent() );
-		//EQUEUE( new PauseBuildOrderEvent() );
-		EQUEUE( new AddBuildOrderEvent(&loadedBO));
+		EQUEUE( new PauseBuildOrderEvent() );
+		//EQUEUE( new AddBuildOrderEvent(&loadedBO));
 
-		// TODO: Add this :TODONE
 		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
+		EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
 	}
 	
 
@@ -256,5 +256,5 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::toggleOrderEvent, ToggleOrderEvent::sk_EventType);
 
 	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
-	// TODO: Insert morph listener
+	ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 
 }
