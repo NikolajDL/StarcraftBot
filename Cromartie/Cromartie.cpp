@@ -131,16 +131,7 @@ void Cromartie::onStart()
 
 void Cromartie::onEnd(bool isWinner)
 {
-	std::set<Player> players = PlayerTracker::Instance().getEnemies();
-	Player enemy;
-	std::set<Player>::iterator it=players.begin();
-    if (it != players.end())
-		enemy = *it;
-
-	int score = BWAPI::Broodwar->self()->getUnitScore() + BWAPI::Broodwar->self()->getKillScore() + BWAPI::Broodwar->self()->getBuildingScore;
-	int scoreOpponent = enemy->getUnitScore() + enemy->getKillScore + enemy->getBuildingScore;
-
-	_ga.onGameEnd(isWinner, score, scoreOpponent, BWAPI::Broodwar->getFrameCount(), 60*60*24);
+	//_ga.onGameEnd(isWinner, score, scoreOpponent, BWAPI::Broodwar->getFrameCount(), 60*60*24);
 
 	BuildOrderManager::Instance().onEnd(isWinner);
 	GameMemory::Instance().onEnd();
@@ -252,4 +243,6 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::addBuildEvent, AddBuildOrderEvent::sk_EventType);
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::pauseBuild, PauseBuildOrderEvent::sk_EventType);
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::continueBuild, ContinueBuildOrderEvent::sk_EventType);
+
+	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
 }

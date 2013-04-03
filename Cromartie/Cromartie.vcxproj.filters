@@ -369,6 +369,9 @@
     <ClCompile Include="GA\sqlite\sqlite3.c">
       <Filter>GA\sqlite</Filter>
     </ClCompile>
+    <ClCompile Include="ScoreHelper.cpp">
+      <Filter>GA</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WallTracker.h">
@@ -727,6 +730,9 @@
     </ClInclude>
     <ClInclude Include="GA\sqlite\sqlite3ext.h">
       <Filter>GA\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreHelper.h">
+      <Filter>GA</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
