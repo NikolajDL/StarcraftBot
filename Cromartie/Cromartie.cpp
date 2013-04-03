@@ -151,6 +151,8 @@ void Cromartie::onFrame()
 			EQUEUE( new UnitDestroyedEvent(bwapiEvent.getUnit()));
 		if(bwapiEvent.getType() == BWAPI::EventType::UnitComplete)
 			EQUEUE( new UnitCompleteEvent(bwapiEvent.getUnit()));
+		if(bwapiEvent.getType() == BWAPI::EventType::UnitMorph)
+			EQUEUE( new UnitMorphEvent(bwapiEvent.getUnit()));
 	}
 
 	if(!mOnBegin)
@@ -254,4 +256,5 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::toggleOrderEvent, ToggleOrderEvent::sk_EventType);
 
 	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
+	// TODO: Insert morph listener
 }
