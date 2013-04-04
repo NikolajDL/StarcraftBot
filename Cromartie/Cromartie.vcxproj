@@ -94,6 +94,7 @@
     <ClCompile Include="ScoutManager.cpp" />
     <ClCompile Include="SquadManager.cpp" />
     <ClCompile Include="StateExecutor.cpp" />
+    <ClCompile Include="Stats.cpp" />
     <ClCompile Include="SupplyManager.cpp" />
     <ClCompile Include="TaskManager.cpp" />
     <ClCompile Include="TaskPump.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SquadManager.h" />
     <ClInclude Include="StateExecutor.h" />
+    <ClInclude Include="Stats.h" />
     <ClInclude Include="SupplyManager.h" />
     <ClInclude Include="Task.h" />
     <ClInclude Include="TaskManager.h" />
