@@ -31,6 +31,7 @@ public:
 	void toggleOrder(Order order);
 	void addProduction(BWAPI::UnitType unit);
 	void attack();
+	void stop();
 
 	void vocalCommand(std::string command);
 

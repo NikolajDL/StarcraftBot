@@ -33,6 +33,8 @@ public:
 	unsigned int controlSize() { return mUnits.size(); }
 
 	virtual void updateRequirements();
+	
+	const UnitGroup units() const { return mUnits; }
 
 private:
 	UnitGroup mUnits;

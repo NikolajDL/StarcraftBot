@@ -158,10 +158,29 @@ struct AttackEvent : public BaseEventData
 	
 	virtual const std::string ToString( void ) const
     {
-		return StringBuilder() << "Add army production unit. ";
+		return StringBuilder() << "Attack event. ";
     }
 
 	explicit AttackEvent( )
+		: BaseEventData(BWAPI::Broodwar->getFrameCount())
+    {
+    }
+	
+};
+struct StopAttackEvent : public BaseEventData
+{
+    static const EventType sk_EventType;
+    virtual const EventType & GetEventType( void ) const
+    {
+        return sk_EventType;
+    }
+	
+	virtual const std::string ToString( void ) const
+    {
+		return StringBuilder() << "Stop attacking event. ";
+    }
+
+	explicit StopAttackEvent( )
 		: BaseEventData(BWAPI::Broodwar->getFrameCount())
     {
     }

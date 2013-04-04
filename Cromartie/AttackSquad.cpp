@@ -9,8 +9,8 @@
 #include "GameProgressDetection.h"
 #include "Logger.h"
 
-AttackSquadTask::AttackSquadTask()
-	: BaseSquadTask(ArmyBehaviour::Defensive)
+AttackSquadTask::AttackSquadTask(ArmyBehaviour behaviour)
+	: BaseSquadTask(behaviour)
 	, mIsAttacking(false)
 {
 }
@@ -67,9 +67,9 @@ BorderPosition AttackSquadTask::getLargestChoke(const std::set<BorderPosition> &
 bool AttackSquadTask::update()
 {
 	Goal squadsGoal;
-	
 
-	
+
+	// Just attack if its not mining anywhere
 	bool hasMiningBases = false;
 	int techStructures = 0;
 	Base baseToDefend;
@@ -93,54 +93,64 @@ bool AttackSquadTask::update()
 			hasMiningBases = true;
 	}
 
-
-
 	UnitGroup avoidGroup;
 	UnitGroup engageGroup;
 	for each(const UnitGroup &unitGroup in PlayerTracker::Instance().getEnemyClusters())
 	{
 		engageGroup += unitGroup;
 	}
-
-	if(!engageGroup.empty() && mIsAttacking)
+	
+	if(baseUnderAttack)
 	{
-		Base bestBaseToAttack;
-		if(mLastGoal.getGoalType() == GoalType::Base && mLastGoal.getActionType() == ActionType::Attack && mLastGoal.getBase()->isEnemyBase())
-			bestBaseToAttack = mLastGoal.getBase();
-
-		for each(Base base in BaseTracker::Instance().getEnemyBases())
-		{
-			if(!bestBaseToAttack || base->getBuildings().size() < bestBaseToAttack->getBuildings().size())
-				bestBaseToAttack = base;
-		}
-
-		if(bestBaseToAttack)
-			squadsGoal = Goal(ActionType::Attack, bestBaseToAttack, engageGroup, avoidGroup);
-		else
-			squadsGoal = Goal(ActionType::Attack, engageGroup, avoidGroup);
-	}else{
-		if(squadsGoal.getGoalType() == GoalType::None && baseToDefend && mUnits.canMajorityAttack(baseToDefend->getEnemyThreats()))
-			squadsGoal = Goal(ActionType::Defend, baseToDefend->getCenterLocation(), engageGroup, avoidGroup);
+		const int rating = mUnits.ratingDifference(baseToDefend->getEnemyThreats());
+		if(rating > -1000)
+			squadsGoal = Goal(ActionType::Defend, baseToDefend->getEnemyThreats(), avoidGroup);
 	}
 
-		if(squadsGoal.getGoalType() == GoalType::None)
+	Base bestBaseToAttack;
+	if(mLastGoal.getGoalType() == GoalType::Base && mLastGoal.getActionType() == ActionType::Attack && mLastGoal.getBase()->isEnemyBase())
+		bestBaseToAttack = mLastGoal.getBase();
+
+	for each(Base base in BaseTracker::Instance().getEnemyBases())
+	{
+		if(!bestBaseToAttack || base->getBuildings().size() < bestBaseToAttack->getBuildings().size())
+			bestBaseToAttack = base;
+	}
+
+	if(mIsAttacking)
+	{
+		if(bestBaseToAttack)
+			squadsGoal = Goal(ActionType::Attack, bestBaseToAttack, engageGroup, avoidGroup);
+		else if(squadsGoal.getGoalType() == GoalType::None)
+			squadsGoal = Goal(ActionType::Attack, Position(BWAPI::Broodwar->mapWidth()*24, BWAPI::Broodwar->mapHeight()*16), engageGroup, avoidGroup);
+		else if(!engageGroup.empty() && !avoidGroup.empty() && squadsGoal.getActionType() == ActionType::Attack && squadsGoal.getGoalType() == GoalType::Base)
+			squadsGoal = Goal(ActionType::Attack, avoidGroup.getCenter(), engageGroup, avoidGroup);
+		else 
+			squadsGoal = Goal(ActionType::Attack, engageGroup, avoidGroup);
+	}
+
+	if(squadsGoal.getGoalType() == GoalType::None && baseToDefend && mUnits.canMajorityAttack(baseToDefend->getEnemyThreats()))
+		squadsGoal = Goal(ActionType::Defend, baseToDefend->getCenterLocation(), engageGroup, avoidGroup);
+
+	if(squadsGoal.getGoalType() == GoalType::None || mUnits.size()<=0)
 	{
 		if(!BorderTracker::Instance().getBorderPositions(PositionType::TechDefenseChokepoint).empty())
 			squadsGoal = Goal(ActionType::Hold, getLargestChoke(BorderTracker::Instance().getBorderPositions(PositionType::TechDefenseChokepoint)).mChoke->getCenter(), engageGroup, avoidGroup);
 	}
 
-	if(squadsGoal.getGoalType() == GoalType::None)
+	if(squadsGoal.getGoalType() == GoalType::None || mUnits.size()<=0)
 	{
 		if(!BorderTracker::Instance().getBorderPositions(PositionType::DefenseChokepoint).empty())
 			squadsGoal = Goal(ActionType::Hold, getLargestChoke(BorderTracker::Instance().getBorderPositions(PositionType::DefenseChokepoint)).mChoke->getCenter(), engageGroup, avoidGroup);
 	}
-	
+
 	if(mLastGoal.getActionType() == ActionType::Attack && mLastGoal.getGoalType() == GoalType::Base && mLastGoal.getBase()->isEnemyBase())
 	{
 		if(squadsGoal.getActionType() != ActionType::Attack || (squadsGoal.getGoalType() == GoalType::Base && !squadsGoal.getBase()->isEnemyBase()))
 		{
 			mIsAttacking = false;
-			LOGMESSAGEWARNING(String_Builder() << "Failed base attack");
+			mUnits += mSavedUnits;
+			LOGMESSAGEWARNING(String_Builder() << "Failed base attacks increased");
 		}
 	}
 
@@ -150,7 +160,8 @@ bool AttackSquadTask::update()
 		for(std::map<Unit, Behaviour>::iterator it = mUnitBehaviours.begin(); it != mUnitBehaviours.end(); ++it)
 			it->second.update(squadsGoal, mUnits);
 	}
-	return true;
+
+	return hasEnded() && mUnits.empty();
 }
 
 bool AttackSquadTask::waitingForUnit(Unit unit) const
@@ -160,11 +171,14 @@ bool AttackSquadTask::waitingForUnit(Unit unit) const
 
 void AttackSquadTask::giveUnit(Unit unit)
 {
-	BWAPI::Broodwar->sendText("Unit given to attack");
 	if(unit->getType() == BWAPI::UnitTypes::Protoss_Observer)
 		mObserver = unit;
 	
-	mUnits.insert(unit);
+	if(mIsAttacking)
+		mSavedUnits.insert(unit);
+	else
+		mUnits.insert(unit);
+
 
 	mUnitBehaviours[unit] = Behaviour(unit);
 }

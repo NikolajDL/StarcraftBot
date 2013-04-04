@@ -164,11 +164,11 @@ void Cromartie::onFrame()
 
 		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
 		EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
-		EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
-		EQUEUE( new ToggleOrderEvent(Order::Scout) );
-		EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
+		//EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
+		//EQUEUE( new ToggleOrderEvent(Order::Scout) );
+		//EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
 
-		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
+		//EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
 
 		EQUEUE( new ToggleDebugInfoEvent() );
 	}
@@ -272,6 +272,7 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::setArmyBehaviourEvent, SetArmyBehaviourEvent::sk_EventType);
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::addProductionEvent, AddProductionEvent::sk_EventType);
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::attack, AttackEvent::sk_EventType);
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::stop, StopAttackEvent::sk_EventType);
 
 	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
 	ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 

@@ -24,6 +24,7 @@ public:
 	void toggleDebug() { mDebugDraw = !mDebugDraw; }
 
 	void attack();
+	void stop();
 
 private:
 	std::map<SquadType, std::set<BaseSquadTaskPointer>> mSquads;

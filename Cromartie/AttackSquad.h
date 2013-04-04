@@ -9,7 +9,7 @@
 class AttackSquadTask : public BaseSquadTask
 {
 public:
-	AttackSquadTask();
+	AttackSquadTask(ArmyBehaviour behaviour);
 
 	virtual int getEndTime() const;
 	virtual int getEndTime(Unit unit) const;
@@ -38,12 +38,14 @@ public:
 	virtual void attack() { mIsAttacking = true; };
 	virtual void stop() { mIsAttacking = false; };
 
-	const UnitGroup units() const { return mUnits; }
+	virtual const UnitGroup units() const { return mUnits; }
 
 private:
 	bool mIsAttacking;
 	UnitGroup mUnits;
+	UnitGroup mSavedUnits;
 	std::map<Unit, Behaviour> mUnitBehaviours;
+	ArmyBehaviour mCurrentBehaviour;
 
 	BorderPosition getLargestChoke(const std::set<BorderPosition> &chokes);
 

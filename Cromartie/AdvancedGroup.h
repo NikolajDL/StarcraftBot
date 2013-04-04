@@ -14,7 +14,8 @@ public:
 
 	void addUnit(Unit unit);
 	void removeUnits(Unit unit);
-
+	
+	const UnitGroup units() const { return mAllUnits; }
 private:
 	UnitGroup mAllUnits;
 	std::map<Unit, Behaviour> mUnitBehaviours;

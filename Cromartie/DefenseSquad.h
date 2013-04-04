@@ -35,6 +35,8 @@ public:
 	virtual void updateRequirements();
 
 	void setGoal(Goal goal) { mDefenseGoal = goal; }
+	
+	const UnitGroup units() const { return mUnits; }
 
 private:
 	UnitGroup mUnits;

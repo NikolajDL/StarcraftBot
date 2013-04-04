@@ -36,9 +36,11 @@ public:
 	virtual unsigned int controlSize() = 0;
 
 	virtual void updateRequirements(){}
+	virtual const UnitGroup units() const = 0;
 
 	void changeBehaviour(ArmyBehaviour armyBehaviour) { mArmyBehaviour = armyBehaviour; }
 	virtual void attack() {}
+	virtual void stop() {}
 protected:
 	ArmyBehaviour mArmyBehaviour;
 };
