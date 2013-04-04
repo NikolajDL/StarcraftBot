@@ -55,7 +55,7 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 			// Executing the first state
 			currentState = getCurrentState();
 
-			//stateExecutor.executeState(currentState);
+			stateExecutor.executeState(currentState);
 			return;
 		}
 
@@ -70,8 +70,8 @@ void GA::changeState()
 	currentState.setFitness(fitness(currentState, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
 	currentStateIndex++;
 	currentState = getCurrentState();
-	// TODO:
-	//stateExecutor.executeState(currentState);
+
+	stateExecutor.executeState(currentState);
 }
 
 State GA::getCurrentState()
