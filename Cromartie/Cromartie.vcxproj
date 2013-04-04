@@ -16,6 +16,7 @@
     <ClCompile Include="AOEThreatTracker.cpp" />
     <ClCompile Include="ArbiterAction.cpp" />
     <ClCompile Include="ArconZealotKillUnDetected.cpp" />
+    <ClCompile Include="AttackSquad.cpp" />
     <ClCompile Include="Base.cpp" />
     <ClCompile Include="BaseTracker.cpp" />
     <ClCompile Include="BasicUnitAction.cpp" />
@@ -119,6 +120,7 @@
     <ClInclude Include="AOEThreatTracker.h" />
     <ClInclude Include="ArbiterAction.h" />
     <ClInclude Include="ArconZealotKillUnDetected.h" />
+    <ClInclude Include="AttackSquad.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="BaseEventData.h" />
     <ClInclude Include="BaseSquad.h" />
