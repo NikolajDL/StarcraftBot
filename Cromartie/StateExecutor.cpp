@@ -64,7 +64,6 @@ StateExecutor::~StateExecutor(void)
 
 void StateExecutor::executeState(const State state)
 {
-	currentGene = 0;
 	currentState = state;
 
 	for (int i = 0; i < state.getGenes().size();i ++)
@@ -81,13 +80,22 @@ void StateExecutor::executeState(const State state)
 
 			BWAPI::UnitType unit = bg.getBuildingType();
 			
-			EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::getUnitType(unit.getName()), 1));
+			if (unit.getName() == "Protoss Nexus")
+			{
+				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), BuildingLocation::Expansion));
+				
+
+			}
+			else
+			{
+				EQUEUE(new BuildUnitEvent(bg.getBuildingType() ));
+			}
 		}
 		else if (typeid(*g) == typeid(ResearchGene))
 		{
 			ResearchGene rg = dynamic_cast<ResearchGene&>(*g);
 
-			EQUEUE(new UpgradeEvent(rg.getUpgradeType(), 3));
+			EQUEUE(new UpgradeEvent(rg.getUpgradeType(), 1));
 		}
 		else if(typeid(*g) == typeid(AttackGene))
 		{

@@ -166,9 +166,9 @@ void Cromartie::onFrame()
 		EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
 		EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
 		EQUEUE( new ToggleOrderEvent(Order::Scout) );
-		EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
+		//EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
 
-		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
+		//EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
 
 		EQUEUE( new ToggleDebugInfoEvent() );
 	}

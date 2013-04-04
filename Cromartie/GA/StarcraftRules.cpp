@@ -220,14 +220,12 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	std::vector<BWAPI::UnitType> validBuildings;
 	
 	// These buildings are availabel at all time, so we add them to the list of valid buildings to build
-	BWAPI::UnitType nexus = BWAPI::UnitTypes::getUnitType("Protoss Nexus");
-	BWAPI::UnitType pylon = BWAPI::UnitTypes::getUnitType("Protoss Pylon");
 	BWAPI::UnitType assimilator = BWAPI::UnitTypes::getUnitType("Protoss Assimilator");
+	BWAPI::UnitType nexus = BWAPI::UnitTypes::getUnitType("Protoss Nexus");
 	BWAPI::UnitType forge = BWAPI::UnitTypes::getUnitType("Protoss Forge");
 	BWAPI::UnitType gateway = BWAPI::UnitTypes::getUnitType("Protoss Gateway");
 	
 	validBuildings.push_back(nexus);
-	validBuildings.push_back(pylon);
 	validBuildings.push_back(assimilator);
 	validBuildings.push_back(forge);
 	validBuildings.push_back(gateway);
