@@ -26,7 +26,7 @@ StateExecutor::~StateExecutor(void)
 //		{
 //			BuildGene bg = dynamic_cast<BuildGene&>(*g);
 //
-			EQUEUE(new BuildUnitEvent(bg.getBuildingType()));
+//			EQUEUE(new BuildUnitEvent(bg.getBuildingType()));
 //		}
 //		else if (typeid(*g) == typeid(ResearchGene))
 //		{
@@ -43,7 +43,7 @@ StateExecutor::~StateExecutor(void)
 //			for (int j = 0; j < cg.getAmount(); j++)
 //			{
 //				enquedUnits.push_back(cg.getUnitType());
-				EQUEUE(new BuildUnitEvent(cg.getUnitType()));
+//				EQUEUE(new BuildUnitEvent(cg.getUnitType()));
 //			}
 //		}
 //
@@ -81,7 +81,7 @@ void StateExecutor::executeState(const State state)
 
 			BWAPI::UnitType unit = bg.getBuildingType();
 			
-			EQUEUE(new BuildUnitEvent(&BWAPI::UnitTypes::getUnitType(unit.getName()), 1));
+			EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::getUnitType(unit.getName()), 1));
 		}
 		else if (typeid(*g) == typeid(ResearchGene))
 		{
@@ -101,7 +101,7 @@ void StateExecutor::executeState(const State state)
 			for (int j = 0; j < cg.getAmount(); j++)
 			{
 				BWAPI::Broodwar->sendText(cg.getUnitType().getName().c_str());
-				EQUEUE(new BuildUnitEvent(&cg.getUnitType()));
+				EQUEUE(new BuildUnitEvent(cg.getUnitType()));
 			}
 		}
 	}

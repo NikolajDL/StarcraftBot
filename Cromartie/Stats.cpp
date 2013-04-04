@@ -1,6 +1,6 @@
 #include "Stats.h"
 #include "GA/Sorting.h"
-#include "../boost/boost/lexical_cast.hpp"
+#include "boost/lexical_cast.hpp"
 #include <iostream>
 #include <fstream>
 
