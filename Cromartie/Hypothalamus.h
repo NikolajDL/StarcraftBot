@@ -23,7 +23,9 @@ public:
 	void addProductionEvent(IEventDataPtr evnt);
 
 	void buildUnit(BWAPI::UnitType unit, BuildingLocation position = BuildingLocation::Base);
+	void buildUnit(BWAPI::UnitType unit, TaskType taskType, BuildingLocation position = BuildingLocation::Base);
 	void buildUnit(BWAPI::UnitType unit, int number, BuildingLocation position = BuildingLocation::Base);
+	void buildUnit(BWAPI::UnitType unit, TaskType taskType, int number, BuildingLocation position = BuildingLocation::Base);
 	void upgrade(BWAPI::UpgradeType type, int level);
 	void setArmyBehaviour(ArmyBehaviour armyBehaviour);
 	void toggleOrder(Order order);

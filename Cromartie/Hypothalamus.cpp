@@ -17,11 +17,12 @@ void HypothalamusClass::buildUnitEvent(IEventDataPtr evnt)
 	BWAPI::UnitType unit = pEventData->mUnit;
 	int number = pEventData->mNumber;
 	BuildingLocation location = pEventData->mLocation;
+	TaskType taskType = pEventData->mTaskType;
 
 	if(number>=1)
-		buildUnit(unit, number, location);
+		buildUnit(unit, taskType, number, location);
 	else
-		buildUnit(unit, location);
+		buildUnit(unit, taskType, location);
 }
 void HypothalamusClass::toggleOrderEvent(IEventDataPtr evnt)
 {
@@ -61,10 +62,19 @@ void HypothalamusClass::buildUnit(BWAPI::UnitType unit, BuildingLocation positio
 {
 	TaskManager::Instance().build(unit, TaskType::Highest, position);
 }
+void HypothalamusClass::buildUnit(BWAPI::UnitType unit, TaskType taskType, BuildingLocation position)
+{
+	TaskManager::Instance().build(unit, taskType, position);
+}
 void HypothalamusClass::buildUnit(BWAPI::UnitType unit, int number, BuildingLocation position)
 {
 	for(int i = 0; i < number; ++i)
 		TaskManager::Instance().build(unit, TaskType::Highest, position);
+}
+void HypothalamusClass::buildUnit(BWAPI::UnitType unit, TaskType taskType, int number, BuildingLocation position)
+{
+	for(int i = 0; i < number; ++i)
+		TaskManager::Instance().build(unit, taskType, position);
 }
 void HypothalamusClass::upgrade(BWAPI::UpgradeType type, int level)
 {

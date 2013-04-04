@@ -160,6 +160,7 @@ bool AttackSquadTask::waitingForUnit(Unit unit) const
 
 void AttackSquadTask::giveUnit(Unit unit)
 {
+	BWAPI::Broodwar->sendText("Unit given to attack");
 	if(unit->getType() == BWAPI::UnitTypes::Protoss_Observer)
 		mObserver = unit;
 	
