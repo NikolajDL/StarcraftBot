@@ -14,7 +14,6 @@ DefaultSquadTask::DefaultSquadTask(ArmyBehaviour behaviour)
 	, mEngageFull(false)
 	, mFailedBaseAttacks(0)
 	, mNumZealots(0)
-	, mShouldAttack(false)
 {
 }
 
@@ -71,7 +70,6 @@ bool DefaultSquadTask::update()
 {
 	Goal squadsGoal;
 
-	// We need to attack - just because
 
 	// Just attack if its not mining anywhere
 	bool hasMiningBases = false;
@@ -101,11 +99,6 @@ bool DefaultSquadTask::update()
 	UnitGroup engageGroup;
 	for each(const UnitGroup &unitGroup in PlayerTracker::Instance().getEnemyClusters())
 	{
-		if(mShouldAttack)
-		{
-			engageGroup += unitGroup;
-			continue;
-		}
 
 		if(!hasMiningBases && mUnits.canMajorityAttack(unitGroup))
 		{
@@ -124,7 +117,7 @@ bool DefaultSquadTask::update()
 	}
 	
 	mEngageFull = !engageGroup.empty();
-	// ATTACK GOD DAMMIT
+
 	if(mEngageFull)
 		squadsGoal = Goal(ActionType::Attack, engageGroup, avoidGroup);
 	else if(baseUnderAttack)
@@ -133,7 +126,6 @@ bool DefaultSquadTask::update()
 		if(rating > -1000)
 			squadsGoal = Goal(ActionType::Defend, baseToDefend->getEnemyThreats(), avoidGroup);
 	}
-	//mShouldAttack = false;
 	if(squadsGoal.getGoalType() == GoalType::None)
 	{
 		for each(Base base in BaseTracker::Instance().getPlayerBases())

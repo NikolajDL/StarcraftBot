@@ -374,6 +374,9 @@
       <Filter>GA\sqlite</Filter>
     </ClCompile>
     <ClCompile Include="StateExecutor.cpp" />
+    <ClCompile Include="AttackSquad.cpp">
+      <Filter>Squad Manager\Squads</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WallTracker.h">
@@ -738,5 +741,8 @@
       <Filter>GA\sqlite</Filter>
     </ClInclude>
     <ClInclude Include="StateExecutor.h" />
+    <ClInclude Include="AttackSquad.h">
+      <Filter>Squad Manager\Squads</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

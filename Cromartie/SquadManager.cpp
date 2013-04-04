@@ -2,6 +2,7 @@
 #include "TaskManager.h"
 #include "BuildOrderManager.h"
 #include "BaseTracker.h"
+#include "AttackSquad.h"
 
 #include <boost/lexical_cast.hpp>
 
@@ -13,13 +14,13 @@ SquadManagerClass::SquadManagerClass()
 	: mCurrentBehaviour(ArmyBehaviour::Default)
 	, mDebugDraw(false)
 {
-	mDefaultSquad = createSquad(SquadType::DefaultSquad);
+	mDefaultSquad = createSquad(SquadType::AttackSquad);
 }
 
 void SquadManagerClass::attack()
 {
-	mDefaultSquad->setShouldAttack(true);
-
+	BWAPI::Broodwar->sendText("ATTACKING!");
+	mDefaultSquad->attack();
 }
 
 void SquadManagerClass::update()
@@ -49,6 +50,17 @@ void SquadManagerClass::update()
 	{
 		BWAPI::Broodwar->drawTextScreen(5, 10, "Army Behaviour: %s", getArmyBehaviourName(mCurrentBehaviour).c_str());
 		BWAPI::Broodwar->drawTextScreen(5, 20, "Squad Count: %s", boost::lexical_cast<std::string>(mSquads.size()).c_str());
+		
+		
+		AttackSquadPointer squad = std::tr1::static_pointer_cast<AttackSquadTask>(mDefaultSquad);
+		if(squad != NULL)
+		{
+			BWAPI::Broodwar->drawTextScreen(5, 30, "Default squad size: %s", boost::lexical_cast<std::string>(squad->units().size()).c_str());
+			for each(Unit unit in squad->units())
+			{
+				BWAPI::Broodwar->drawCircleMap(unit->getPosition().x(), unit->getPosition().y(), 32, BWAPI::Colors::Teal);
+			}
+		}
 	}
 }
 
@@ -142,6 +154,9 @@ BaseSquadTaskPointer SquadManagerClass::createSquad(SquadType type)
 		break;
 	case SquadType::CorsairSquad:
 		//task = BaseSquadTaskPointer(new CorsairSquad());
+		break;
+	case SquadType::AttackSquad:
+		task = BaseSquadTaskPointer(new AttackSquadTask());
 		break;
 	}
 

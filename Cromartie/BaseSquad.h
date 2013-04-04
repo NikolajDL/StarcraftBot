@@ -38,7 +38,7 @@ public:
 	virtual void updateRequirements(){}
 
 	void changeBehaviour(ArmyBehaviour armyBehaviour) { mArmyBehaviour = armyBehaviour; }
-	virtual void setShouldAttack(bool attack) {}
+	virtual void attack() {}
 protected:
 	ArmyBehaviour mArmyBehaviour;
 };

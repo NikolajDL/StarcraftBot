@@ -16,7 +16,8 @@ struct SquadTypeDef
 		DefenseSquad,
 		ReaverDropSquad,
 		DarkTemplerSquad,
-		CorsairSquad
+		CorsairSquad,
+		AttackSquad
 	};
 };
 typedef SafeEnum<SquadTypeDef> SquadType;
