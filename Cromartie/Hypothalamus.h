@@ -18,6 +18,9 @@ public:
 	// Event handlers
 	void buildUnitEvent(IEventDataPtr evnt);
 	void toggleOrderEvent(IEventDataPtr evnt);
+	void upgradeEvent(IEventDataPtr evnt);
+	void setArmyBehaviourEvent(IEventDataPtr evnt);
+	void addProductionEvent(IEventDataPtr evnt);
 
 	void buildUnit(BWAPI::UnitType unit, BuildingLocation position = BuildingLocation::Base);
 	void buildUnit(BWAPI::UnitType unit, int number, BuildingLocation position = BuildingLocation::Base);
@@ -25,6 +28,7 @@ public:
 	void setArmyBehaviour(ArmyBehaviour armyBehaviour);
 	void toggleOrder(Order order);
 	void addProduction(BWAPI::UnitType unit);
+	void attack();
 
 	void vocalCommand(std::string command);
 

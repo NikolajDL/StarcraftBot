@@ -4,7 +4,21 @@
 #include <cassert>
 
 BaseTrackerClass::BaseTrackerClass()
+	: mShowDebug(false)
 {
+	for each(Base base in mBases)
+	{
+		base->toggleDebug(mShowDebug);
+	}
+}
+
+void BaseTrackerClass::toggleDebug()
+{
+	mShowDebug = !mShowDebug;
+	for each(Base base in mBases)
+	{
+		base->toggleDebug(mShowDebug);
+	}
 }
 
 Base BaseTrackerClass::createBase(std::set<TilePosition> tiles, Region region, bool startLocation, TilePosition position, const UnitGroup &resources)
@@ -29,8 +43,6 @@ void BaseTrackerClass::update()
 	{
 		//TODO: track flying buildings, they can move between bases
 		base->update();
-
-		base->drawDebugInfo();
 	}
 }
 

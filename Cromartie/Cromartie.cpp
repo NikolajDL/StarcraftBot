@@ -167,6 +167,10 @@ void Cromartie::onFrame()
 
 		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
 		EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
+		EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
+		EQUEUE( new ToggleOrderEvent(Order::Scout) );
+
+		EQUEUE( new ToggleDebugInfoEvent() );
 	}
 	
 
@@ -209,12 +213,15 @@ void Cromartie::onPlayerLeft(Player player)
 
 void Cromartie::registerListeners()
 {
+	// Event log listener
 	eventRecorderListener = new EventRecorder("bwapi-data\\logs\\Cromartie_EventLog.txt");
 	ADDLISTENER(eventRecorderListener, &EventRecorder::RecordEvent, CatchAllEvents);
 
+	// Basic unit event listeners
 	ADDLISTENER(&UnitTracker::Instance(), &UnitTrackerClass::onUnitDiscoverEvent, UnitDiscoveredEvent::sk_EventType);
 	ADDLISTENER(&UnitTracker::Instance(), &UnitTrackerClass::onUnitDestroyEvent, UnitDestroyedEvent::sk_EventType);
 	
+	// Listen to OnStart events
 	ADDLISTENER(&WallTracker::Instance(), &WallTrackerClass::onBegin, OnStartEvent::sk_EventType);
 	ADDLISTENER(&PlayerTracker::Instance(), &PlayerTrackerClass::onBegin, OnStartEvent::sk_EventType);
 	ADDLISTENER(&TerrainAnalysis::Instance(), &TerrainAnalysisClass::analyseBasesAndTerrain, OnStartEvent::sk_EventType);
@@ -226,6 +233,7 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::onBegin, OnStartEvent::sk_EventType);
 	ADDLISTENER(&BlockedPathManager::Instance(), &BlockedPathManagerClass::onBegin, OnStartEvent::sk_EventType);
 	
+	// Listen to Update events
 	ADDLISTENER(&UnitTracker::Instance(), &UnitTrackerClass::update, OnUpdateEvent::sk_EventType);
 	ADDLISTENER(&AOEThreatTracker::Instance(), &AOEThreatTrackerClass::update, OnUpdateEvent::sk_EventType);
 	ADDLISTENER(&BlockedPathManager::Instance(), &BlockedPathManagerClass::update, OnUpdateEvent::sk_EventType);
@@ -247,13 +255,23 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&TaskManager::Instance(), &TaskManagerClass::update, OnUpdateEvent::sk_EventType);
 	ADDLISTENER(&DrawBuffer::Instance(), &DrawBufferClass::update, OnUpdateEvent::sk_EventType);
 	
+	// Build Order Manager listeners
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::changeCurrentBuildEvent, ChangeBuildOrderEvent::sk_EventType);
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::addBuildEvent, AddBuildOrderEvent::sk_EventType);
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::pauseBuild, PauseBuildOrderEvent::sk_EventType);
 	ADDLISTENER(&BuildOrderManager::Instance(), &BuildOrderManagerClass::continueBuild, ContinueBuildOrderEvent::sk_EventType);
 
+	// Listen for toggle debug
+	ADDLISTENER(&SquadManager::Instance(), &SquadManagerClass::toggleDebug, ToggleDebugInfoEvent::sk_EventType);
+	ADDLISTENER(&BaseTracker::Instance(), &BaseTrackerClass::toggleDebug, ToggleDebugInfoEvent::sk_EventType);
+
+	// Hypothalamus event listeners
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::buildUnitEvent, BuildUnitEvent::sk_EventType);
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::toggleOrderEvent, ToggleOrderEvent::sk_EventType);
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::upgradeEvent, UpgradeEvent::sk_EventType);
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::setArmyBehaviourEvent, SetArmyBehaviourEvent::sk_EventType);
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::addProductionEvent, AddProductionEvent::sk_EventType);
+	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::attack, AttackEvent::sk_EventType);
 
 	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
 	ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 

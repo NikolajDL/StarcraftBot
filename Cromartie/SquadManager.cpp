@@ -3,6 +3,8 @@
 #include "BuildOrderManager.h"
 #include "BaseTracker.h"
 
+#include <boost/lexical_cast.hpp>
+
 #include "DefaultSquad.h"
 
 #include "Logger.h"
@@ -12,6 +14,12 @@ SquadManagerClass::SquadManagerClass()
 	, mDebugDraw(false)
 {
 	mDefaultSquad = createSquad(SquadType::DefaultSquad);
+}
+
+void SquadManagerClass::attack()
+{
+	mDefaultSquad->setShouldAttack(true);
+
 }
 
 void SquadManagerClass::update()
@@ -40,6 +48,7 @@ void SquadManagerClass::update()
 	if(mDebugDraw)
 	{
 		BWAPI::Broodwar->drawTextScreen(5, 10, "Army Behaviour: %s", getArmyBehaviourName(mCurrentBehaviour).c_str());
+		BWAPI::Broodwar->drawTextScreen(5, 20, "Squad Count: %s", boost::lexical_cast<std::string>(mSquads.size()).c_str());
 	}
 }
 

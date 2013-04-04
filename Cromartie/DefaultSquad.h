@@ -34,7 +34,10 @@ public:
 
 	virtual void updateRequirements();
 
+	void setShouldAttack(bool attack) { mShouldAttack = attack; }
+
 private:
+	bool mShouldAttack;
 	UnitGroup mUnits;
 	std::map<Unit, Behaviour> mUnitBehaviours;
 	int mNumZealots;

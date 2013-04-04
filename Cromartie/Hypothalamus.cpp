@@ -5,8 +5,10 @@
 #include "TaskManager.h"
 #include "MacroManager.h"
 #include "BuildOrderManager.h"
+#include "EventManager.h"
 
 #include "HypothalamusEvents.h"
+#include "GenericEvents.h"
 
 void HypothalamusClass::buildUnitEvent(IEventDataPtr evnt)
 {
@@ -28,6 +30,32 @@ void HypothalamusClass::toggleOrderEvent(IEventDataPtr evnt)
 
 	toggleOrder(order);
 }
+
+void HypothalamusClass::upgradeEvent(IEventDataPtr evnt)
+{
+	std::tr1::shared_ptr<UpgradeEvent> pEventData = std::tr1::static_pointer_cast<UpgradeEvent>(evnt);
+	BWAPI::UpgradeType type = pEventData->mUpgrade;
+	int level = pEventData->mLevel;
+
+	upgrade(type, level);
+}
+void HypothalamusClass::setArmyBehaviourEvent(IEventDataPtr evnt)
+{
+	std::tr1::shared_ptr<SetArmyBehaviourEvent> pEventData = std::tr1::static_pointer_cast<SetArmyBehaviourEvent>(evnt);
+
+	setArmyBehaviour(pEventData->mArmyBehaviour);
+}
+void HypothalamusClass::addProductionEvent(IEventDataPtr evnt)
+{
+	std::tr1::shared_ptr<AddProductionEvent> pEventData = std::tr1::static_pointer_cast<AddProductionEvent>(evnt);
+
+	addProduction(*pEventData->mUnit);
+}
+void HypothalamusClass::attack()
+{
+	SquadManager::Instance().attack();
+}
+
 
 void HypothalamusClass::buildUnit(BWAPI::UnitType unit, BuildingLocation position)
 {
@@ -79,7 +107,10 @@ void HypothalamusClass::vocalCommand(std::string command)
 
 	}else if(commandParts.size() == 1)	// one part command
 	{
-		
+		if(commandParts[0] == "debug")
+			EQUEUE( new ToggleDebugInfoEvent() );
+		else if(commandParts[0] == "attack")
+			SquadManager::Instance().attack();
 	}
 }
 
