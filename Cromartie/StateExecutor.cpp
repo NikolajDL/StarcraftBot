@@ -50,19 +50,19 @@ StateExecutor::~StateExecutor(void)
 //	currentGene++;
 //}
 
-bool StateExecutor::isStateFinish()
-{
-	if (currentGene == currentState.getGenes().size())
-		return true;
-	else
-		return false;
-}
+//bool StateExecutor::isStateFinish()
+//{
+//	if (currentGene == currentState.getGenes().size())
+//		return true;
+//	else
+//		return false;
+//}
+//
+//void StateExecutor::unitComplete(BWAPI::UnitType unit)
+//{
+//}
 
-void StateExecutor::unitComplete(BWAPI::UnitType unit)
-{
-}
-
-void StateExecutor::SetState(const State state)
+void StateExecutor::executeState(const State state)
 {
 	currentGene = 0;
 	currentState = state;
