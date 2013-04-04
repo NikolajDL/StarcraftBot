@@ -10,9 +10,9 @@ private:
 public:
 	StateExecutor(void);
 	~StateExecutor(void);
-	void SetState(const State state);
-	void executeNextGene();
-	bool isStateFinish();
-	void unitComplete(BWAPI::UnitType unit);
+	void executeState(const State state);
+	//void executeNextGene();
+	//bool isStateFinish();
+	//void unitComplete(BWAPI::UnitType unit);
 };
 

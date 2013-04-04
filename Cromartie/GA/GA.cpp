@@ -4,6 +4,7 @@
 #include "DatabaseManager.h"
 #include "../GenericEvents.h"
 #include "../ScoreHelper.h"
+#include "../Stats.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -40,14 +41,7 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 	BWAPI::Unit* unit = pEventData->m_Unit;
 
 	std::string name = unit->getType().getName();
-
-	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
-		unit->getType().isBuilding() == false &&
-		(unit->getType().isResourceContainer() == false))
-	{
-
-	}
-
+	
 	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
 		unit->getType().isBuilding() == true &&
 		(unit->getType().isResourceContainer() == false) &&
@@ -57,6 +51,11 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 		{
 			stateChanges++;
 			BWAPI::Broodwar->sendText("Skipping state change");
+
+			// Executing the first state
+			currentState = getCurrentState();
+
+			stateExecutor.executeState(currentState);
 			return;
 		}
 
@@ -72,7 +71,7 @@ void GA::changeState()
 	currentStateIndex++;
 	currentState = getCurrentState();
 	// TODO:
-	stateExecutor.SetState(currentState);
+	stateExecutor.executeState(currentState);
 }
 
 State GA::getCurrentState()
@@ -115,6 +114,7 @@ void GA::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, i
 
 	currentChromosome.setFitness(fitness);
 	savePopulation();
+	Stats::logPop(population);
 }
 
 void GA::onStarcraftStart()
