@@ -55,7 +55,7 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 			// Executing the first state
 			currentState = getCurrentState();
 
-			stateExecutor.executeState(currentState);
+			//stateExecutor.executeState(currentState);
 			return;
 		}
 
@@ -71,7 +71,7 @@ void GA::changeState()
 	currentStateIndex++;
 	currentState = getCurrentState();
 	// TODO:
-	stateExecutor.executeState(currentState);
+	//stateExecutor.executeState(currentState);
 }
 
 State GA::getCurrentState()
