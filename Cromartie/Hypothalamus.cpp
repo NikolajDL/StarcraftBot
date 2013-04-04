@@ -14,14 +14,14 @@ void HypothalamusClass::buildUnitEvent(IEventDataPtr evnt)
 {
 	
 	std::tr1::shared_ptr<BuildUnitEvent> pEventData = std::tr1::static_pointer_cast<BuildUnitEvent>(evnt);
-	BWAPI::UnitType* unit = pEventData->mUnit;
+	BWAPI::UnitType unit = pEventData->mUnit;
 	int number = pEventData->mNumber;
 	BuildingLocation location = pEventData->mLocation;
 
 	if(number>=1)
-		buildUnit(*unit, number, location);
+		buildUnit(unit, number, location);
 	else
-		buildUnit(*unit, location);
+		buildUnit(unit, location);
 }
 void HypothalamusClass::toggleOrderEvent(IEventDataPtr evnt)
 {
@@ -49,7 +49,7 @@ void HypothalamusClass::addProductionEvent(IEventDataPtr evnt)
 {
 	std::tr1::shared_ptr<AddProductionEvent> pEventData = std::tr1::static_pointer_cast<AddProductionEvent>(evnt);
 
-	addProduction(*pEventData->mUnit);
+	addProduction(pEventData->mUnit);
 }
 void HypothalamusClass::attack()
 {

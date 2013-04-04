@@ -42,17 +42,17 @@ struct BuildUnitEvent : public BaseEventData
 	
 	virtual const std::string ToString( void ) const
     {
-		return StringBuilder() << "Build unit event. Type: " << mUnit->getName().c_str();
+		return StringBuilder() << "Build unit event. Type: " << mUnit.getName().c_str();
     }
 
-	explicit BuildUnitEvent( BWAPI::UnitType* unit, BuildingLocation location = BuildingLocation::Base)
+	explicit BuildUnitEvent( BWAPI::UnitType unit, BuildingLocation location = BuildingLocation::Base)
         : mUnit( unit )
 		, mNumber(1)
 		, mLocation(location)
 		, BaseEventData(BWAPI::Broodwar->getFrameCount())
     {
     }
-	explicit BuildUnitEvent( BWAPI::UnitType* unit, int number, BuildingLocation location = BuildingLocation::Base)
+	explicit BuildUnitEvent( BWAPI::UnitType unit, int number, BuildingLocation location = BuildingLocation::Base)
         : mUnit( unit )
 		, mNumber(number)
 		, mLocation(location)
@@ -60,7 +60,7 @@ struct BuildUnitEvent : public BaseEventData
     {
     }
 	
-	BWAPI::UnitType* mUnit;
+	BWAPI::UnitType mUnit;
 	int mNumber;
 	BuildingLocation mLocation;
 };
@@ -118,16 +118,16 @@ struct AddProductionEvent : public BaseEventData
 	
 	virtual const std::string ToString( void ) const
     {
-		return StringBuilder() << "Add army production unit. Type: " << mUnit->getName().c_str();
+		return StringBuilder() << "Add army production unit. Type: " << mUnit.getName().c_str();
     }
 
-	explicit AddProductionEvent( BWAPI::UnitType* unit)
+	explicit AddProductionEvent( BWAPI::UnitType unit)
         : mUnit( unit )
 		, BaseEventData(BWAPI::Broodwar->getFrameCount())
     {
     }
 	
-	BWAPI::UnitType* mUnit;
+	BWAPI::UnitType mUnit;
 };
 struct AttackEvent : public BaseEventData
 {
