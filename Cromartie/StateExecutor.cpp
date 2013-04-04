@@ -25,7 +25,7 @@ void StateExecutor::executeNextGene()
 		{
 			BuildGene bg = dynamic_cast<BuildGene&>(*g);
 
-			EQUEUE(new BuildUnitEvent(&bg.getBuildingType()));
+			EQUEUE(new BuildUnitEvent(bg.getBuildingType()));
 		}
 		else if (typeid(*g) == typeid(ResearchGene))
 		{
@@ -42,7 +42,7 @@ void StateExecutor::executeNextGene()
 			for (int j = 0; j < cg.getAmount(); j++)
 			{
 				enquedUnits.push_back(cg.getUnitType());
-				EQUEUE(new BuildUnitEvent(&cg.getUnitType()));
+				EQUEUE(new BuildUnitEvent(cg.getUnitType()));
 			}
 		}
 
