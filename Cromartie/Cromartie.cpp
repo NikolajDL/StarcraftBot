@@ -119,7 +119,7 @@ void Cromartie::onStart()
 		BWAPI::Broodwar->sendText("But BWAPI rev. %d is currently running", BWAPI::Broodwar->getRevision());
 	}
 
-	BWAPI::Broodwar->setLocalSpeed(0);
+	BWAPI::Broodwar->setLocalSpeed(20);
 
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 

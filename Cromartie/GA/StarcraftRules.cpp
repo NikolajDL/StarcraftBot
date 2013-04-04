@@ -25,7 +25,7 @@ std::tr1::shared_ptr<CombatGene> StarcraftRules::getValidCombatGene(const State&
 	BWAPI::UnitType randomUnit= validUnits.at(randomNrGene);
 
 	// Choose a random number of that unit
-	boost::random::uniform_int_distribution<> dist2(1, 4);
+	boost::random::uniform_int_distribution<> dist2(1, 10);
 	int randomAmount = dist2(randomGen);
 
 	// Create a CombatGene and set the unit type and amount

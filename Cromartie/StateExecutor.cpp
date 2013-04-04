@@ -76,19 +76,21 @@ void StateExecutor::executeState(const State state)
 
 			std::string name = bg.getBuildingType().getName();
 
-			BWAPI::Broodwar->sendText(bg.getBuildingType().getName().c_str());
-
 			BWAPI::UnitType unit = bg.getBuildingType();
+
+			BWAPI::Broodwar->sendText(name.c_str());
 			
 			if (unit.getName() == "Protoss Nexus")
 			{
-				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), BuildingLocation::Expansion));
-				
-
+				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::Expansion));
+			}
+			else if (unit.getName() == "Protoss Assimilator")
+			{
+				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::ExpansionGas));
 			}
 			else
 			{
-				EQUEUE(new BuildUnitEvent(bg.getBuildingType() ));
+				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder));
 			}
 		}
 		else if (typeid(*g) == typeid(ResearchGene))
