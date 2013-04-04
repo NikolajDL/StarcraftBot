@@ -49,6 +49,15 @@ struct BuildUnitEvent : public BaseEventData
         : mUnit( unit )
 		, mNumber(1)
 		, mLocation(location)
+		, mTaskType(TaskType::Highest)
+		, BaseEventData(BWAPI::Broodwar->getFrameCount())
+    {
+    }
+	explicit BuildUnitEvent( BWAPI::UnitType unit, TaskType taskType, BuildingLocation location = BuildingLocation::Base)
+        : mUnit( unit )
+		, mNumber(1)
+		, mLocation(location)
+		, mTaskType(taskType)
 		, BaseEventData(BWAPI::Broodwar->getFrameCount())
     {
     }
@@ -56,6 +65,15 @@ struct BuildUnitEvent : public BaseEventData
         : mUnit( unit )
 		, mNumber(number)
 		, mLocation(location)
+		, mTaskType(TaskType::Highest)
+		, BaseEventData(BWAPI::Broodwar->getFrameCount())
+    {
+    }
+	explicit BuildUnitEvent( BWAPI::UnitType unit, TaskType taskType, int number, BuildingLocation location = BuildingLocation::Base)
+        : mUnit( unit )
+		, mNumber(number)
+		, mLocation(location)
+		, mTaskType(taskType)
 		, BaseEventData(BWAPI::Broodwar->getFrameCount())
     {
     }
@@ -63,6 +81,7 @@ struct BuildUnitEvent : public BaseEventData
 	BWAPI::UnitType mUnit;
 	int mNumber;
 	BuildingLocation mLocation;
+	TaskType mTaskType;
 };
 struct UpgradeEvent : public BaseEventData
 {
