@@ -17,7 +17,44 @@ StateExecutor::~StateExecutor(void)
 
 void StateExecutor::executeNextGene()
 {
+	std::tr1::shared_ptr<Gene> g = currentState.getGenes().at(currentGene);
 
+	enquedUnits.clear();
+	
+		if(typeid(*g) != typeid(BuildGene))
+		{
+			BuildGene bg = dynamic_cast<BuildGene&>(*g);
+
+			EQUEUE(new BuildUnitEvent(&bg.getBuildingType()));
+		}
+		else if (typeid(*g) == typeid(ResearchGene))
+		{
+			ResearchGene rg = dynamic_cast<ResearchGene&>(*g);
+		}
+		else if(typeid(*g) == typeid(AttackGene))
+		{
+			AttackGene ag = dynamic_cast<AttackGene&>(*g);
+		}
+		else if(typeid(*g) == typeid(CombatGene))
+		{
+			CombatGene cg = dynamic_cast<CombatGene&>(*g);
+
+			for (int j = 0; j < cg.getAmount(); j++)
+			{
+				enquedUnits.push_back(cg.getUnitType());
+				EQUEUE(new BuildUnitEvent(&cg.getUnitType()));
+			}
+		}
+
+	currentGene++;
+}
+
+bool StateExecutor::isStateFinish()
+{
+	if (currentGene == currentState.getGenes().size())
+		return true;
+	else
+		return false;
 }
 
 void StateExecutor::unitComplete(BWAPI::UnitType unit)
