@@ -325,7 +325,6 @@ bool DefaultSquadTask::waitingForUnit(Unit unit) const
 
 void DefaultSquadTask::giveUnit(Unit unit)
 {
-	BWAPI::Broodwar->sendText("Unit given to default");
 	if(unit->getType() == BWAPI::UnitTypes::Protoss_Observer)
 		mObserver = unit;
 	

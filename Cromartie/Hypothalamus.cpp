@@ -52,10 +52,6 @@ void HypothalamusClass::addProductionEvent(IEventDataPtr evnt)
 
 	addProduction(pEventData->mUnit);
 }
-void HypothalamusClass::attack()
-{
-	SquadManager::Instance().attack();
-}
 
 
 void HypothalamusClass::buildUnit(BWAPI::UnitType unit, BuildingLocation position)
@@ -93,6 +89,14 @@ void HypothalamusClass::addProduction(BWAPI::UnitType unit)
 	mProduces.push_back(UnitToProduce(unit, 1, 100, Condition(ConditionTest::None, true), Condition(ConditionTest::None, true)));
 	MacroManager::Instance().setUnitsToProduce(mProduces);
 }
+void HypothalamusClass::attack()
+{
+	SquadManager::Instance().attack();
+}
+void HypothalamusClass::stop()
+{
+	SquadManager::Instance().stop();
+}
 
 void HypothalamusClass::vocalCommand(std::string command)
 {
@@ -120,7 +124,9 @@ void HypothalamusClass::vocalCommand(std::string command)
 		if(commandParts[0] == "debug")
 			EQUEUE( new ToggleDebugInfoEvent() );
 		else if(commandParts[0] == "attack")
-			SquadManager::Instance().attack();
+			attack();
+		else if(commandParts[0] == "stop")
+			stop();
 	}
 }
 
