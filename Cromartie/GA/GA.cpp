@@ -5,6 +5,8 @@
 #include "../GenericEvents.h"
 #include "../ScoreHelper.h"
 #include "../Stats.h"
+#include "../EventManager.h"
+#include "../HypothalamusEvents.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -151,6 +153,9 @@ void GA::onStarcraftStart()
 	{
 		status = 2; // 2 = finishedGeneration
 	}
+
+	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::getUnitType("Protoss Prope"), TaskType::Lowest));
+	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::getUnitType("Protoss Prope"), TaskType::Lowest));
 }
 
 void GA::loadPopulation()
