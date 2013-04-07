@@ -13,7 +13,7 @@
 
 int status; // 0 = FirstRun 1 = Running 2 = FinishedGeneration 3 = Finished
 
-GA::GA(void) : currentStateIndex(0), stateChanges(0), currentState(std::vector<BWAPI::UnitType>())
+GA::GA(void) : currentStateIndex(0), stateChanges(0)
 {
 }
 
@@ -54,10 +54,7 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 			stateChanges++;
 			BWAPI::Broodwar->sendText("Skipping state change");
 
-			// Executing the first state
-			currentState = getCurrentState();
-
-			stateExecutor.executeState(currentState);
+			stateExecutor.executeState(getCurrentState());
 			return;
 		}
 
@@ -69,19 +66,19 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 
 void GA::changeState()
 {
-	currentState.setFitness(fitness(currentState, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
+	getCurrentState().setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
 	currentStateIndex++;
-	currentState = getCurrentState();
 
-	stateExecutor.executeState(currentState);
+	if (stateExecutor.executeState(getCurrentState()) == false)
+		changeState();
 }
 
 State GA::getCurrentState()
 {
-	return currentChromosome.getStates().at(currentStateIndex);
+	return getCurrentChromosome().getStates().at(currentStateIndex);
 }
 
-double GA::fitness(State state, int score, int opponentScore)
+double GA::fitness(int score, int opponentScore)
 {
 	double fitness;
 
@@ -114,8 +111,9 @@ void GA::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, i
 		fitness = ((double)elapsedTime / (double)maxElapsedTime) * ((double)score / ((double)score + (double)scoreOpponent));
 	}
 
-	currentChromosome.setFitness(fitness);
+	getCurrentChromosome().setFitness(fitness);
 	savePopulation();
+	saveGAStatus();
 	Stats::logPop(population);
 }
 
@@ -144,7 +142,6 @@ void GA::onStarcraftStart()
 		if (population.at(i).getFitness() == -999)
 		{
 			currentChromosomeIndex = i;
-			currentChromosome = population.at(i);
 			nonTestedChromosomeFound = true;
 			break;
 		}
@@ -158,11 +155,19 @@ void GA::onStarcraftStart()
 	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::getUnitType("Protoss Prope"), TaskType::Lowest));
 }
 
+Chromosome& GA::getCurrentChromosome()
+{
+	return population.at(currentChromosomeIndex);
+}
+
 void GA::loadPopulation()
 {
 	DatabaseManager db;
 
 	population = db.selectAllChromosomes();
+
+	if (population.size() == 0)
+		BWAPI::Broodwar->sendText("Could not load chromosomes");
 }
 
 void GA::savePopulation()

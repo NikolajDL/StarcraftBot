@@ -1,6 +1,7 @@
 #pragma once
 #include "gene.h"
 #include "../Interface.h"
+#include <string>
 
 class BuildGene :
 	public Gene
@@ -8,6 +9,7 @@ class BuildGene :
 private:
 	BWAPI::UnitType buildingType;
 public:
+	std::string name;
 	BuildGene(void);
 	BuildGene(BWAPI::UnitType building);
 	~BuildGene(void);

@@ -89,16 +89,12 @@ bool StateExecutor::executeState(const State state)
 			{
 				if (assimilatorCount == 0)
 				{
+					assimilatorCount++;
 					EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::ExpansionGas));
 					return true;
 				}
 				else
 					return false;
-			}
-			else if (unit.getName() == "Protoss Photon Cannon")
-			{
-				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::BaseChoke));
-				return true;
 			}
 			else
 			{

@@ -95,6 +95,7 @@ std::tr1::shared_ptr<BuildGene> StarcraftRules::getValidBuildGene(const State& s
 
 	// Create the build gene and assign the random building to the gene
 	std::tr1::shared_ptr<BuildGene> bg( new BuildGene(randomBuilding) );
+	bg->name = randomBuilding.getName();
 
 	return bg;
 }
@@ -187,7 +188,6 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidUnits(const State& s)
 		else if (ut.getName() == "Protoss Robotics Facility")
 		{
 			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss Shuttle"));
-			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss Reaver"));
 		}
 		else if (ut.getName() == "Protoss Robotics Support Bay")
 		{
@@ -220,16 +220,25 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	std::vector<BWAPI::UnitType> validBuildings;
 	
 	// These buildings are availabel at all time, so we add them to the list of valid buildings to build
-	BWAPI::UnitType assimilator = BWAPI::UnitTypes::getUnitType("Protoss Assimilator");
+	
 	BWAPI::UnitType nexus = BWAPI::UnitTypes::getUnitType("Protoss Nexus");
 	BWAPI::UnitType forge = BWAPI::UnitTypes::getUnitType("Protoss Forge");
 	BWAPI::UnitType gateway = BWAPI::UnitTypes::getUnitType("Protoss Gateway");
 	
 	validBuildings.push_back(nexus);
-	validBuildings.push_back(assimilator);
 	validBuildings.push_back(forge);
 	validBuildings.push_back(gateway);
 
+	bool assimilatorFound = false;
+	for (int i = 0; i < s.getBuildingSequence().size(); i++)
+	{
+		BWAPI::UnitType ut = s.getBuildingSequence().at(i);
+
+		if (ut.getName() == "Protoss Assimilator")
+		{
+			assimilatorFound = true;
+		}
+	}
 	// We loop through each building that has been build. For each building, we add the buildings that, that building unlocks to the list of valid buildings.
 	for (int i = 0; i < s.getBuildingSequence().size(); i++)
 	{
@@ -243,29 +252,35 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Cybernetics Core"));
 		}
-		else if (ut.getName() == "Protoss Cybernetics Core")
+		else if (ut.getName() == "Protoss Cybernetics Core"  && assimilatorFound == true)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Stargate"));
 			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Citadel Of Adun"));
 			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Robotics Facility"));
 		}
-		else if (ut.getName() == "Protoss Robotics Facility")
+		else if (ut.getName() == "Protoss Robotics Facility" && assimilatorFound == true)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Robotics Support Bay"));
-			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Observatory"));
+			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Observatory"));
 		}
-		else if (ut.getName() == "Protoss Stargate")
+		else if (ut.getName() == "Protoss Stargate"  && assimilatorFound == true)
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Fleet Beacon"));
+			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Fleet Beacon"));
 		}
-		else if (ut.getName() == "Protoss Citadel Of Adun")
+		else if (ut.getName() == "Protoss Citadel Of Adun"  && assimilatorFound == true)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Templar Archives"));
 		}
-		else if (ut.getName() == "Protoss Templar Archives")
+		else if (ut.getName() == "Protoss Templar Archives"  && assimilatorFound == true)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Arbiter Tribunal"));
 		}
+	}
+
+	if (assimilatorFound == false)
+	{
+		BWAPI::UnitType assimilator = BWAPI::UnitTypes::getUnitType("Protoss Assimilator");
+		validBuildings.push_back(assimilator);
 	}
 
 	return validBuildings;
