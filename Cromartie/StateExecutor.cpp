@@ -7,7 +7,7 @@
 #include "HypothalamusEvents.h"
 #include <string>
 
-StateExecutor::StateExecutor(void)
+StateExecutor::StateExecutor(void) : assimilatorCount(0)
 {
 }
 
@@ -62,7 +62,7 @@ StateExecutor::~StateExecutor(void)
 //{
 //}
 
-void StateExecutor::executeState(const State state)
+bool StateExecutor::executeState(const State state)
 {
 	currentState = state;
 
@@ -83,14 +83,23 @@ void StateExecutor::executeState(const State state)
 			if (unit.getName() == "Protoss Nexus")
 			{
 				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::Expansion));
+				return true;
 			}
 			else if (unit.getName() == "Protoss Assimilator")
 			{
-				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::ExpansionGas));
+				if (assimilatorCount == 0)
+				{
+					assimilatorCount++;
+					EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::ExpansionGas));
+					return true;
+				}
+				else
+					return false;
 			}
 			else
 			{
 				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder));
+				return true;
 			}
 		}
 		else if (typeid(*g) == typeid(ResearchGene))
@@ -115,4 +124,5 @@ void StateExecutor::executeState(const State state)
 			}
 		}
 	}
+	return false;
 }

@@ -7,10 +7,11 @@ private:
 	int currentGene;
 	State currentState;
 	std::vector<BWAPI::UnitType> enquedUnits;
+	int assimilatorCount;
 public:
 	StateExecutor(void);
 	~StateExecutor(void);
-	void executeState(const State state);
+	bool executeState(const State state);
 	//void executeNextGene();
 	//bool isStateFinish();
 	//void unitComplete(BWAPI::UnitType unit);
