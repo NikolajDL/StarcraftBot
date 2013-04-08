@@ -101,7 +101,7 @@ void BuildOrderManagerClass::calculateNextBuilds()
 		float highestWinRate = 0.0f;
 		for(size_t i = 0; i < mNextBuilds.size(); ++i)
 		{
-			BWAPI::Broodwar->sendText((String_Builder() << "Possible build: " << BuildOrderIDStrings[mNextBuilds[i].getBuildID().underlying()]).getString().c_str());
+			//BWAPI::Broodwar->sendText((String_Builder() << "Possible build: " << BuildOrderIDStrings[mNextBuilds[i].getBuildID().underlying()]).getString().c_str());
 			winRates.push_back(mBuildOrders[mNextBuilds[i].getBuildID()].getWinRate(mCurrentBuild));
 			highestWinRate = std::max(highestWinRate, winRates.back());
 		}

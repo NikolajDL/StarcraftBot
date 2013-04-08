@@ -49,53 +49,7 @@ Cromartie::Cromartie()
 	, mLeavingGame(0)
 	, mSaidGG(false)
 {
-	using namespace BWAPI::Races;
-	using namespace BWAPI::UnitTypes;
-	using namespace BWAPI::UpgradeTypes;
-	using namespace BWAPI::TechTypes;
-
-	int ID_1 = 0;
-	int ID_2 = 0;
-	int ID_3 = 0;
-
-	BuildOrder dtRush(Protoss, BuildOrderID::LoadIn, "Fast Reaver");
-
-	//Army Behaviour
-	dtRush.addArmyBehaviour(ArmyBehaviour::Defensive);
-
-	// Build Order
-			dtRush.addItem(Protoss_Probe, 4, TaskType::Highest);
-	ID_1 =	dtRush.addItem(Protoss_Pylon, 1); //Pylon on 8
-			dtRush.addItem(Protoss_Probe, CB(ID_1, CallBackType::onDispatched), 2); //probage
-
-	ID_1 =	dtRush.addItem(Protoss_Gateway, CB(ID_1, CallBackType::onDispatched)); //Gateway on 10
-	ID_2 =	dtRush.addItem(Protoss_Assimilator, CB(ID_1, CallBackType::onDispatched)); //gas on 11
-
-			dtRush.addOrder(Order::TrainWorkers, CB(ID_2, CallBackType::onDispatched));
-	ID_2 =	dtRush.addItem(Protoss_Cybernetics_Core, CB(ID_1, CallBackType::onDispatched)); //core on 13
-			dtRush.addOrder(Order::Scout, CB(ID_1, CallBackType::onStarted));
-
-	ID_1 =	dtRush.addItem(Protoss_Pylon, TaskType::Supply, CB(ID_2, CallBackType::onDispatched)); //pylon on 15
-			dtRush.addItem(Protoss_Dragoon, 4); //dragoon on 18
-
-	ID_1 =	dtRush.addItem(Protoss_Pylon, TaskType::Supply, CB(ID_2, CallBackType::onDispatched)); //pylon on 21
 	
-	ID_2 =	dtRush.addItem(Protoss_Robotics_Facility, CB(ID_1, CallBackType::onDispatched)); // Robo Fac on 26
-	ID_1 =	dtRush.addItem(Protoss_Pylon, TaskType::Supply, CB(ID_2, CallBackType::onDispatched)); //pylon on 29
-	
-	ID_2 =	dtRush.addItem(Protoss_Robotics_Support_Bay, CB(ID_1, CallBackType::onDispatched)); //support bay on 34
-	
-			dtRush.addArmyBehaviour(ArmyBehaviour::Aggresive);
-
-			dtRush.addOrder(Order::SupplyManager, CB(ID_2, CallBackType::onDispatched));
-			dtRush.addOrder(Order::RefineryManager, CB(ID_2, CallBackType::onDispatched));
-			dtRush.addOrder(Order::MacroArmyProduction, CB(ID_2, CallBackType::onDispatched));
-			
-	dtRush.addNextBuild(BuildOrderID::Nexus, 24*60*3);
-	dtRush.addProduce(Protoss_Dragoon, 1);
-	dtRush.addProduce(Protoss_Reaver, 1, 1000);
-
-	loadedBO = dtRush;
 }
 
 Cromartie::~Cromartie(void)
@@ -129,9 +83,9 @@ void Cromartie::onStart()
 
 void Cromartie::onEnd(bool isWinner)
 {
-	BWAPI::Broodwar->sendText("Ending GA...");
-	_ga.onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 60*60*24);
-	BWAPI::Broodwar->sendText("GA Ended");
+	//BWAPI::Broodwar->sendText("Ending GA...");
+	//_ga.onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 60*60*24);
+	//BWAPI::Broodwar->sendText("GA Ended");
 
 	BuildOrderManager::Instance().onEnd(isWinner);
 	GameMemory::Instance().onEnd();
@@ -154,16 +108,16 @@ void Cromartie::onFrame()
 
 	if(!mOnBegin)
 	{
-		BWAPI::Broodwar->sendText("Starting GA...");
-		_ga.onStarcraftStart();
-		BWAPI::Broodwar->sendText("GA started!");
+		//BWAPI::Broodwar->sendText("Starting GA...");
+		//_ga.onStarcraftStart();
+		//BWAPI::Broodwar->sendText("GA started!");
 		mOnBegin = true;
 		EQUEUE( new OnStartEvent() );
-		EQUEUE( new PauseBuildOrderEvent() );
-		//EQUEUE( new AddBuildOrderEvent(&loadedBO));
+		//EQUEUE( new PauseBuildOrderEvent() );
+		EQUEUE( new ChangeBuildOrderEvent(BuildOrderID::TwoGate));
 
-		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
-		EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
+		//EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
+		//EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
 		//EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
 		//EQUEUE( new ToggleOrderEvent(Order::Scout) );
 		//EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
@@ -274,6 +228,6 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::attack, AttackEvent::sk_EventType);
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::stop, StopAttackEvent::sk_EventType);
 
-	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
-	ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 
+	//ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
+	//ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 
 }
