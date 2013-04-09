@@ -222,14 +222,18 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	// These buildings are availabel at all time, so we add them to the list of valid buildings to build
 	
 	BWAPI::UnitType nexus = BWAPI::UnitTypes::Protoss_Nexus;
-	BWAPI::UnitType forge = BWAPI::UnitTypes::Protoss_Forge;
 	BWAPI::UnitType gateway = BWAPI::UnitTypes::Protoss_Gateway;
 	
 	validBuildings.push_back(nexus);
-	validBuildings.push_back(forge);
 	validBuildings.push_back(gateway);
 
 	bool assimilatorFound = false;
+	bool forgeFound = false;
+	bool cyberFound = false;
+	bool suportFound = false;
+	bool observatoryFound = false;
+	bool citadelFound = false;
+
 	for (int i = 0; i < s.getBuildingSequence().size(); i++)
 	{
 		BWAPI::UnitType ut = s.getBuildingSequence().at(i);
@@ -238,6 +242,24 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		{
 			assimilatorFound = true;
 		}
+		else if (ut.getName() == "Protoss Forge")
+		{
+			forgeFound = true;
+		}
+		else if (ut.getName() == "Protoss Cybernetics Core")
+		{
+			cyberFound = true;
+		}
+		else if (ut.getName() == "Protoss Observatory")
+		{
+			observatoryFound = true;
+		}
+		else if (ut.getName() == "Protoss Robotics Support Bay")
+		{
+			suportFound = true;
+		}
+		else if (ut.getName() == "Protoss Citadel Of Adun")
+			citadelFound = true;
 	}
 	// We loop through each building that has been build. For each building, we add the buildings that, that building unlocks to the list of valid buildings.
 	for (int i = 0; i < s.getBuildingSequence().size(); i++)
@@ -250,18 +272,22 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		}
 		else if (ut.getName() == "Protoss Gateway")
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Cybernetics_Core);
+			if (cyberFound == false)
+				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Cybernetics_Core);
 		}
 		else if (ut.getName() == "Protoss Cybernetics Core"  && assimilatorFound == true)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Stargate);
-			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Citadel_of_Adun);
+			if (citadelFound == false)
+				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Citadel_of_Adun);
 			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Robotics_Facility);
 		}
 		else if (ut.getName() == "Protoss Robotics Facility" && assimilatorFound == true)
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Robotics_Support_Bay);
-			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Observatory);
+			if (suportFound == false)
+				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Robotics_Support_Bay);
+			if (observatoryFound == false)
+				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Observatory);
 		}
 		else if (ut.getName() == "Protoss Stargate"  && assimilatorFound == true)
 		{
@@ -282,6 +308,12 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		BWAPI::UnitType assimilator = BWAPI::UnitTypes::Protoss_Assimilator;
 		validBuildings.push_back(assimilator);
 	}
+	if (forgeFound == false)
+	{
+		BWAPI::UnitType forge = BWAPI::UnitTypes::Protoss_Forge;
+		validBuildings.push_back(forge);
+	}
+
 
 	return validBuildings;
 }

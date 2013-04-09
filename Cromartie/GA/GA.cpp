@@ -68,6 +68,9 @@ void GA::changeState()
 	getCurrentState().setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
 	currentStateIndex++;
 
+	if (currentStateIndex > 49)
+		return;
+
 	if (stateExecutor.executeState(getCurrentState()) == false)
 		changeState();
 }
@@ -100,6 +103,8 @@ double GA::fitness(int score, int opponentScore)
 
 void GA::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, int maxElapsedTime)
 {
+
+
 	double fitness = 0;
 	if (winner)
 	{
@@ -114,6 +119,20 @@ void GA::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, i
 
 	Chromosome& chromo = getCurrentChromosome();
 	chromo.setFitness(fitness);
+
+	bool nonTestedChromosomeFound = false;
+	for (int i = 0; i < population.size(); i++)
+	{
+		if (population.at(i).getFitness() == -999)
+		{
+			nonTestedChromosomeFound = true;
+			break;
+		}
+	}
+	if (nonTestedChromosomeFound == false)
+	{
+		status = 2; // 2 = finishedGeneration
+	}
 
 	savePopulation();
 	saveGAStatus();
@@ -137,21 +156,16 @@ void GA::onStarcraftStart()
 	{
 		loadPopulation();
 		createNextGeneration();
+		status = 1;
 	}
 
-	bool nonTestedChromosomeFound = false;
 	for (int i = 0; i < population.size(); i++)
 	{
 		if (population.at(i).getFitness() == -999)
 		{
 			currentChromosomeIndex = i;
-			nonTestedChromosomeFound = true;
 			break;
 		}
-	}
-	if (nonTestedChromosomeFound == false)
-	{
-		status = 2; // 2 = finishedGeneration
 	}
 
 	BWAPI::Broodwar->sendText(static_cast<std::ostringstream*>( &(std::ostringstream() << currentChromosomeIndex) )->str().c_str());
