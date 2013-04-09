@@ -12,15 +12,16 @@
 #include <windows.h>
 
 #define SQLITE_FILENAME "sqlite.db"
-#define SQLITE_FILENAME_BUFFER "sqliteBuffer.db"
 
 DatabaseManager::DatabaseManager(void)
 {
+	sqlite3_open(SQLITE_FILENAME, &db);
 }
 
 
 DatabaseManager::~DatabaseManager(void)
 {
+	sqlite3_close(db);
 }
 
 void DatabaseManager::insertChromosomes(std::vector<Chromosome> c)
@@ -28,9 +29,6 @@ void DatabaseManager::insertChromosomes(std::vector<Chromosome> c)
 	for(int i=0;i<c.size();i++)	{
 		this->insertChromosome(c.at(i));
 	}
-
-	CopyFile( SQLITE_FILENAME_BUFFER, SQLITE_FILENAME, false);
-	remove(SQLITE_FILENAME_BUFFER);
 }
 
 void DatabaseManager::insertAndReplaceChromosomes(std::vector<Chromosome> c)
@@ -41,10 +39,6 @@ void DatabaseManager::insertAndReplaceChromosomes(std::vector<Chromosome> c)
 
 void DatabaseManager::eraseDatabaseContent(void)
 {
-	remove( "sqlite.db" );
-	CopyFile( "sqliteEmpty.db", SQLITE_FILENAME_BUFFER, false);
-	/*sqlite3_open(SQLITE_FILENAME, &db);
-
 	std::stringstream ss;
 	ss << "DELETE FROM attack_genes;";
 	sqlite3_stmt* delete_attackgenes_stmt;
@@ -121,13 +115,11 @@ void DatabaseManager::eraseDatabaseContent(void)
 		0);
 	sqlite3_step(delete_chromosomes_stmt);
 	sqlite3_finalize(delete_chromosomes_stmt);
-
-	sqlite3_close(db);*/
 }
 
 void DatabaseManager::insertChromosome(Chromosome c)
 {
-	sqlite3_open(SQLITE_FILENAME_BUFFER, &db);
+
 	std::stringstream ss;
 	ss << "INSERT INTO chromosomes(fitness) VALUES(" << c.getFitness() << ");";
 	sqlite3_stmt* chromosome_stmt;
@@ -212,7 +204,7 @@ void DatabaseManager::insertChromosome(Chromosome c)
 		}
 	}
 
-	sqlite3_close(db);
+	
 }
 
 // If you wanna avoid having a brain aneurysm, avoid reading this method. 
@@ -223,8 +215,6 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 
 	std::stringstream ss;
 	ss << "SELECT id, fitness FROM chromosomes;";
-
-	sqlite3_open(SQLITE_FILENAME, &db);
 
 	sqlite3_stmt* chromosome_stmt;
 	sqlite3_prepare_v2(db,
@@ -344,7 +334,6 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 	}	
 	
 	sqlite3_finalize(chromosome_stmt);
-	sqlite3_close(db);
 
 	return result;
 }
