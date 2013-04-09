@@ -90,12 +90,14 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 		
 	}
 
-	boost::random::uniform_int_distribution<> dist2(0, 9);
-	int random = dist(randomGen);
+
 
 	// For each winner we apply a genetic operator
 	for (int i = 0; i < winners.size(); i++)
 	{
+		boost::random::uniform_int_distribution<> dist2(0, 9);
+		int random = dist(randomGen);
+
 		if (random > 6) // 30% chance
 		{
 			 Chromosome child = GeneticOperator::RuleReplaceMutation(winners.at(i));
@@ -122,6 +124,10 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 					didFindThreeMatches = true;
 					break;
 				}
+			}
+			if (didFindThreeMatches == false)
+			{
+				i--;
 			}
 			if (didFindThreeMatches)
 				std::cout<<"Never found three state matches for State Crossover opperation\n";
