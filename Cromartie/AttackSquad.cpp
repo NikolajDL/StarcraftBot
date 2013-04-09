@@ -100,11 +100,12 @@ bool AttackSquadTask::update()
 		engageGroup += unitGroup;
 	}
 	
+	
+	BWAPI::Broodwar->drawTextScreen(5, 40, "Base under attack: %s", (baseUnderAttack ? "Yes" : "No"));
+
 	if(baseUnderAttack)
 	{
-		const int rating = mUnits.ratingDifference(baseToDefend->getEnemyThreats());
-		if(rating > -1000)
-			squadsGoal = Goal(ActionType::Defend, baseToDefend->getEnemyThreats(), avoidGroup);
+		squadsGoal = Goal(ActionType::Defend, baseToDefend->getEnemyThreats(), avoidGroup);
 	}
 
 	Base bestBaseToAttack;
@@ -129,18 +130,14 @@ bool AttackSquadTask::update()
 			squadsGoal = Goal(ActionType::Attack, engageGroup, avoidGroup);
 	}
 
-	if(squadsGoal.getGoalType() == GoalType::None && baseToDefend && mUnits.canMajorityAttack(baseToDefend->getEnemyThreats()))
+	if(squadsGoal.getGoalType() == GoalType::None && baseToDefend)
 		squadsGoal = Goal(ActionType::Defend, baseToDefend->getCenterLocation(), engageGroup, avoidGroup);
 
 	if(squadsGoal.getGoalType() == GoalType::None || mUnits.size()<=0)
 	{
 		if(!BorderTracker::Instance().getBorderPositions(PositionType::TechDefenseChokepoint).empty())
 			squadsGoal = Goal(ActionType::Hold, getLargestChoke(BorderTracker::Instance().getBorderPositions(PositionType::TechDefenseChokepoint)).mChoke->getCenter(), engageGroup, avoidGroup);
-	}
-
-	if(squadsGoal.getGoalType() == GoalType::None || mUnits.size()<=0)
-	{
-		if(!BorderTracker::Instance().getBorderPositions(PositionType::DefenseChokepoint).empty())
+		else if(!BorderTracker::Instance().getBorderPositions(PositionType::DefenseChokepoint).empty())
 			squadsGoal = Goal(ActionType::Hold, getLargestChoke(BorderTracker::Instance().getBorderPositions(PositionType::DefenseChokepoint)).mChoke->getCenter(), engageGroup, avoidGroup);
 	}
 

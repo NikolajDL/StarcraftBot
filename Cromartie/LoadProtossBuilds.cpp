@@ -174,8 +174,9 @@ void BuildOrderManagerClass::LoadProtossBuilds()
 	twoGate.setStartingCondition(Condition(ConditionTest::isEnemyZerg) || Condition(ConditionTest::isEnemyProtoss) || Condition(ConditionTest::isEnemyUnknown));
 
 	// Follow Ups
-	twoGate.addNextBuild(BuildOrderID::CoreIntoStargate, 0, Condition(ConditionTest::isEnemyZerg));
-	twoGate.addNextBuild(BuildOrderID::FourGateGoon, 0, Condition(ConditionTest::isEnemyProtoss) || Condition(ConditionTest::isEnemyTerran) || Condition(ConditionTest::isEnemyUnknown));
+	//twoGate.addNextBuild(BuildOrderID::CoreIntoStargate, 0, Condition(ConditionTest::isEnemyZerg));
+	//twoGate.addNextBuild(BuildOrderID::FourGateGoon, 0, Condition(ConditionTest::isEnemyProtoss) || Condition(ConditionTest::isEnemyTerran) || Condition(ConditionTest::isEnemyUnknown));
+	twoGate.addNextBuild(BuildOrderID::FourGateGoon);
 
 	//Units to Produce
 	twoGate.addProduce(Protoss_Zealot, 1);
@@ -257,6 +258,7 @@ void BuildOrderManagerClass::LoadProtossBuilds()
 	fourteenNexus.setStartingCondition(Condition(ConditionTest::isEnemyTerran) && Condition(ConditionTest::numberOfEnemies, 1) && Condition(ConditionTest::mapSize, 4));
 
 	fourteenNexus.addNextBuild(BuildOrderID::CitadelFirst, 24*60*2);
+	//fourteenNexus.addNextBuild(BuildOrderID::CitadelFirst, 24*60*2);
 
 	//Units to Produce
 	fourteenNexus.addProduce(Protoss_Dragoon, 6);
@@ -420,9 +422,10 @@ void BuildOrderManagerClass::LoadProtossBuilds()
 	nexus.addOrder(Order::Scout);
 
 	// Follow Ups
-	nexus.addNextBuild(BuildOrderID::PvPMidGame, 0, Condition(ConditionTest::isEnemyProtoss));
-	nexus.addNextBuild(BuildOrderID::PvZEndGame, 0, Condition(ConditionTest::isEnemyZerg));
-	nexus.addNextBuild(BuildOrderID::CitadelFirst, 24*50*2);
+	nexus.addNextBuild(BuildOrderID::PvPMidGame);
+	//nexus.addNextBuild(BuildOrderID::PvPMidGame, 0, Condition(ConditionTest::isEnemyProtoss));
+	//nexus.addNextBuild(BuildOrderID::PvZEndGame, 0, Condition(ConditionTest::isEnemyZerg));
+	//nexus.addNextBuild(BuildOrderID::CitadelFirst, 24*50*2);
 
 	//Units to Produce
 	nexus.addProduce(Protoss_Dragoon, 6, 110);
@@ -452,8 +455,8 @@ void BuildOrderManagerClass::LoadProtossBuilds()
 	citadel.addOrder(Order::Scout);
 
 	// Follow Ups
-	citadel.addNextBuild(BuildOrderID::PvTMidGame, 24*60);
-	citadel.addNextBuild(BuildOrderID::PvTCarrierSwitch, 0, Condition(ConditionTest::enemyUnitCountLessThan, BWAPI::UnitTypes::Terran_Goliath, 2) && Condition(ConditionTest::myUnitCountGreaterEqualThan, BWAPI::UnitTypes::Protoss_Nexus, 2) && Condition(ConditionTest::randomChance, 0.2));
+	citadel.addNextBuild(BuildOrderID::PvTCarrierSwitch, 24*60);
+	//citadel.addNextBuild(BuildOrderID::PvTCarrierSwitch, 0, Condition(ConditionTest::enemyUnitCountLessThan, BWAPI::UnitTypes::Terran_Goliath, 2) && Condition(ConditionTest::myUnitCountGreaterEqualThan, BWAPI::UnitTypes::Protoss_Nexus, 2) && Condition(ConditionTest::randomChance, 0.2));
 
 	// Squads
 	citadel.addSquad(SquadType::ReaverDropSquad);
