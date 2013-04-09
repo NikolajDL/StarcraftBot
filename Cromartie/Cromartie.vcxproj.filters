@@ -377,6 +377,7 @@
     <ClCompile Include="AttackSquad.cpp">
       <Filter>Squad Manager\Squads</Filter>
     </ClCompile>
+    <ClCompile Include="Stats.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WallTracker.h">
@@ -744,5 +745,6 @@
     <ClInclude Include="AttackSquad.h">
       <Filter>Squad Manager\Squads</Filter>
     </ClInclude>
+    <ClInclude Include="Stats.h" />
   </ItemGroup>
 </Project>

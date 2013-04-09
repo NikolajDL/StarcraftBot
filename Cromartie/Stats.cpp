@@ -20,16 +20,18 @@ void Stats::logPop(vector<Chromosome> pop)
 
 	double bestFitness = pop.at(0).getFitness();
 	double avgFitness = 0;
+	int count = 0;
 
 	for (int i = 0; i < pop.size(); i++)
 	{
 		if (pop.at(i).getFitness() != -999)
 		{
 			avgFitness += pop.at(i).getFitness();
+			count++;
 		}
 	}
 
-	avgFitness = avgFitness / (double) pop.size();
+	avgFitness = avgFitness / (double) count;
 
 	writeToFile(bestFitness, avgFitness);
 }

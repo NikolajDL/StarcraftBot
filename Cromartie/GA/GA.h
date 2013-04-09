@@ -5,6 +5,7 @@
 #include "../Interface.h"
 #include "../IEventData.h"
 #include "../StateExecutor.h"
+#include "DatabaseManager.h"
 
 class GA
 {
@@ -25,6 +26,7 @@ private:
 	void changeState(void);
 	Chromosome& getCurrentChromosome(void);
 	State getCurrentState(void);
+	DatabaseManager db;
 public:
 	GA(void);
 	~GA(void);

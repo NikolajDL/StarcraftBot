@@ -174,41 +174,41 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidUnits(const State& s)
 
 		if (ut.getName() == "Protoss Gateway")
 		{
-			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss Zealot"));
+			validUnits.push_back(BWAPI::UnitTypes::Protoss_Zealot);
 		}
 		else if (ut.getName() == "Protoss Cybernetics Core")
 		{
-			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss Dragoon"));
+			validUnits.push_back(BWAPI::UnitTypes::Protoss_Dragoon);
 		}
 		else if (ut.getName() == "Protoss Templar Archives")
 		{
-			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss Dark Templar"));
-			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss High Templar"));
+			validUnits.push_back(BWAPI::UnitTypes::Protoss_Dark_Templar);
+			validUnits.push_back(BWAPI::UnitTypes::Protoss_High_Templar);
 		}
 		else if (ut.getName() == "Protoss Robotics Facility")
 		{
-			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss Shuttle"));
+			validUnits.push_back(BWAPI::UnitTypes::Protoss_Shuttle);
 		}
 		else if (ut.getName() == "Protoss Robotics Support Bay")
 		{
-			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss Reaver"));
+			validUnits.push_back(BWAPI::UnitTypes::Protoss_Reaver);
 		}
 		else if (ut.getName() == "Protoss Observatory")
 		{
-			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss Observer"));
+			validUnits.push_back(BWAPI::UnitTypes::Protoss_Observer);
 		}
 		else if (ut.getName() == "Protoss Stargate")
 		{
-			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss Scout"));
-			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss Corsair"));
+			validUnits.push_back(BWAPI::UnitTypes::Protoss_Scout);
+			validUnits.push_back(BWAPI::UnitTypes::Protoss_Corsair);
 		}
 		else if (ut.getName() == "Protoss Arbiter Tribunal")
 		{
-			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss Arbiter"));
+			validUnits.push_back(BWAPI::UnitTypes::Protoss_Arbiter);
 		}
 		else if (ut.getName() == "Protoss Fleet Beacon")
 		{
-			validUnits.push_back(BWAPI::UnitTypes::getUnitType("Protoss Carrier"));
+			validUnits.push_back(BWAPI::UnitTypes::Protoss_Carrier);
 		}
 	}
 
@@ -221,9 +221,9 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	
 	// These buildings are availabel at all time, so we add them to the list of valid buildings to build
 	
-	BWAPI::UnitType nexus = BWAPI::UnitTypes::getUnitType("Protoss Nexus");
-	BWAPI::UnitType forge = BWAPI::UnitTypes::getUnitType("Protoss Forge");
-	BWAPI::UnitType gateway = BWAPI::UnitTypes::getUnitType("Protoss Gateway");
+	BWAPI::UnitType nexus = BWAPI::UnitTypes::Protoss_Nexus;
+	BWAPI::UnitType forge = BWAPI::UnitTypes::Protoss_Forge;
+	BWAPI::UnitType gateway = BWAPI::UnitTypes::Protoss_Gateway;
 	
 	validBuildings.push_back(nexus);
 	validBuildings.push_back(forge);
@@ -246,40 +246,40 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 
 		if (ut.getName() == "Protoss Forge")
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Photon Cannon"));
+			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Photon_Cannon);
 		}
 		else if (ut.getName() == "Protoss Gateway")
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Cybernetics Core"));
+			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Cybernetics_Core);
 		}
 		else if (ut.getName() == "Protoss Cybernetics Core"  && assimilatorFound == true)
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Stargate"));
-			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Citadel Of Adun"));
-			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Robotics Facility"));
+			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Stargate);
+			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Citadel_of_Adun);
+			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Robotics_Facility);
 		}
 		else if (ut.getName() == "Protoss Robotics Facility" && assimilatorFound == true)
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Robotics Support Bay"));
-			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Observatory"));
+			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Robotics_Support_Bay);
+			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Observatory);
 		}
 		else if (ut.getName() == "Protoss Stargate"  && assimilatorFound == true)
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Fleet Beacon"));
+			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Fleet_Beacon);
 		}
 		else if (ut.getName() == "Protoss Citadel Of Adun"  && assimilatorFound == true)
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Templar Archives"));
+			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Templar_Archives);
 		}
 		else if (ut.getName() == "Protoss Templar Archives"  && assimilatorFound == true)
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::getUnitType("Protoss Arbiter Tribunal"));
+			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Arbiter_Tribunal);
 		}
 	}
 
 	if (assimilatorFound == false)
 	{
-		BWAPI::UnitType assimilator = BWAPI::UnitTypes::getUnitType("Protoss Assimilator");
+		BWAPI::UnitType assimilator = BWAPI::UnitTypes::Protoss_Assimilator;
 		validBuildings.push_back(assimilator);
 	}
 

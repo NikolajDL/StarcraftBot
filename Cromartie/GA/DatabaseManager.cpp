@@ -8,8 +8,11 @@
 #include <typeinfo>
 #include <iostream>
 #include "sqlite\sqlite3.h"
+#include <stdio.h>
+#include <windows.h>
 
 #define SQLITE_FILENAME "sqlite.db"
+#define SQLITE_FILENAME_BUFFER "sqliteBuffer.db"
 
 DatabaseManager::DatabaseManager(void)
 {
@@ -25,6 +28,9 @@ void DatabaseManager::insertChromosomes(std::vector<Chromosome> c)
 	for(int i=0;i<c.size();i++)	{
 		this->insertChromosome(c.at(i));
 	}
+
+	CopyFile( SQLITE_FILENAME_BUFFER, SQLITE_FILENAME, false);
+	remove(SQLITE_FILENAME_BUFFER);
 }
 
 void DatabaseManager::insertAndReplaceChromosomes(std::vector<Chromosome> c)
@@ -35,7 +41,9 @@ void DatabaseManager::insertAndReplaceChromosomes(std::vector<Chromosome> c)
 
 void DatabaseManager::eraseDatabaseContent(void)
 {
-	sqlite3_open(SQLITE_FILENAME, &db);
+	remove( "sqlite.db" );
+	CopyFile( "sqliteEmpty.db", SQLITE_FILENAME_BUFFER, false);
+	/*sqlite3_open(SQLITE_FILENAME, &db);
 
 	std::stringstream ss;
 	ss << "DELETE FROM attack_genes;";
@@ -114,12 +122,12 @@ void DatabaseManager::eraseDatabaseContent(void)
 	sqlite3_step(delete_chromosomes_stmt);
 	sqlite3_finalize(delete_chromosomes_stmt);
 
-	sqlite3_close(db);
+	sqlite3_close(db);*/
 }
 
 void DatabaseManager::insertChromosome(Chromosome c)
 {
-	sqlite3_open(SQLITE_FILENAME, &db);
+	sqlite3_open(SQLITE_FILENAME_BUFFER, &db);
 	std::stringstream ss;
 	ss << "INSERT INTO chromosomes(fitness) VALUES(" << c.getFitness() << ");";
 	sqlite3_stmt* chromosome_stmt;
@@ -254,7 +262,6 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 			ss << "SELECT id FROM genes WHERE states_id = " << stateID << ";";
 
 			sqlite3_stmt* gene_stmt;
-			sqlite3_open(SQLITE_FILENAME, &db);
 			sqlite3_prepare_v2(db,
 				ss.str().c_str(),
 				-1,

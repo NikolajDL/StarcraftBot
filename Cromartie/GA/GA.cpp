@@ -1,7 +1,6 @@
 #include "GA.h"
 #include "GeneticOperator.h"
 #include "TournamentSelection.h"
-#include "DatabaseManager.h"
 #include "../GenericEvents.h"
 #include "../ScoreHelper.h"
 #include "../Stats.h"
@@ -111,7 +110,11 @@ void GA::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, i
 		fitness = ((double)elapsedTime / (double)maxElapsedTime) * ((double)score / ((double)score + (double)scoreOpponent));
 	}
 
-	getCurrentChromosome().setFitness(fitness);
+	fitness *= 10000;
+
+	Chromosome& chromo = getCurrentChromosome();
+	chromo.setFitness(fitness);
+
 	savePopulation();
 	saveGAStatus();
 	Stats::logPop(population);
@@ -123,7 +126,7 @@ void GA::onStarcraftStart()
 
 	if (status == 0) // 0 = FirstRun
 	{
-		generateInitialPopulation(50);
+		generateInitialPopulation(5);
 		status = 1; // 1 = running
 	}
 	else if (status == 1) // 1 = running
@@ -151,6 +154,8 @@ void GA::onStarcraftStart()
 		status = 2; // 2 = finishedGeneration
 	}
 
+	BWAPI::Broodwar->sendText(static_cast<std::ostringstream*>( &(std::ostringstream() << currentChromosomeIndex) )->str().c_str());
+
 	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::getUnitType("Protoss Prope"), TaskType::Lowest));
 	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::getUnitType("Protoss Prope"), TaskType::Lowest));
 }
@@ -162,8 +167,6 @@ Chromosome& GA::getCurrentChromosome()
 
 void GA::loadPopulation()
 {
-	DatabaseManager db;
-
 	population = db.selectAllChromosomes();
 
 	if (population.size() == 0)
@@ -172,10 +175,7 @@ void GA::loadPopulation()
 
 void GA::savePopulation()
 {
-	DatabaseManager db;
-
 	db.eraseDatabaseContent();
-
 	db.insertChromosomes(population);
 }
 
