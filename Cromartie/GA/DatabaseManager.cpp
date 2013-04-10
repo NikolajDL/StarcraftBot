@@ -307,7 +307,7 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 				{
 					std::string unittype = std::string(
 						reinterpret_cast<const char*>(sqlite3_column_text(combatgene_stmt,0))); 
-					int unitamount = sqlite3_column_int(combatgene_stmt, 2);
+					int unitamount = sqlite3_column_int(combatgene_stmt, 1);
 					s.addGene(std::tr1::shared_ptr<CombatGene>(new CombatGene(BWAPI::UnitTypes::getUnitType(unittype), unitamount)));
 				} else if(sqlite3_step(researchgene_stmt) == SQLITE_ROW)
 				{
