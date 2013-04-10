@@ -8,16 +8,20 @@
 #include <typeinfo>
 #include <iostream>
 #include "sqlite\sqlite3.h"
+#include <stdio.h>
+#include <windows.h>
 
 #define SQLITE_FILENAME "sqlite.db"
 
 DatabaseManager::DatabaseManager(void)
 {
+	sqlite3_open(SQLITE_FILENAME, &db);
 }
 
 
 DatabaseManager::~DatabaseManager(void)
 {
+	sqlite3_close(db);
 }
 
 void DatabaseManager::insertChromosomes(std::vector<Chromosome> c)
@@ -35,8 +39,6 @@ void DatabaseManager::insertAndReplaceChromosomes(std::vector<Chromosome> c)
 
 void DatabaseManager::eraseDatabaseContent(void)
 {
-	sqlite3_open(SQLITE_FILENAME, &db);
-
 	std::stringstream ss;
 	ss << "DELETE FROM attack_genes;";
 	sqlite3_stmt* delete_attackgenes_stmt;
@@ -113,13 +115,11 @@ void DatabaseManager::eraseDatabaseContent(void)
 		0);
 	sqlite3_step(delete_chromosomes_stmt);
 	sqlite3_finalize(delete_chromosomes_stmt);
-
-	sqlite3_close(db);
 }
 
 void DatabaseManager::insertChromosome(Chromosome c)
 {
-	sqlite3_open(SQLITE_FILENAME, &db);
+
 	std::stringstream ss;
 	ss << "INSERT INTO chromosomes(fitness) VALUES(" << c.getFitness() << ");";
 	sqlite3_stmt* chromosome_stmt;
@@ -204,7 +204,7 @@ void DatabaseManager::insertChromosome(Chromosome c)
 		}
 	}
 
-	sqlite3_close(db);
+	
 }
 
 // If you wanna avoid having a brain aneurysm, avoid reading this method. 
@@ -215,8 +215,6 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 
 	std::stringstream ss;
 	ss << "SELECT id, fitness FROM chromosomes;";
-
-	sqlite3_open(SQLITE_FILENAME, &db);
 
 	sqlite3_stmt* chromosome_stmt;
 	sqlite3_prepare_v2(db,
@@ -254,7 +252,6 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 			ss << "SELECT id FROM genes WHERE states_id = " << stateID << ";";
 
 			sqlite3_stmt* gene_stmt;
-			sqlite3_open(SQLITE_FILENAME, &db);
 			sqlite3_prepare_v2(db,
 				ss.str().c_str(),
 				-1,
@@ -310,7 +307,7 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 				{
 					std::string unittype = std::string(
 						reinterpret_cast<const char*>(sqlite3_column_text(combatgene_stmt,0))); 
-					int unitamount = sqlite3_column_int(combatgene_stmt, 2);
+					int unitamount = sqlite3_column_int(combatgene_stmt, 1);
 					s.addGene(std::tr1::shared_ptr<CombatGene>(new CombatGene(BWAPI::UnitTypes::getUnitType(unittype), unitamount)));
 				} else if(sqlite3_step(researchgene_stmt) == SQLITE_ROW)
 				{
@@ -337,7 +334,6 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 	}	
 	
 	sqlite3_finalize(chromosome_stmt);
-	sqlite3_close(db);
 
 	return result;
 }
