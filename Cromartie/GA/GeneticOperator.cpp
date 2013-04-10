@@ -236,7 +236,7 @@ Chromosome GeneticOperator::RandomChromosome(void)
 		State s(buildSequence);
 		while(randomNrGene != 4) // 4 = build gene
 		{
-			bool found;
+			bool found = false;
 			switch(randomNrGene)
 			{
 				case 1:	
@@ -269,6 +269,14 @@ Chromosome GeneticOperator::RandomChromosome(void)
 			}
 			randomNrGene = dist(randomGen);
 		}
+
+		bool found = false;
+		std::tr1::shared_ptr<CombatGene> gene = StarcraftRules::getValidCombatGene(s, found);
+			if (found == true)
+				s.addGene(gene);
+			else
+				std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
+
 		s.addGene(StarcraftRules::getValidBuildGene(s));
 		c.addState(s);
 

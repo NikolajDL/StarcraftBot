@@ -39,7 +39,7 @@ void Stats::logPop(vector<Chromosome> pop)
 void Stats::writeToFile(double best, double avg)
 {
 	std::string bestStr = boost::lexical_cast<std::string>(best);
-	std::string avgStr = boost::lexical_cast<std::string>(best);
+	std::string avgStr = boost::lexical_cast<std::string>(avg);
 
 	 ofstream myfile;
 	 myfile.open ("stats.txt", ios::app);

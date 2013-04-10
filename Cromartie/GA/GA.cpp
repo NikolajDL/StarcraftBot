@@ -143,7 +143,7 @@ void GA::onStarcraftStart()
 
 	if (status == 0) // 0 = FirstRun
 	{
-		generateInitialPopulation(50);
+		generateInitialPopulation(5);
 		status = 1; // 1 = running
 	}
 	else if (status == 1) // 1 = running
