@@ -103,16 +103,14 @@ double GA::fitness(int score, int opponentScore)
 
 void GA::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, int maxElapsedTime)
 {
-
-
 	double fitness = 0;
 	if (winner)
 	{
-		fitness = (double)score / ((double)score + (double)scoreOpponent);
+		fitness = (double)score / ((double)scoreOpponent);
 	}
 	else
 	{
-		fitness = ((double)elapsedTime / (double)maxElapsedTime) * ((double)score / ((double)score + (double)scoreOpponent));
+		fitness = ((double)elapsedTime / (double)maxElapsedTime) * ((double)score / ((double)scoreOpponent));
 	}
 
 	fitness *= 10000;
@@ -145,7 +143,7 @@ void GA::onStarcraftStart()
 
 	if (status == 0) // 0 = FirstRun
 	{
-		generateInitialPopulation(5);
+		generateInitialPopulation(50);
 		status = 1; // 1 = running
 	}
 	else if (status == 1) // 1 = running
