@@ -28,7 +28,7 @@ void SquadManagerClass::stop()
 
 void SquadManagerClass::update()
 {
-	/*for(std::map<Base, DefenseSquadPointer>::iterator it = mDefenseSquads.begin(); it != mDefenseSquads.end();)
+	for(std::map<Base, DefenseSquadPointer>::iterator it = mDefenseSquads.begin(); it != mDefenseSquads.end();)
 	{
 		if(it->first->getEnemyThreats().empty() || (it->first->isMinedOut() && it->first->getNumberOfTechBuildings() == 0))
 			it->second->cancel();
@@ -47,7 +47,7 @@ void SquadManagerClass::update()
 			squad->setGoal(Goal(ActionType::Defend, base));
 			mDefenseSquads[base] = squad;
 		}
-	}*/
+	}
 
 	if(mDebugDraw)
 	{

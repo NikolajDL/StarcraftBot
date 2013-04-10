@@ -100,7 +100,8 @@ void DefenseSquadTask::giveUnit(Unit unit)
 	else if(unit->getType().isWorker())
 		mWorkerDefenders.insert(unit);
 
-	mUnits.insert(unit);
+	// Only plade workers in defense squads
+	//mUnits.insert(unit);
 
 	mUnitBehaviours[unit] = Behaviour(unit);
 }
