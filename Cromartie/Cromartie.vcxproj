@@ -41,6 +41,7 @@
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="EventRecorder.cpp" />
     <ClCompile Include="ExpansionManager.cpp" />
+    <ClCompile Include="FlatFileSerializer.cpp" />
     <ClCompile Include="GameMemory.cpp" />
     <ClCompile Include="GameProgressDetection.cpp" />
     <ClCompile Include="GatherTask.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="ExpansionManager.h" />
     <ClInclude Include="FastDelegate.h" />
     <ClInclude Include="FastDelegateBind.h" />
+    <ClInclude Include="FlatFileSerializer.h" />
     <ClInclude Include="GameMemory.h" />
     <ClInclude Include="GameProgressDetection.h" />
     <ClInclude Include="GatherTask.h" />

@@ -378,6 +378,7 @@
       <Filter>Squad Manager\Squads</Filter>
     </ClCompile>
     <ClCompile Include="Stats.cpp" />
+    <ClCompile Include="FlatFileSerializer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WallTracker.h">
@@ -746,5 +747,6 @@
       <Filter>Squad Manager\Squads</Filter>
     </ClInclude>
     <ClInclude Include="Stats.h" />
+    <ClInclude Include="FlatFileSerializer.h" />
   </ItemGroup>
 </Project>

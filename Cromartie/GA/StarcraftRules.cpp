@@ -258,7 +258,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		{
 			suportFound = true;
 		}
-		else if (ut.getName() == "Protoss Citadel Of Adun")
+		else if (ut.getName() == "Protoss Citadel of Adun")
 			citadelFound = true;
 	}
 	// We loop through each building that has been build. For each building, we add the buildings that, that building unlocks to the list of valid buildings.

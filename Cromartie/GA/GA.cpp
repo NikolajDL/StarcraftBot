@@ -6,6 +6,7 @@
 #include "../Stats.h"
 #include "../EventManager.h"
 #include "../HypothalamusEvents.h"
+#include "../FlatFileSerializer.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -179,7 +180,7 @@ Chromosome& GA::getCurrentChromosome()
 
 void GA::loadPopulation()
 {
-	population = db.selectAllChromosomes();
+	population = FlatFileSerializer::loadPop();
 
 	if (population.size() == 0)
 		BWAPI::Broodwar->sendText("Could not load chromosomes");
@@ -187,8 +188,7 @@ void GA::loadPopulation()
 
 void GA::savePopulation()
 {
-	db.eraseDatabaseContent();
-	db.insertChromosomes(population);
+	FlatFileSerializer::savePop(population);
 }
 
 void GA::createNextGeneration()
