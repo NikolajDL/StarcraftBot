@@ -28,3 +28,18 @@ int ScoreHelper::getOpponentScore(void)
 
 	return scoreOpponent;
 }
+
+int ScoreHelper::getUnitScore(void)
+{
+	return BWAPI::Broodwar->enemy()->getUnitScore();
+}
+
+int ScoreHelper::getKillScore(void)
+{
+	return BWAPI::Broodwar->enemy()->getKillScore();
+}
+
+int ScoreHelper::getBuildingScore(void)
+{
+	return BWAPI::Broodwar->enemy()->getBuildingScore();
+}

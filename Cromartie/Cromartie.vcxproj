@@ -93,6 +93,7 @@
     <ClCompile Include="ScoreHelper.cpp" />
     <ClCompile Include="ScoutData.cpp" />
     <ClCompile Include="ScoutManager.cpp" />
+    <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SquadManager.cpp" />
     <ClCompile Include="StateExecutor.cpp" />
     <ClCompile Include="Stats.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="ScoreHelper.h" />
     <ClInclude Include="ScoutData.h" />
     <ClInclude Include="ScoutManager.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SquadManager.h" />
     <ClInclude Include="StateExecutor.h" />
