@@ -306,46 +306,6 @@ void DatabaseManager::updateChromosomes(std::vector<Chromosome> c)
 			sqlite3_step(state_stmt);
 			sqlite3_finalize(state_stmt);
 
-
-			for(int k=0; k<s.getGenes().size();k++)
-			{
-				std::tr1::shared_ptr<Gene> g = s.getGenes().at(k);
-				ss.str("");
-
-				if(typeid(*g) == typeid(BuildGene))
-				{
-					ss	<< "UPDATE build_genes "
-						<< "SET building_type=" <<  dynamic_cast<BuildGene&>(*g).getBuildingType().getName() << " "
-						<< "WHERE id=" << g->getId() << ";";
-				} 
-				else if(typeid(*g) == typeid(AttackGene))
-				{
-					ss	<< "UPDATE attack_genes "
-						<< "SET do_attack=" <<  dynamic_cast<AttackGene&>(*g).getAttack() << " "
-						<< "WHERE id=" << g->getId() << ";";
-				}
-				else if(typeid(*g) == typeid(CombatGene))
-				{
-					ss	<< "UPDATE combat_genes "
-						<< "SET unit_type=" <<  dynamic_cast<CombatGene&>(*g).getUnitType().getName() << ", " << "unit_amount=" << dynamic_cast<CombatGene&>(*g).getAmount() << " " 
-						<< "WHERE id=" << g->getId() << ";";
-				}
-				else if(typeid(*g) == typeid(ResearchGene))
-				{
-					ss	<< "UPDATE research_genes "
-						<< "SET research_type=" <<  dynamic_cast<ResearchGene&>(*g).getUpgradeType().getName() << " "
-						<< "WHERE id=" << g->getId() << ";";
-				}
-
-				sqlite3_stmt* derivedgene_stmt;
-				sqlite3_prepare_v2(db,
-					ss.str().c_str(),
-					-1,
-					&derivedgene_stmt,
-					0);
-				sqlite3_step(derivedgene_stmt);
-				sqlite3_finalize(derivedgene_stmt);
-			}
 		}
 	}
 	
