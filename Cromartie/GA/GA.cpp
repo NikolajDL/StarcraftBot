@@ -11,7 +11,6 @@
 #include <fstream>
 #include <sstream>
 
-int status; // 0 = FirstRun 1 = Running 2 = FinishedGeneration 3 = Finished
 
 GA::GA(void) : currentStateIndex(0), stateChanges(0)
 {
@@ -145,7 +144,7 @@ void GA::onStarcraftStart()
 	if (status == 0) // 0 = FirstRun
 	{
 		generateInitialPopulation(50);
-		status = 1; // 1 = running
+		//status = 1; // 1 = running
 	}
 	else if (status == 1) // 1 = running
 	{
@@ -190,8 +189,15 @@ void GA::loadPopulation()
 void GA::savePopulation()
 {
 	//FlatFileSerializer::savePop(population);
-	//db.insertChromosomes(population);
-	db.insertAndReplaceChromosomes(population);
+	if(status == 0) 
+	{ 
+		db.insertChromosomes(population); 
+		status = 1; 
+	}
+	else 
+	{ 
+		db.updateChromosomes(population); 
+	}
 }
 
 void GA::createNextGeneration()
@@ -199,6 +205,7 @@ void GA::createNextGeneration()
 	// Replace this class if you want another selection aglorithm
 	TournamentSelection ts;
 	ts.selectAndMutate(population);
+	db.insertAndReplaceChromosomes(population);
 }
 
 void GA::generateInitialPopulation(int size)

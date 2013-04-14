@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
 #include "State.h"
+#include "../DbElement.h"
 
-class Chromosome
+class Chromosome : public DbElement
 {
 private:
 	std::vector<State> states;
@@ -15,7 +16,7 @@ public:
 	int temp;
 	State getNextState();
 	void setFitness(double value);
-	const std::vector<State>& getStates(void) const;
+	std::vector<State> getStates(void) const;
 	void addState(State s);
 	int getFitness(void) const;
 };

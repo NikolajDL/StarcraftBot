@@ -27,6 +27,7 @@ private:
 	Chromosome& getCurrentChromosome(void);
 	State getCurrentState(void);
 	DatabaseManager db;
+	int status; // 0 = FirstRun 1 = Running 2 = FinishedGeneration 3 = Finished
 public:
 	GA(void);
 	~GA(void);

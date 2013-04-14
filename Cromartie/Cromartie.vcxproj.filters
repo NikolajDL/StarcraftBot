@@ -379,6 +379,9 @@
     </ClCompile>
     <ClCompile Include="Stats.cpp" />
     <ClCompile Include="FlatFileSerializer.cpp" />
+    <ClCompile Include="DbElement.cpp">
+      <Filter>GA</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WallTracker.h">
@@ -748,5 +751,8 @@
     </ClInclude>
     <ClInclude Include="Stats.h" />
     <ClInclude Include="FlatFileSerializer.h" />
+    <ClInclude Include="DbElement.h">
+      <Filter>GA</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -257,13 +257,9 @@ void DatabaseManager::insertChromosome(Chromosome c)
 	sqlite3_close(db);
 }
 
-// If you wanna avoid having a brain aneurysm, avoid reading this method. 
-// Multiple nested while-loops, no reuse of statements, lots of fun times to be had here.
-std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
+void DatabaseManager::updateChromosomes(std::vector<Chromosome> c)
 {
 	sqlite3_open(SQLITE_FILENAME, &db);
-
-	std::vector<Chromosome> result;
 
 	std::stringstream ss;
 
@@ -277,6 +273,106 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 		0);
 	sqlite3_step(begin_stmt);
 	sqlite3_finalize(begin_stmt);
+
+	for(int i=0; i<c.size();i++)
+	{
+		ss.str("");
+		ss	<< "UPDATE chromosomes "
+			<< "SET fitness=" << c.at(i).getFitness() << " "
+			<< "WHERE id=" << c.at(i).getId() << ";";
+		sqlite3_stmt* chromosome_stmt;
+		sqlite3_prepare_v2(db,
+			ss.str().c_str(),
+			-1,
+			&chromosome_stmt,
+			0);
+		sqlite3_step(chromosome_stmt);
+		sqlite3_finalize(chromosome_stmt);
+
+		for(int j=0; j<c.at(i).getStates().size();j++)
+		{
+			State s = c.at(i).getStates().at(j);
+
+			ss.str("");
+			ss	<< "UPDATE states "
+				<< "SET fitness=" << s.getFitness() << " "
+				<< "WHERE id=" << s.getId() << ";";
+			sqlite3_stmt* state_stmt;
+			sqlite3_prepare_v2(db,
+				ss.str().c_str(),
+				-1,
+				&state_stmt,
+				0);
+			sqlite3_step(state_stmt);
+			sqlite3_finalize(state_stmt);
+
+
+			for(int k=0; k<s.getGenes().size();k++)
+			{
+				std::tr1::shared_ptr<Gene> g = s.getGenes().at(k);
+				ss.str("");
+
+				if(typeid(*g) == typeid(BuildGene))
+				{
+					ss	<< "UPDATE build_genes "
+						<< "SET building_type=" <<  dynamic_cast<BuildGene&>(*g).getBuildingType().getName() << " "
+						<< "WHERE id=" << g->getId() << ";";
+				} 
+				else if(typeid(*g) == typeid(AttackGene))
+				{
+					ss	<< "UPDATE attack_genes "
+						<< "SET do_attack=" <<  dynamic_cast<AttackGene&>(*g).getAttack() << " "
+						<< "WHERE id=" << g->getId() << ";";
+				}
+				else if(typeid(*g) == typeid(CombatGene))
+				{
+					ss	<< "UPDATE combat_genes "
+						<< "SET unit_type=" <<  dynamic_cast<CombatGene&>(*g).getUnitType().getName() << ", " << "unit_amount=" << dynamic_cast<CombatGene&>(*g).getAmount() << " " 
+						<< "WHERE id=" << g->getId() << ";";
+				}
+				else if(typeid(*g) == typeid(ResearchGene))
+				{
+					ss	<< "UPDATE research_genes "
+						<< "SET research_type=" <<  dynamic_cast<ResearchGene&>(*g).getUpgradeType().getName() << " "
+						<< "WHERE id=" << g->getId() << ";";
+				}
+
+				sqlite3_stmt* derivedgene_stmt;
+				sqlite3_prepare_v2(db,
+					ss.str().c_str(),
+					-1,
+					&derivedgene_stmt,
+					0);
+				sqlite3_step(derivedgene_stmt);
+				sqlite3_finalize(derivedgene_stmt);
+			}
+		}
+	}
+	
+
+	ss.str("");
+	ss << "COMMIT;";
+	sqlite3_stmt* commit_stmt;
+	sqlite3_prepare_v2(db,
+		ss.str().c_str(),
+		-1,
+		&commit_stmt,
+		0);
+	sqlite3_step(commit_stmt);
+	sqlite3_finalize(commit_stmt);
+
+	sqlite3_close(db);
+}
+
+// If you wanna avoid having a brain aneurysm, avoid reading this method. 
+// Multiple nested while-loops, no reuse of statements, lots of fun times to be had here.
+std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
+{
+	sqlite3_open(SQLITE_FILENAME, &db);
+
+	std::vector<Chromosome> result;
+
+	std::stringstream ss;
 
 	ss.str("");
 	ss << "SELECT id, fitness FROM chromosomes;";
@@ -294,6 +390,7 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 		std::vector<BWAPI::UnitType> buildSequence;
 
 		int chromosomeID = sqlite3_column_int(chromosome_stmt, 0);
+		c.setId(chromosomeID);
 		double chromosomeFitness = sqlite3_column_double(chromosome_stmt, 1);
 		c.setFitness(chromosomeFitness);
 
@@ -311,6 +408,7 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 		{
 			State s(buildSequence);
 			int stateID = sqlite3_column_int(state_stmt, 0);
+			s.setId(stateID);
 			s.setFitness(sqlite3_column_int(state_stmt, 1));
 
 			ss.str("");
@@ -367,20 +465,28 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 				if(sqlite3_step(attackgene_stmt) == SQLITE_ROW)
 				{
 					bool doAttack = sqlite3_column_int(attackgene_stmt, 0);
-					s.addGene(std::tr1::shared_ptr<AttackGene>(new AttackGene(doAttack)));
+					std::tr1::shared_ptr<AttackGene> g(new AttackGene(doAttack));
+					g->setId(geneID);
+					s.addGene(g);
 				} else if(sqlite3_step(combatgene_stmt) == SQLITE_ROW)
 				{
 					std::string unittype = boost::lexical_cast<std::string>(sqlite3_column_text(combatgene_stmt,0)); 
 					int unitamount = sqlite3_column_int(combatgene_stmt, 1);
-					s.addGene(std::tr1::shared_ptr<CombatGene>(new CombatGene(BWAPI::UnitTypes::getUnitType(unittype), unitamount)));
+					std::tr1::shared_ptr<CombatGene> g(new CombatGene(BWAPI::UnitTypes::getUnitType(unittype), unitamount));
+					g->setId(geneID);
+					s.addGene(g);
 				} else if(sqlite3_step(researchgene_stmt) == SQLITE_ROW)
 				{
-					std::string upgradetype = boost::lexical_cast<std::string>(sqlite3_column_text(researchgene_stmt,0)); 
-					s.addGene(std::tr1::shared_ptr<ResearchGene>(new ResearchGene(BWAPI::UpgradeTypes::getUpgradeType(upgradetype))));
+					std::string upgradetype = boost::lexical_cast<std::string>(sqlite3_column_text(researchgene_stmt,0));
+					std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(BWAPI::UpgradeTypes::getUpgradeType(upgradetype)));
+					g->setId(geneID);
+					s.addGene(g);
 				} else if(sqlite3_step(buildgene_stmt) == SQLITE_ROW)
 				{
 					std::string buildingtype = boost::lexical_cast<std::string>(sqlite3_column_text(buildgene_stmt,0));
-					s.addGene(std::tr1::shared_ptr<BuildGene>(new BuildGene(BWAPI::UnitTypes::getUnitType(buildingtype))));
+					std::tr1::shared_ptr<BuildGene> g(new BuildGene(BWAPI::UnitTypes::getUnitType(buildingtype)));
+					g->setId(geneID);
+					s.addGene(g);
 				} else
 				{
 					std::cout << "DatabaseManager::selectAllChromosomes(): Found unknown gene type in DB with ID = " << geneID << std::endl;
@@ -401,17 +507,6 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 	}	
 	
 	sqlite3_finalize(chromosome_stmt);
-
-	ss.str("");
-	ss << "COMMIT;";
-	sqlite3_stmt* commit_stmt;
-	sqlite3_prepare_v2(db,
-		ss.str().c_str(),
-		-1,
-		&commit_stmt,
-		0);
-	sqlite3_step(commit_stmt);
-	sqlite3_finalize(commit_stmt);
 
 	sqlite3_close(db);
 
