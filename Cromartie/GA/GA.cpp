@@ -180,7 +180,8 @@ Chromosome& GA::getCurrentChromosome()
 
 void GA::loadPopulation()
 {
-	population = FlatFileSerializer::loadPop();
+	//population = FlatFileSerializer::loadPop();
+	population = db.selectAllChromosomes();
 
 	if (population.size() == 0)
 		BWAPI::Broodwar->sendText("Could not load chromosomes");
@@ -188,7 +189,9 @@ void GA::loadPopulation()
 
 void GA::savePopulation()
 {
-	FlatFileSerializer::savePop(population);
+	//FlatFileSerializer::savePop(population);
+	//db.insertChromosomes(population);
+	db.insertAndReplaceChromosomes(population);
 }
 
 void GA::createNextGeneration()

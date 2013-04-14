@@ -26,7 +26,7 @@ private:
 	void changeState(void);
 	Chromosome& getCurrentChromosome(void);
 	State getCurrentState(void);
-	/*DatabaseManager db;*/
+	DatabaseManager db;
 public:
 	GA(void);
 	~GA(void);
