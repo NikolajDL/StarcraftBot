@@ -1,4 +1,5 @@
 #include "StarcraftRules.h"
+#include "../Settings.h"
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 extern boost::random::mt19937 randomGen;
@@ -221,10 +222,10 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	
 	// These buildings are availabel at all time, so we add them to the list of valid buildings to build
 	
-	BWAPI::UnitType nexus = BWAPI::UnitTypes::Protoss_Nexus;
+	
 	BWAPI::UnitType gateway = BWAPI::UnitTypes::Protoss_Gateway;
 	
-	validBuildings.push_back(nexus);
+	
 	validBuildings.push_back(gateway);
 
 	bool assimilatorFound = false;
@@ -233,6 +234,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	bool suportFound = false;
 	bool observatoryFound = false;
 	bool citadelFound = false;
+	int nexusCounter = 0;
 
 	for (int i = 0; i < s.getBuildingSequence().size(); i++)
 	{
@@ -258,6 +260,8 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		{
 			suportFound = true;
 		}
+		else if (ut.getName() == "Protoss Nexus")
+			nexusCounter++;
 		else if (ut.getName() == "Protoss Citadel of Adun")
 			citadelFound = true;
 	}
@@ -313,7 +317,11 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		BWAPI::UnitType forge = BWAPI::UnitTypes::Protoss_Forge;
 		validBuildings.push_back(forge);
 	}
-
+	if (nexusCounter < NEXUS_LIMIT)
+	{
+		BWAPI::UnitType nexus = BWAPI::UnitTypes::Protoss_Nexus;
+		validBuildings.push_back(nexus);
+	}
 
 	return validBuildings;
 }
