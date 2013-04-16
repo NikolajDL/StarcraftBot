@@ -35,10 +35,14 @@ void HypothalamusClass::toggleOrderEvent(IEventDataPtr evnt)
 void HypothalamusClass::upgradeEvent(IEventDataPtr evnt)
 {
 	std::tr1::shared_ptr<UpgradeEvent> pEventData = std::tr1::static_pointer_cast<UpgradeEvent>(evnt);
-	BWAPI::UpgradeType type = pEventData->mUpgrade;
+	BWAPI::UpgradeType upgradeType = pEventData->mUpgrade;
+	BWAPI::TechType techType = pEventData->mTech;
 	int level = pEventData->mLevel;
 
-	upgrade(type, level);
+	if(upgradeType!=0)
+		upgrade(upgradeType, level);
+	else if(techType!=0)
+		upgrade(techType);
 }
 void HypothalamusClass::setArmyBehaviourEvent(IEventDataPtr evnt)
 {
@@ -301,6 +305,7 @@ void HypothalamusClass::parseUpgradeCommand(std::string upgradeCommand)
 		type = BWAPI::UpgradeTypes::Protoss_Plasma_Shields;
 	else
 		return;
+	
 
 	upgrade(type, 3);
 }
