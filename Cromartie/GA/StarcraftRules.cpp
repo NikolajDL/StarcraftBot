@@ -26,13 +26,22 @@ std::tr1::shared_ptr<CombatGene> StarcraftRules::getValidCombatGene(const State&
 	BWAPI::UnitType randomUnit= validUnits.at(randomNrGene);
 
 	// Choose a random number of that unit
-	boost::random::uniform_int_distribution<> dist2(1, 10);
-	int randomAmount = dist2(randomGen);
+	if (randomUnit == BWAPI::UnitTypes::Protoss_Shuttle)
+	{
+		// Create a CombatGene and set the unit type and amount
+		std::tr1::shared_ptr<CombatGene> cg( new CombatGene(randomUnit, 1) );
 
-	// Create a CombatGene and set the unit type and amount
-	std::tr1::shared_ptr<CombatGene> cg( new CombatGene(randomUnit, randomAmount) );
+		return cg;
+	}
+	else
+	{
+		boost::random::uniform_int_distribution<> dist2(1, 10);
+		int randomAmount = dist2(randomGen);
+		// Create a CombatGene and set the unit type and amount
+		std::tr1::shared_ptr<CombatGene> cg( new CombatGene(randomUnit, randomAmount) );
 
 	return cg;
+	}
 }
 
 std::tr1::shared_ptr<ResearchGene> StarcraftRules::getValidResearchGene(const State& s, bool& found)
@@ -234,6 +243,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	bool suportFound = false;
 	bool observatoryFound = false;
 	bool citadelFound = false;
+	bool fleetBeaconFound = false;
 	int nexusCounter = 0;
 
 	for (int i = 0; i < s.getBuildingSequence().size(); i++)
@@ -259,6 +269,10 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		else if (ut.getName() == "Protoss Robotics Support Bay")
 		{
 			suportFound = true;
+		}
+		else if (ut.getName() == "Protoss Fleet Beacon")
+		{
+			fleetBeaconFound = true;
 		}
 		else if (ut.getName() == "Protoss Nexus")
 			nexusCounter++;
@@ -295,7 +309,8 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		}
 		else if (ut.getName() == "Protoss Stargate"  && assimilatorFound == true)
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Fleet_Beacon);
+			if (fleetBeaconFound == false)
+				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Fleet_Beacon);
 		}
 		else if (ut.getName() == "Protoss Citadel Of Adun"  && assimilatorFound == true)
 		{
