@@ -4,6 +4,8 @@
 #include "ResourceTracker.h"
 #include "PlayerTracker.h"
 #include "MacroManager.h"
+#include "EventManager.h"
+#include "GenericEvents.h"
 
 void GameProgressDetectionClass::update()
 {
@@ -42,10 +44,24 @@ void GameProgressDetectionClass::update()
 			if(enemyGuessSupply > mySupply*3 && ResourceTracker::Instance().getMineralRate() < 5.0)
 				mShouldGG = true;
 
-			if(enemyGuessSupply > mySupply*4 || enemyKnownSupply > mySupply*3)
+			if(enemyGuessSupply > mySupply*4 || enemyKnownSupply > mySupply*3)		
 				mShouldGG = true;
+
+			if(mShouldGG)
+			{
+
+				std::string debugString = (StringBuilder() 
+					<< "SHOULD GG! Guessed Supply: " << boost::lexical_cast<std::string>(enemyGuessSupply).c_str()
+					<< "| Known Supply: " << boost::lexical_cast<std::string>(enemyKnownSupply).c_str()
+					<< "| My Supply: " << boost::lexical_cast<std::string>(mySupply).c_str()).getString();
+				ETRIGGER( new DebugStringEvent(debugString, DebugStringEvent::Info));
+			}
 		}
 	}
+
+	BWAPI::Broodwar->drawTextScreen(5, 50, "Guessed Supply: %s", boost::lexical_cast<std::string>(enemyGuessSupply).c_str());
+	BWAPI::Broodwar->drawTextScreen(5, 60, "Known Supply: %s", boost::lexical_cast<std::string>(enemyKnownSupply).c_str());
+	BWAPI::Broodwar->drawTextScreen(5, 70, "My Supply: %s", boost::lexical_cast<std::string>(mySupply).c_str());
 	
 	// if bases available to attack are up small chokes, dont attack without recall or a much bigger army
 	if(BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Protoss)

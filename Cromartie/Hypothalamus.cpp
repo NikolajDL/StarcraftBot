@@ -35,14 +35,18 @@ void HypothalamusClass::toggleOrderEvent(IEventDataPtr evnt)
 void HypothalamusClass::upgradeEvent(IEventDataPtr evnt)
 {
 	std::tr1::shared_ptr<UpgradeEvent> pEventData = std::tr1::static_pointer_cast<UpgradeEvent>(evnt);
-	BWAPI::UpgradeType upgradeType = pEventData->mUpgrade;
-	BWAPI::TechType techType = pEventData->mTech;
+	std::tr1::shared_ptr<const BWAPI::Type> type = pEventData->mType;
 	int level = pEventData->mLevel;
 
-	if(upgradeType!=0)
-		upgrade(upgradeType, level);
-	else if(techType!=0)
-		upgrade(techType);
+	if(typeid(type) == typeid(BWAPI::UpgradeType))
+	{
+		std::tr1::shared_ptr<const BWAPI::UpgradeType> upgradeType = std::tr1::static_pointer_cast<const BWAPI::UpgradeType>(type);
+		upgrade(*upgradeType, level);
+	}else if(typeid(type) == typeid(BWAPI::TechType))
+	{
+		std::tr1::shared_ptr<const BWAPI::TechType> techType = std::tr1::static_pointer_cast<const BWAPI::TechType>(type);
+		upgrade(*techType);
+	}
 }
 void HypothalamusClass::setArmyBehaviourEvent(IEventDataPtr evnt)
 {
@@ -79,6 +83,10 @@ void HypothalamusClass::buildUnit(BWAPI::UnitType unit, TaskType taskType, int n
 void HypothalamusClass::upgrade(BWAPI::UpgradeType type, int level)
 {
 	TaskManager::Instance().upgrade(type, level, TaskType::Highest);
+}
+void HypothalamusClass::upgrade(BWAPI::TechType type)
+{
+	TaskManager::Instance().research(type, TaskType::Highest);
 }
 void HypothalamusClass::setArmyBehaviour(ArmyBehaviour armyBehaviour)
 {
