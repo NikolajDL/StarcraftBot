@@ -38,7 +38,7 @@ std::tr1::shared_ptr<CombatGene> StarcraftRules::getValidCombatGene(const State&
 std::tr1::shared_ptr<ResearchGene> StarcraftRules::getValidResearchGene(const State& s, bool& found)
 {
 	// Get all valid upgrades
-	std::vector<BWAPI::UpgradeType> validUpgrades = getValidUpgrades(s);
+	std::vector<std::tr1::shared_ptr<BWAPI::Type>> validUpgrades = getValidUpgrades(s);
 
 	// If no valid upgrades exists, we return NULL
 	if (validUpgrades.size() == 0)
@@ -55,10 +55,9 @@ std::tr1::shared_ptr<ResearchGene> StarcraftRules::getValidResearchGene(const St
 	// Choose a random upgrade type
 	boost::random::uniform_int_distribution<> dist(0, validUpgrades.size()-1);
 	int randomNrGene = dist(randomGen);
-	BWAPI::UpgradeType randomUpgrade = validUpgrades.at(randomNrGene);
 
 	// Create the research gene and assign the upgrade
-	std::tr1::shared_ptr<ResearchGene> rg( new ResearchGene(randomUpgrade) );
+	std::tr1::shared_ptr<ResearchGene> rg( new ResearchGene(validUpgrades.at(randomNrGene)) );
 	return rg;
 }
 
@@ -101,62 +100,63 @@ std::tr1::shared_ptr<BuildGene> StarcraftRules::getValidBuildGene(const State& s
 	return bg;
 }
 
-std::vector<BWAPI::UpgradeType> StarcraftRules::getValidUpgrades(const State& s)
+std::vector<std::tr1::shared_ptr<BWAPI::Type>> StarcraftRules::getValidUpgrades(const State& s)
 {
-	std::vector<BWAPI::UpgradeType> validUpgrades;
+	std::vector<std::tr1::shared_ptr<BWAPI::Type>> validUpgrades;
 
 	// Loop through all buildings that has been build in order to determine which buildings are valid to build
 	for (int i = 0; i < s.getBuildingSequence().size(); i++)
 	{
 		BWAPI::UnitType ut = s.getBuildingSequence().at(i);
 
-		if (ut.getName() == "Protoss Forge")
+		if (ut == BWAPI::UnitTypes::Protoss_Forge )
 		{
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Ground Weapons"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Ground Armor"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Plasma Shields"));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Protoss_Ground_Weapons));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Protoss_Ground_Armor));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Protoss_Plasma_Shields));
 		}
-		else if (ut.getName() == "Protoss Cybernetics Core")
+		else if (ut == BWAPI::UnitTypes::Protoss_Cybernetics_Core)
 		{
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Air Weapons"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Air Armor"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Singularity Charge"));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Protoss_Air_Weapons));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Protoss_Air_Armor));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Singularity_Charge));
 		}
-		else if (ut.getName() == "Protoss Robotics Support Bay")
+		else if (ut == BWAPI::UnitTypes::Protoss_Robotics_Support_Bay)
 		{
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Increase Reaver Capacity"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Scarab Damage"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Gravitic Drive"));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Reaver_Capacity));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Scarab_Damage));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Gravitic_Drive));
 		}
-		else if (ut.getName() == "Protoss Observatory")
+		else if (ut == BWAPI::UnitTypes::Protoss_Observatory)
 		{
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Gravitic Boosters"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Sensor Array"));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Gravitic_Boosters));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Sensor_Array));
 		}
-		else if (ut.getName() == "Protoss Citadel Of Adun")
+		else if (ut == BWAPI::UnitTypes::Protoss_Citadel_of_Adun)
 		{
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Leg Enhancements"));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Leg_Enhancements));
 		}
-		else if (ut.getName() == "Protoss Templar Archives")
+		else if (ut == BWAPI::UnitTypes::Protoss_Templar_Archives)
 		{
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Hallucinations"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Psionic Storm"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Maelstrom"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Mind Control"));
+			
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::TechTypes::Hallucination));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::TechTypes::Psionic_Storm));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::TechTypes::Maelstrom));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::TechTypes::Mind_Control));
 		}
-		else if (ut.getName() == "Protoss Arbiter Tribunal")
+		else if (ut == BWAPI::UnitTypes::Protoss_Arbiter_Tribunal)
 		{
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Khaydarin Core"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Recall"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Statis Field"));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Khaydarin_Core));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::TechTypes::Recall));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::TechTypes::Stasis_Field));
 		}
-		else if (ut.getName() == "Protoss Fleet Beacon")
+		else if (ut == BWAPI::UnitTypes::Protoss_Fleet_Beacon)
 		{
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Disruption Web"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Apial Sensors"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Gravitic Thrusters"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Carrier Capacity"));
-			validUpgrades.push_back(BWAPI::UpgradeTypes::getUpgradeType("Protoss Argus Jewel"));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::TechTypes::Disruption_Web));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Apial_Sensors));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Gravitic_Thrusters));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Carrier_Capacity));
+			validUpgrades.push_back(std::tr1::shared_ptr<BWAPI::Type>(&BWAPI::UpgradeTypes::Argus_Jewel));
 		}
 	}
 
@@ -173,41 +173,41 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidUnits(const State& s)
 	{
 		BWAPI::UnitType ut = s.getBuildingSequence().at(i);
 
-		if (ut.getName() == "Protoss Gateway")
+		if (ut == BWAPI::UnitTypes::Protoss_Gateway)
 		{
 			validUnits.push_back(BWAPI::UnitTypes::Protoss_Zealot);
 		}
-		else if (ut.getName() == "Protoss Cybernetics Core")
+		else if (ut == BWAPI::UnitTypes::Protoss_Cybernetics_Core)
 		{
 			validUnits.push_back(BWAPI::UnitTypes::Protoss_Dragoon);
 		}
-		else if (ut.getName() == "Protoss Templar Archives")
+		else if (ut == BWAPI::UnitTypes::Protoss_Templar_Archives)
 		{
 			validUnits.push_back(BWAPI::UnitTypes::Protoss_Dark_Templar);
 			validUnits.push_back(BWAPI::UnitTypes::Protoss_High_Templar);
 		}
-		else if (ut.getName() == "Protoss Robotics Facility")
+		else if (ut == BWAPI::UnitTypes::Protoss_Robotics_Facility)
 		{
 			validUnits.push_back(BWAPI::UnitTypes::Protoss_Shuttle);
 		}
-		else if (ut.getName() == "Protoss Robotics Support Bay")
+		else if (ut == BWAPI::UnitTypes::Protoss_Robotics_Support_Bay)
 		{
 			validUnits.push_back(BWAPI::UnitTypes::Protoss_Reaver);
 		}
-		else if (ut.getName() == "Protoss Observatory")
+		else if (ut == BWAPI::UnitTypes::Protoss_Observatory)
 		{
 			validUnits.push_back(BWAPI::UnitTypes::Protoss_Observer);
 		}
-		else if (ut.getName() == "Protoss Stargate")
+		else if (ut == BWAPI::UnitTypes::Protoss_Stargate)
 		{
 			validUnits.push_back(BWAPI::UnitTypes::Protoss_Scout);
 			validUnits.push_back(BWAPI::UnitTypes::Protoss_Corsair);
 		}
-		else if (ut.getName() == "Protoss Arbiter Tribunal")
+		else if (ut == BWAPI::UnitTypes::Protoss_Arbiter_Tribunal)
 		{
 			validUnits.push_back(BWAPI::UnitTypes::Protoss_Arbiter);
 		}
-		else if (ut.getName() == "Protoss Fleet Beacon")
+		else if (ut == BWAPI::UnitTypes::Protoss_Fleet_Beacon)
 		{
 			validUnits.push_back(BWAPI::UnitTypes::Protoss_Carrier);
 		}
@@ -221,12 +221,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	std::vector<BWAPI::UnitType> validBuildings;
 	
 	// These buildings are availabel at all time, so we add them to the list of valid buildings to build
-	
-	
-	BWAPI::UnitType gateway = BWAPI::UnitTypes::Protoss_Gateway;
-	
-	
-	validBuildings.push_back(gateway);
+	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Gateway);
 
 	bool assimilatorFound = false;
 	bool forgeFound = false;
@@ -240,68 +235,69 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	{
 		BWAPI::UnitType ut = s.getBuildingSequence().at(i);
 
-		if (ut.getName() == "Protoss Assimilator")
+		if (ut == BWAPI::UnitTypes::Protoss_Assimilator)
 		{
 			assimilatorFound = true;
 		}
-		else if (ut.getName() == "Protoss Forge")
+		else if (ut == BWAPI::UnitTypes::Protoss_Forge)
 		{
 			forgeFound = true;
 		}
-		else if (ut.getName() == "Protoss Cybernetics Core")
+		else if (ut == BWAPI::UnitTypes::Protoss_Cybernetics_Core)
 		{
 			cyberFound = true;
 		}
-		else if (ut.getName() == "Protoss Observatory")
+		else if (ut == BWAPI::UnitTypes::Protoss_Observatory)
 		{
 			observatoryFound = true;
 		}
-		else if (ut.getName() == "Protoss Robotics Support Bay")
+		else if (ut == BWAPI::UnitTypes::Protoss_Robotics_Support_Bay)
 		{
 			suportFound = true;
 		}
-		else if (ut.getName() == "Protoss Nexus")
+		else if (ut == BWAPI::UnitTypes::Protoss_Nexus)
 			nexusCounter++;
-		else if (ut.getName() == "Protoss Citadel of Adun")
+		else if (ut == BWAPI::UnitTypes::Protoss_Citadel_of_Adun)
 			citadelFound = true;
 	}
-	// We loop through each building that has been build. For each building, we add the buildings that, that building unlocks to the list of valid buildings.
+	// We loop through each building that has been build. 
+	// For each building, we add the buildings that, that building unlocks to the list of valid buildings.
 	for (int i = 0; i < s.getBuildingSequence().size(); i++)
 	{
 		BWAPI::UnitType ut = s.getBuildingSequence().at(i);
 
-		if (ut.getName() == "Protoss Forge")
+		if (ut == BWAPI::UnitTypes::Protoss_Forge)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Photon_Cannon);
 		}
-		else if (ut.getName() == "Protoss Gateway")
+		else if (ut == BWAPI::UnitTypes::Protoss_Gateway)
 		{
 			if (cyberFound == false)
 				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Cybernetics_Core);
 		}
-		else if (ut.getName() == "Protoss Cybernetics Core"  && assimilatorFound == true)
+		else if (ut == BWAPI::UnitTypes::Protoss_Cybernetics_Core  && assimilatorFound == true)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Stargate);
 			if (citadelFound == false)
 				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Citadel_of_Adun);
 			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Robotics_Facility);
 		}
-		else if (ut.getName() == "Protoss Robotics Facility" && assimilatorFound == true)
+		else if (ut == BWAPI::UnitTypes::Protoss_Robotics_Facility && assimilatorFound == true)
 		{
 			if (suportFound == false)
 				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Robotics_Support_Bay);
 			if (observatoryFound == false)
 				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Observatory);
 		}
-		else if (ut.getName() == "Protoss Stargate"  && assimilatorFound == true)
+		else if (ut == BWAPI::UnitTypes::Protoss_Stargate  && assimilatorFound == true)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Fleet_Beacon);
 		}
-		else if (ut.getName() == "Protoss Citadel Of Adun"  && assimilatorFound == true)
+		else if (ut == BWAPI::UnitTypes::Protoss_Citadel_of_Adun  && assimilatorFound == true)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Templar_Archives);
 		}
-		else if (ut.getName() == "Protoss Templar Archives"  && assimilatorFound == true)
+		else if (ut == BWAPI::UnitTypes::Protoss_Templar_Archives  && assimilatorFound == true)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Arbiter_Tribunal);
 		}
@@ -312,16 +308,16 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		BWAPI::UnitType assimilator = BWAPI::UnitTypes::Protoss_Assimilator;
 		validBuildings.push_back(assimilator);
 	}
-	if (forgeFound == false)
-	{
-		BWAPI::UnitType forge = BWAPI::UnitTypes::Protoss_Forge;
-		validBuildings.push_back(forge);
-	}
-	if (nexusCounter < NEXUS_LIMIT)
-	{
-		BWAPI::UnitType nexus = BWAPI::UnitTypes::Protoss_Nexus;
-		validBuildings.push_back(nexus);
-	}
+	//if (forgeFound == false)
+	//{
+	//	BWAPI::UnitType forge = BWAPI::UnitTypes::Protoss_Forge;
+	//	validBuildings.push_back(forge);
+	//}
+	//if (nexusCounter < NEXUS_LIMIT)
+	//{
+	//	BWAPI::UnitType nexus = BWAPI::UnitTypes::Protoss_Nexus;
+	//	validBuildings.push_back(nexus);
+	//}
 
 	return validBuildings;
 }

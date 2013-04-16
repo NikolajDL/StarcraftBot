@@ -226,10 +226,25 @@ void DatabaseManager::insertChromosome(Chromosome c)
 			}
 			else if(typeid(*g) == typeid(ResearchGene))
 			{
-				ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
+				std::tr1::shared_ptr<BWAPI::Type> t = dynamic_cast<ResearchGene&>(*g).getUpgradeType();
+				if(typeid(*t) == typeid(BWAPI::UpgradeType))
+				{
+					ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
 					<< geneID << ","
-					<< "\"" << dynamic_cast<ResearchGene&>(*g).getUpgradeType().getName() << "\""
+					<< "\"" << dynamic_cast<BWAPI::UpgradeType&>(*t).getName() << "\""
 					<< ");";
+				}
+				else if(typeid(*t) == typeid(BWAPI::TechType))
+				{
+					ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
+					<< geneID << ","
+					<< "\"" << dynamic_cast<BWAPI::TechType&>(*t).getName() << "\""
+					<< ");";
+				}
+				else
+				{
+					std::cout << "DatabaseManager::insertChromosome(): Unknown research or tech type" << std::endl;
+				}
 			}
 
 			sqlite3_stmt* derivedgene_stmt;
@@ -438,9 +453,19 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 				} else if(sqlite3_step(researchgene_stmt) == SQLITE_ROW)
 				{
 					std::string upgradetype = boost::lexical_cast<std::string>(sqlite3_column_text(researchgene_stmt,0));
-					std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(BWAPI::UpgradeTypes::getUpgradeType(upgradetype)));
-					g->setId(geneID);
-					s.addGene(g);
+					if(BWAPI::UpgradeTypes::getUpgradeType(upgradetype) != BWAPI::UpgradeTypes::Unknown)
+					{
+						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(std::tr1::shared_ptr<BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::getUpgradeType(upgradetype))));
+						g->setId(geneID);
+						s.addGene(g);
+					}
+					else
+					{
+						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(std::tr1::shared_ptr<BWAPI::TechType>(&BWAPI::TechTypes::getTechType(upgradetype))));
+						g->setId(geneID);
+						s.addGene(g);
+					}
+					
 				} else if(sqlite3_step(buildgene_stmt) == SQLITE_ROW)
 				{
 					std::string buildingtype = boost::lexical_cast<std::string>(sqlite3_column_text(buildgene_stmt,0));

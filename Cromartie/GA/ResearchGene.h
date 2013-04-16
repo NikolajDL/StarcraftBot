@@ -6,11 +6,11 @@ class ResearchGene :
 	public Gene
 {
 private:
-	BWAPI::UpgradeType upgradeType;
+	std::tr1::shared_ptr<BWAPI::Type> upgradeType;
 public:
 	ResearchGene(void);
-	ResearchGene(BWAPI::UpgradeType upgrade);
+	ResearchGene(std::tr1::shared_ptr<BWAPI::Type> upgrade);
 	~ResearchGene(void);
-	BWAPI::UpgradeType getUpgradeType(void) const;
+	std::tr1::shared_ptr<BWAPI::Type> getUpgradeType(void) const;
 };
 
