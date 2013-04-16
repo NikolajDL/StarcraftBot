@@ -10,6 +10,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include "../Settings.h"
 
 
 GA::GA(void) : currentStateIndex(0), stateChanges(0)
@@ -134,7 +135,7 @@ void GA::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, i
 
 	savePopulation();
 	saveGAStatus();
-	Stats::logPop(population);
+	Stats::logPop(population, elapsedTime);
 }
 
 void GA::onStarcraftStart()
@@ -143,7 +144,7 @@ void GA::onStarcraftStart()
 
 	if (status == 0) // 0 = FirstRun
 	{
-		generateInitialPopulation(50);
+		generateInitialPopulation(POP_SIZE);
 		//status = 1; // 1 = running
 	}
 	else if (status == 1) // 1 = running

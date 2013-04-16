@@ -128,7 +128,6 @@ void Cromartie::onFrame()
 		EQUEUE( new ToggleDebugInfoEvent() );
 	}
 	
-
 	EQUEUE( new OnUpdateEvent() );
 	EventManager::Instance().update();
 

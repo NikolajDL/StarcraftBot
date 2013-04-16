@@ -3,14 +3,12 @@
 #include "GeneticOperator.h"
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
+#include "../Settings.h"
 
 extern boost::random::mt19937 randomGen;
 
 TournamentSelection::TournamentSelection(void)
 {
-	sampleSize = 5;
-	winningSize = 2;
-	loosingSize = 2;
 }
 
 
@@ -25,14 +23,14 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 	std::vector<int> sampleIndex;
 	std::vector<Chromosome> sample;
 
-	if (population.size() < sampleSize)
+	if (population.size() < SAMPLE_SIZE)
 	{
 		std::cout<"Sample size bigger than pop size. This is not allowed\n";
 		return;
 	}
 
 	// We take a random sample of size sampleSize from the population
-	while (sample.size() < sampleSize)
+	while (sample.size() < SAMPLE_SIZE)
 	{
 		int random = dist(randomGen);
 		Chromosome& randomChromosome = population.at(random);
@@ -64,13 +62,13 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 	std::vector<Chromosome> loosers;
 
 	// We add the best chromosomes from the sample to winners
-	for (int i = 0; i < winningSize; i++)
+	for (int i = 0; i < WINNING_SIZE; i++)
 	{
 		winners.push_back(sample.at(i));
 	}
 
 	// We add the worst chromosome from the sample to the loosers
-	for (int i = 0; i < loosingSize; i++)
+	for (int i = 0; i < LOOSING_SIZE; i++)
 	{
 		loosers.push_back(sample.at(sample.size() - 1 - i));
 	}

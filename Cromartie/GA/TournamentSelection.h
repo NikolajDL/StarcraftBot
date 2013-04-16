@@ -4,10 +4,6 @@
 
 class TournamentSelection
 {
-private:
-	int sampleSize;
-	int winningSize;
-	int loosingSize;
 public:
 	TournamentSelection(void);
 	~TournamentSelection(void);
