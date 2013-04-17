@@ -378,9 +378,8 @@
       <Filter>Squad Manager\Squads</Filter>
     </ClCompile>
     <ClCompile Include="Stats.cpp" />
-    <ClCompile Include="FlatFileSerializer.cpp" />
-    <ClCompile Include="DbElement.cpp">
-    <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="DbElement.cpp" />
+    <ClCompile Include="Settings.cpp">
       <Filter>GA</Filter>
     </ClCompile>
   </ItemGroup>
@@ -751,9 +750,8 @@
       <Filter>Squad Manager\Squads</Filter>
     </ClInclude>
     <ClInclude Include="Stats.h" />
-    <ClInclude Include="FlatFileSerializer.h" />
-    <ClInclude Include="DbElement.h">
-    <ClInclude Include="Settings.h" />
+    <ClInclude Include="DbElement.h" />
+    <ClInclude Include="Settings.h">
       <Filter>GA</Filter>
     </ClInclude>
   </ItemGroup>

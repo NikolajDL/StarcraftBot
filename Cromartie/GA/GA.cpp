@@ -6,7 +6,6 @@
 #include "../Stats.h"
 #include "../EventManager.h"
 #include "../HypothalamusEvents.h"
-#include "../FlatFileSerializer.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -27,9 +26,7 @@ void GA::onMorph(IEventDataPtr e)
 	std::tr1::shared_ptr<UnitMorphEvent> pEventData = std::tr1::static_pointer_cast<UnitMorphEvent>(e);
 	BWAPI::Unit* unit = pEventData->m_Unit;
 
-	std::string name = unit->getType().getName();
-
-	if (name == "Protoss Assimilator")
+	if (unit->getType() == BWAPI::UnitTypes::Protoss_Assimilator)
 	{
 		BWAPI::Broodwar->sendText("Changing state");
 		BWAPI::Broodwar->sendText(unit->getType().getName().c_str());
@@ -42,12 +39,10 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 	std::tr1::shared_ptr<UnitCompleteEvent> pEventData = std::tr1::static_pointer_cast<UnitCompleteEvent>(e);
 	BWAPI::Unit* unit = pEventData->m_Unit;
 
-	std::string name = unit->getType().getName();
-	
 	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
 		unit->getType().isBuilding() == true &&
 		(unit->getType().isResourceContainer() == false) &&
-		name != "Protoss Pylon")
+		unit->getType() != BWAPI::UnitTypes::Protoss_Pylon)
 	{
 		if (stateChanges < 1)
 		{
@@ -169,8 +164,8 @@ void GA::onStarcraftStart()
 
 	BWAPI::Broodwar->sendText(static_cast<std::ostringstream*>( &(std::ostringstream() << currentChromosomeIndex) )->str().c_str());
 
-	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::getUnitType("Protoss Prope"), TaskType::Lowest));
-	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::getUnitType("Protoss Prope"), TaskType::Lowest));
+	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Probe, TaskType::Lowest));
+	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Probe, TaskType::Lowest));
 }
 
 Chromosome& GA::getCurrentChromosome()

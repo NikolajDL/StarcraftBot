@@ -265,14 +265,18 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		{
 			suportFound = true;
 		}
-		else if (ut.getName() == "Protoss Fleet Beacon")
+		else if (ut == BWAPI::UnitTypes::Protoss_Fleet_Beacon)
 		{
 			fleetBeaconFound = true;
 		}
-		else if (ut.getName() == "Protoss Nexus")
+		else if (ut == BWAPI::UnitTypes::Protoss_Nexus)
+		{
 			nexusCounter++;
+		}
 		else if (ut == BWAPI::UnitTypes::Protoss_Citadel_of_Adun)
+		{
 			citadelFound = true;
+		}
 	}
 	// We loop through each building that has been build. 
 	// For each building, we add the buildings that, that building unlocks to the list of valid buildings.
