@@ -15,7 +15,7 @@ Stats::~Stats(void)
 }
 
 
-void Stats::logPop(vector<Chromosome> pop, int elabsedTime)
+void Stats::logPop(vector<Chromosome> pop, int elabsedTime, bool winner)
 {
 	Sorting::sort(pop);
 
@@ -34,10 +34,10 @@ void Stats::logPop(vector<Chromosome> pop, int elabsedTime)
 
 	avgFitness = avgFitness / (double) count;
 
-	writeToFile(bestFitness, avgFitness, elabsedTime, ScoreHelper::getUnitScore(), ScoreHelper::getKillScore(), ScoreHelper::getBuildingScore());
+	writeToFile(bestFitness, avgFitness, elabsedTime, ScoreHelper::getUnitScore(), ScoreHelper::getKillScore(), ScoreHelper::getBuildingScore(), winner);
 }
 
-void Stats::writeToFile(double best, double avg, int elabsedTime, int unitScore, int killScore, int buildingScore)
+void Stats::writeToFile(double best, double avg, int elabsedTime, int unitScore, int killScore, int buildingScore, bool winner)
 {
 	std::string bestStr = boost::lexical_cast<std::string>(best);
 	std::string avgStr = boost::lexical_cast<std::string>(avg);
@@ -49,6 +49,15 @@ void Stats::writeToFile(double best, double avg, int elabsedTime, int unitScore,
 
 	 ofstream myfile;
 	 myfile.open ("stats.txt", ios::app);
-	 myfile << bestStr << ";" << avgStr << ";" << et << ";" << us << ";" << ks << ";" << bs << ";" << "\n";
+	 myfile << bestStr << ";" << avgStr << ";" << et << ";" << us << ";" << ks << ";" << bs << ";";
+	 if (winner == true)
+	 {
+		 myfile << "winner";
+	 }
+	 else
+	 {
+		 myfile << "looser";
+	 }
+	 myfile << "\n";
 	 myfile.close();
 }

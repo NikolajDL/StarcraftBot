@@ -93,17 +93,22 @@ struct UpgradeEvent : public BaseEventData
 	
 	virtual const std::string ToString( void ) const
     {
-		return StringBuilder() << "Upgrade event. Type: " << mUpgrade.getName().c_str();
+		return StringBuilder() << "Upgrade event.";
     }
 
 	explicit UpgradeEvent( BWAPI::UpgradeType upgrade, int level)
-        : mUpgrade( upgrade )
+        : mType( &upgrade )
 		, mLevel(level)
 		, BaseEventData(BWAPI::Broodwar->getFrameCount())
     {
     }
+	explicit UpgradeEvent(std::tr1::shared_ptr<const BWAPI::Type> upgrade)
+        : mType( upgrade )
+		, BaseEventData(BWAPI::Broodwar->getFrameCount())
+    {
+    }
 	
-	BWAPI::UpgradeType mUpgrade;
+	std::tr1::shared_ptr<const BWAPI::Type> mType;
 	int mLevel;
 };
 struct SetArmyBehaviourEvent : public BaseEventData

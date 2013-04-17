@@ -135,7 +135,7 @@ void GA::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, i
 
 	savePopulation();
 	saveGAStatus();
-	Stats::logPop(population, elapsedTime);
+	Stats::logPop(population, elapsedTime, winner);
 }
 
 void GA::onStarcraftStart()
