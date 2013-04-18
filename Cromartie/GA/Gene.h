@@ -1,8 +1,10 @@
 #pragma once
-class Gene
+#include "../DbElement.h"
+
+class Gene : public DbElement
 {
 public:
-	Gene();
+	Gene(void);
 	virtual ~Gene(void);
 };
 

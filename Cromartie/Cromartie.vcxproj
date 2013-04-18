@@ -31,6 +31,7 @@
     <ClCompile Include="Chokepoint.cpp" />
     <ClCompile Include="Condition.cpp" />
     <ClCompile Include="ConstructionTask.cpp" />
+    <ClCompile Include="DbElement.cpp" />
     <ClCompile Include="DefaultSquad.cpp" />
     <ClCompile Include="DefenseSquad.cpp" />
     <ClCompile Include="DetectorAction.cpp" />
@@ -41,7 +42,6 @@
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="EventRecorder.cpp" />
     <ClCompile Include="ExpansionManager.cpp" />
-    <ClCompile Include="FlatFileSerializer.cpp" />
     <ClCompile Include="GameMemory.cpp" />
     <ClCompile Include="GameProgressDetection.cpp" />
     <ClCompile Include="GatherTask.cpp" />
@@ -148,6 +148,7 @@
     <ClInclude Include="Chokepoint.h" />
     <ClInclude Include="Condition.h" />
     <ClInclude Include="ConstructionTask.h" />
+    <ClInclude Include="DbElement.h" />
     <ClInclude Include="DefaultSquad.h" />
     <ClInclude Include="DefenseSquad.h" />
     <ClInclude Include="DetectorAction.h" />
@@ -159,7 +160,6 @@
     <ClInclude Include="ExpansionManager.h" />
     <ClInclude Include="FastDelegate.h" />
     <ClInclude Include="FastDelegateBind.h" />
-    <ClInclude Include="FlatFileSerializer.h" />
     <ClInclude Include="GameMemory.h" />
     <ClInclude Include="GameProgressDetection.h" />
     <ClInclude Include="GatherTask.h" />

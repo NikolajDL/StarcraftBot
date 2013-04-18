@@ -25,7 +25,7 @@ int Chromosome::getFitness(void) const
 	return fitness;
 }
 
-const std::vector<State>& Chromosome::getStates(void) const 
+std::vector<State> Chromosome::getStates(void) const 
 {
 	return this->states;
 }

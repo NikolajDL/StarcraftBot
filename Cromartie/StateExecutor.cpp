@@ -106,7 +106,7 @@ bool StateExecutor::executeState(const State state)
 		{
 			ResearchGene rg = dynamic_cast<ResearchGene&>(*g);
 
-			EQUEUE(new UpgradeEvent(rg.getUpgradeType(), 1));
+			EQUEUE(new UpgradeEvent(rg.getUpgradeType()));
 		}
 		else if(typeid(*g) == typeid(AttackGene))
 		{
