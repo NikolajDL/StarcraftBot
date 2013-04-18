@@ -6,13 +6,11 @@
 #include "../Stats.h"
 #include "../EventManager.h"
 #include "../HypothalamusEvents.h"
-#include "../FlatFileSerializer.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include "../Settings.h"
 
-int status; // 0 = FirstRun 1 = Running 2 = FinishedGeneration 3 = Finished
 
 GA::GA(void) : currentStateIndex(0), stateChanges(0)
 {
@@ -28,9 +26,7 @@ void GA::onMorph(IEventDataPtr e)
 	std::tr1::shared_ptr<UnitMorphEvent> pEventData = std::tr1::static_pointer_cast<UnitMorphEvent>(e);
 	BWAPI::Unit* unit = pEventData->m_Unit;
 
-	std::string name = unit->getType().getName();
-
-	if (name == "Protoss Assimilator")
+	if (unit->getType() == BWAPI::UnitTypes::Protoss_Assimilator)
 	{
 		BWAPI::Broodwar->sendText("Changing state");
 		BWAPI::Broodwar->sendText(unit->getType().getName().c_str());
@@ -43,12 +39,10 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 	std::tr1::shared_ptr<UnitCompleteEvent> pEventData = std::tr1::static_pointer_cast<UnitCompleteEvent>(e);
 	BWAPI::Unit* unit = pEventData->m_Unit;
 
-	std::string name = unit->getType().getName();
-	
 	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
 		unit->getType().isBuilding() == true &&
 		(unit->getType().isResourceContainer() == false) &&
-		name != "Protoss Pylon")
+		unit->getType() != BWAPI::UnitTypes::Protoss_Pylon)
 	{
 		if (stateChanges < 1)
 		{
@@ -146,7 +140,7 @@ void GA::onStarcraftStart()
 	if (status == 0) // 0 = FirstRun
 	{
 		generateInitialPopulation(POP_SIZE);
-		status = 1; // 1 = running
+		//status = 1; // 1 = running
 	}
 	else if (status == 1) // 1 = running
 	{
@@ -170,8 +164,8 @@ void GA::onStarcraftStart()
 
 	BWAPI::Broodwar->sendText(static_cast<std::ostringstream*>( &(std::ostringstream() << currentChromosomeIndex) )->str().c_str());
 
-	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::getUnitType("Protoss Prope"), TaskType::Lowest));
-	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::getUnitType("Protoss Prope"), TaskType::Lowest));
+	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Probe, TaskType::Lowest));
+	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Probe, TaskType::Lowest));
 }
 
 Chromosome& GA::getCurrentChromosome()
@@ -181,7 +175,8 @@ Chromosome& GA::getCurrentChromosome()
 
 void GA::loadPopulation()
 {
-	population = FlatFileSerializer::loadPop();
+	//population = FlatFileSerializer::loadPop();
+	population = db.selectAllChromosomes();
 
 	if (population.size() == 0)
 		BWAPI::Broodwar->sendText("Could not load chromosomes");
@@ -189,7 +184,16 @@ void GA::loadPopulation()
 
 void GA::savePopulation()
 {
-	FlatFileSerializer::savePop(population);
+	//FlatFileSerializer::savePop(population);
+	if(status == 0) 
+	{ 
+		db.insertChromosomes(population); 
+		status = 1; 
+	}
+	else 
+	{ 
+		db.updateChromosomes(population); 
+	}
 }
 
 void GA::createNextGeneration()
@@ -197,6 +201,7 @@ void GA::createNextGeneration()
 	// Replace this class if you want another selection aglorithm
 	TournamentSelection ts;
 	ts.selectAndMutate(population);
+	db.insertAndReplaceChromosomes(population);
 }
 
 void GA::generateInitialPopulation(int size)
