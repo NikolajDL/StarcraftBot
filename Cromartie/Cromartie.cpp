@@ -61,8 +61,8 @@ void Cromartie::onStart()
 {
 	BWAPI::Broodwar->sendText("Cromartie 1.0 Operational");
 
-	BWAPI::Broodwar->setLatCom(false);
-	BWAPI::Broodwar->setCommandOptimizationLevel(1);
+	//BWAPI::Broodwar->setLatCom(false);
+	//BWAPI::Broodwar->setCommandOptimizationLevel(1);
 
 	if(BWAPI::Broodwar->self()->getRace() != BWAPI::Races::Protoss)
 		BWAPI::Broodwar->sendText("Cromartie is a Protoss only bot");
@@ -75,14 +75,14 @@ void Cromartie::onStart()
 
 	// Make it go faster! Faster I say! I wanna go faster than any man before me!
 	// I wanna look down at the light and laugh at its pitiful speed
-	BWAPI::Broodwar->setLocalSpeed(0);
-	BWAPI::Broodwar->setGUI(false);
+	//BWAPI::Broodwar->setLocalSpeed(0);
+	//BWAPI::Broodwar->setGUI(false);
 
-	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
+	//BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::CompleteMapInformation);
 
 	
-	registerListeners();
+	//registerListeners();
 }
 
 void Cromartie::onEnd(bool isWinner)
@@ -98,17 +98,17 @@ void Cromartie::onEnd(bool isWinner)
 void Cromartie::onFrame()
 {
 	// Enqueue bwapi events
-	for each(BWAPI::Event bwapiEvent in BWAPI::Broodwar->getEvents())
-	{
-		if(bwapiEvent.getType() == BWAPI::EventType::UnitDiscover)
-			EQUEUE( new UnitDiscoveredEvent(bwapiEvent.getUnit()));
-		if(bwapiEvent.getType() == BWAPI::EventType::UnitDestroy)
-			EQUEUE( new UnitDestroyedEvent(bwapiEvent.getUnit()));
-		if(bwapiEvent.getType() == BWAPI::EventType::UnitComplete)
-			EQUEUE( new UnitCompleteEvent(bwapiEvent.getUnit()));
-		if(bwapiEvent.getType() == BWAPI::EventType::UnitMorph)
-			EQUEUE( new UnitMorphEvent(bwapiEvent.getUnit()));
-	}
+	//for each(BWAPI::Event bwapiEvent in BWAPI::Broodwar->getEvents())
+	//{
+	//	if(bwapiEvent.getType() == BWAPI::EventType::UnitDiscover)
+	//		EQUEUE( new UnitDiscoveredEvent(bwapiEvent.getUnit()));
+	//	if(bwapiEvent.getType() == BWAPI::EventType::UnitDestroy)
+	//		EQUEUE( new UnitDestroyedEvent(bwapiEvent.getUnit()));
+	//	if(bwapiEvent.getType() == BWAPI::EventType::UnitComplete)
+	//		EQUEUE( new UnitCompleteEvent(bwapiEvent.getUnit()));
+	//	if(bwapiEvent.getType() == BWAPI::EventType::UnitMorph)
+	//		EQUEUE( new UnitMorphEvent(bwapiEvent.getUnit()));
+	//}
 
 	if(!mOnBegin)
 	{
