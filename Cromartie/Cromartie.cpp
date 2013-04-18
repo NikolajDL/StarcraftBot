@@ -113,34 +113,59 @@ void Cromartie::onFrame()
 		//_ga.onStarcraftStart();
 		//BWAPI::Broodwar->sendText("GA started!");
 		mOnBegin = true;
+		
+		/*
 		EQUEUE( new OnStartEvent() );
 		EQUEUE( new PauseBuildOrderEvent() );
 		//EQUEUE( new ChangeBuildOrderEvent(BuildOrderID::TwoGate));
 
 		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
 		EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
-		//EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
+		EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
 		EQUEUE( new ToggleOrderEvent(Order::Scout) );
-		//EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
-
+		EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
+		*/
 		//EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
 
 		/*std::tr1::shared_ptr<const BWAPI::Type> tt = std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Hallucination);
 		std::tr1::shared_ptr<const BWAPI::TechType> tt2 = std::tr1::static_pointer_cast<const BWAPI::TechType>(tt);
 		TaskManager::Instance().research(*tt2, TaskType::Highest);*/
 
-		EQUEUE( new UpgradeEvent( std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Hallucination) ) );
+		/*EQUEUE( new UpgradeEvent( std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Hallucination) ) );
 		EQUEUE( new UpgradeEvent( std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Protoss_Air_Armor) ) );
+		*/
+		using namespace std::tr1;
+		shared_ptr<const BWAPI::Type> type(&BWAPI::UpgradeTypes::Protoss_Air_Weapons);
 		
+		BWAPI::UpgradeType upgradeType = static_cast<const BWAPI::UpgradeType&>(*type);
+		BWAPI::TechType techType = static_cast<const BWAPI::TechType&>(*type);
+		
+		BWAPI::Broodwar->sendText(typeid(type).name());
+		BWAPI::Broodwar->sendText(typeid(*type).name());
+		BWAPI::Broodwar->sendText(typeid(upgradeType).name());
+		BWAPI::Broodwar->sendText(typeid(techType).name());
+
+		if(typeid(*type) == typeid(BWAPI::UpgradeType))
+		{
+			BWAPI::Broodwar->sendText("Upgrade " + *upgradeType.getName().c_str());
+		}else if(typeid(*type) == typeid(BWAPI::TechType))
+		{
+			BWAPI::Broodwar->sendText("Tech " + *techType.getName().c_str());
+		}else if(typeid(*type) == typeid(BWAPI::Type))
+		{
+			BWAPI::Broodwar->sendText("Just type... awww ");
+		}
+		/*
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Assimilator) );
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Cybernetics_Core) );
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Citadel_of_Adun) );
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Templar_Archives) );
 
-		EQUEUE( new ToggleDebugInfoEvent() );
+		EQUEUE( new ToggleDebugInfoEvent() );*/
 	}
 	
+	/*
 	EQUEUE( new OnUpdateEvent() );
 	EventManager::Instance().update();
 
@@ -161,7 +186,7 @@ void Cromartie::onFrame()
 		}
 		else if(BWAPI::Broodwar->getFrameCount() - mLeavingGame > 80)
 			BWAPI::Broodwar->leaveGame();
-	}
+	}*/
 }
 
 void Cromartie::onSendText(std::string text) 
