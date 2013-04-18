@@ -138,26 +138,26 @@ void Cromartie::onFrame()
 		EQUEUE( new UpgradeEvent( std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Protoss_Air_Armor) ) );
 		*/
 		using namespace std::tr1;
-		shared_ptr<const BWAPI::Type> type(&BWAPI::UpgradeTypes::Protoss_Air_Weapons);
+		//shared_ptr<BWAPI::Type> type(&const_cast<BWAPI::UpgradeType&>(BWAPI::UpgradeTypes::Protoss_Air_Weapons));
 		
-		BWAPI::UpgradeType upgradeType = dynamic_cast<const BWAPI::UpgradeType&>(*type);
-		BWAPI::TechType techType = dynamic_cast<const BWAPI::TechType&>(*type);
+		//BWAPI::UpgradeType upgradeType = dynamic_cast<BWAPI::UpgradeType&>(*type);
+		//BWAPI::TechType techType = dynamic_cast<BWAPI::TechType&>(*type);
 		
-		BWAPI::Broodwar->sendText(typeid(type).name());
-		BWAPI::Broodwar->sendText(typeid(*type).name());
-		BWAPI::Broodwar->sendText(typeid(upgradeType).name());
-		BWAPI::Broodwar->sendText(typeid(techType).name());
-
+		//::Broodwar->sendText(typeid(type).name());
+		//BWAPI::Broodwar->sendText(typeid(*type).name());
+		//BWAPI::Broodwar->sendText(typeid(upgradeType).name());
+		//BWAPI::Broodwar->sendText(typeid(techType).name());
+		/*
 		if(typeid(*type) == typeid(BWAPI::UpgradeType))
 		{
 			BWAPI::Broodwar->sendText("Upgrade " + *upgradeType.getName().c_str());
 		}else if(typeid(*type) == typeid(BWAPI::TechType))
 		{
-			BWAPI::Broodwar->sendText("Tech " + *techType.getName().c_str());
+			//BWAPI::Broodwar->sendText("Tech " + *techType.getName().c_str());
 		}else if(typeid(*type) == typeid(BWAPI::Type))
 		{
 			BWAPI::Broodwar->sendText("Just type... awww ");
-		}
+		}*/
 		/*
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Assimilator) );
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );

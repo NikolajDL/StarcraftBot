@@ -34,6 +34,7 @@ void HypothalamusClass::toggleOrderEvent(IEventDataPtr evnt)
 
 void HypothalamusClass::upgradeEvent(IEventDataPtr evnt)
 {
+	/*
 	std::tr1::shared_ptr<UpgradeEvent> pEventData = std::tr1::static_pointer_cast<UpgradeEvent>(evnt);
 	std::tr1::shared_ptr<const BWAPI::Type> type = pEventData->mType;
 	int level = pEventData->mLevel;
@@ -41,8 +42,8 @@ void HypothalamusClass::upgradeEvent(IEventDataPtr evnt)
 	//BWAPI::Broodwar->sendText(typeid(type).name());
 	//BWAPI::Broodwar->sendText(typeid(*type).name());
 	
-	std::tr1::shared_ptr<const BWAPI::UpgradeType> upgradeTypeTmp = std::tr1::static_pointer_cast<const BWAPI::UpgradeType>(type);
-	std::tr1::shared_ptr<const BWAPI::TechType> techTypeTmp = std::tr1::static_pointer_cast<const BWAPI::TechType>(type);
+	//std::tr1::shared_ptr<const BWAPI::UpgradeType> upgradeTypeTmp = std::tr1::static_pointer_cast<const BWAPI::UpgradeType>(type);
+	//std::tr1::shared_ptr<const BWAPI::TechType> techTypeTmp = std::tr1::static_pointer_cast<const BWAPI::TechType>(type);
 	
 
 	BWAPI::Broodwar->sendText(typeid(*type).name());
@@ -71,6 +72,7 @@ void HypothalamusClass::upgradeEvent(IEventDataPtr evnt)
 		std::tr1::shared_ptr<const BWAPI::TechType> techType = std::tr1::static_pointer_cast<const BWAPI::TechType>(type);
 		upgrade(*techType);
 	}
+	*/
 }
 void HypothalamusClass::setArmyBehaviourEvent(IEventDataPtr evnt)
 {
