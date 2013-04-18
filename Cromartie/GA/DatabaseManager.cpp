@@ -226,19 +226,21 @@ void DatabaseManager::insertChromosome(Chromosome c)
 			}
 			else if(typeid(*g) == typeid(ResearchGene))
 			{
-				std::tr1::shared_ptr<const BWAPI::Type> t = dynamic_cast<ResearchGene&>(*g).getUpgradeType();
-				if(typeid(*t) == typeid(BWAPI::UpgradeType))
+				BWAPI::UpgradeType ut = dynamic_cast<ResearchGene&>(*g).getUpgradeType();
+				BWAPI::TechType tt = dynamic_cast<ResearchGene&>(*g).getTechType();
+
+				if(ut != NULL && tt == NULL)
 				{
 					ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
 					<< geneID << ","
-					<< "\"" << dynamic_cast<const BWAPI::UpgradeType&>(*t).getName() << "\""
+					<< "\"" << ut.getName() << "\""
 					<< ");";
 				}
-				else if(typeid(*t) == typeid(BWAPI::TechType))
+				else if(tt != NULL && ut == NULL)
 				{
 					ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
 					<< geneID << ","
-					<< "\"" << dynamic_cast<const BWAPI::TechType&>(*t).getName() << "\""
+					<< "\"" << tt.getName() << "\""
 					<< ");";
 				}
 				else
@@ -455,13 +457,13 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 					std::string upgradetype = boost::lexical_cast<std::string>(sqlite3_column_text(researchgene_stmt,0));
 					if(BWAPI::UpgradeTypes::getUpgradeType(upgradetype) != BWAPI::UpgradeTypes::Unknown)
 					{
-						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::getUpgradeType(upgradetype))));
+						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(BWAPI::UpgradeTypes::getUpgradeType(upgradetype)));
 						g->setId(geneID);
 						s.addGene(g);
 					}
 					else if(BWAPI::TechTypes::getTechType(upgradetype) != BWAPI::TechTypes::Unknown)
 					{
-						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::getTechType(upgradetype))));
+						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(BWAPI::TechTypes::getTechType(upgradetype)));
 						g->setId(geneID);
 						s.addGene(g);
 					}

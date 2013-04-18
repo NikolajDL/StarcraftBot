@@ -105,8 +105,12 @@ bool StateExecutor::executeState(const State state)
 		else if (typeid(*g) == typeid(ResearchGene))
 		{
 			ResearchGene rg = dynamic_cast<ResearchGene&>(*g);
-
-			EQUEUE(new UpgradeEvent(rg.getUpgradeType()));
+			if(rg.getUpgradeType() != NULL)
+				EQUEUE(new UpgradeEvent(rg.getUpgradeType(), 1));
+			else if(rg.getTechType() != NULL)
+				EQUEUE(new UpgradeEvent(rg.getTechType()));
+			else
+				std::cout << "StateExecutor::executeState(): Unable to determine upgrade type" << std::endl;
 		}
 		else if(typeid(*g) == typeid(AttackGene))
 		{

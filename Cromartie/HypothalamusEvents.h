@@ -97,16 +97,23 @@ struct UpgradeEvent : public BaseEventData
     }
 
 	explicit UpgradeEvent( BWAPI::UpgradeType upgrade, int level)
-        : BaseEventData(BWAPI::Broodwar->getFrameCount())
+        : mUpgrade(upgrade)
+		, mTech(NULL)
+		, mLevel(level)
+		, BaseEventData(BWAPI::Broodwar->getFrameCount())
+		
     {
     }
-	explicit UpgradeEvent(std::tr1::shared_ptr<const BWAPI::Type> upgrade)
-        : mType( upgrade )
+	explicit UpgradeEvent( BWAPI::TechType upgrade)
+        : mTech( upgrade )
+		, mUpgrade(NULL)
+		, mLevel(0)
 		, BaseEventData(BWAPI::Broodwar->getFrameCount())
     {
     }
 	
-	std::tr1::shared_ptr<const BWAPI::Type> mType;
+	BWAPI::UpgradeType mUpgrade;
+	BWAPI::TechType mTech;
 	int mLevel;
 };
 struct SetArmyBehaviourEvent : public BaseEventData

@@ -47,11 +47,11 @@ std::tr1::shared_ptr<CombatGene> StarcraftRules::getValidCombatGene(const State&
 std::tr1::shared_ptr<ResearchGene> StarcraftRules::getValidResearchGene(const State& s, bool& found)
 {
 	// Get all valid upgrades
-	//std::vector<std::tr1::shared_ptr<const BWAPI::Type>> validUpgrades = getValidUpgrades(s);
-	std::vector<std::tr1::shared_ptr<const BWAPI::Type>> validUpgrades;
+	std::vector<BWAPI::UpgradeType> validUpgrades = getValidUpgrades(s);
+	std::vector<BWAPI::TechType> validTechs = getValidTechs(s);
 
 	// If no valid upgrades exists, we return NULL
-	if (validUpgrades.size() == 0)
+	if (validUpgrades.size() == 0 && validTechs.size() == 0)
 	{
 		std::tr1::shared_ptr<ResearchGene> rg( new ResearchGene() );
 		found = false;
@@ -60,15 +60,21 @@ std::tr1::shared_ptr<ResearchGene> StarcraftRules::getValidResearchGene(const St
 	else
 	{
 		found = true;
+
+		boost::random::uniform_int_distribution<> dist(0, validUpgrades.size()+validTechs.size()-2);
+		int randomNrGene = dist(randomGen);
+		if(randomNrGene < validUpgrades.size())
+		{
+			std::tr1::shared_ptr<ResearchGene> rg( new ResearchGene(validUpgrades.at(randomNrGene)) );
+			return rg;
+		}
+		else
+		{
+			std::tr1::shared_ptr<ResearchGene> rg( new ResearchGene(validTechs.at(randomNrGene-validUpgrades.size())) );
+			return rg;
+		}
+		
 	}
-
-	// Choose a random upgrade type
-	boost::random::uniform_int_distribution<> dist(0, validUpgrades.size()-1);
-	int randomNrGene = dist(randomGen);
-
-	// Create the research gene and assign the upgrade
-	std::tr1::shared_ptr<ResearchGene> rg( new ResearchGene(validUpgrades.at(randomNrGene)) );
-	return rg;
 }
 
 std::tr1::shared_ptr<AttackGene> StarcraftRules::getValidAttackGene(const State& s, bool& found)
@@ -110,9 +116,9 @@ std::tr1::shared_ptr<BuildGene> StarcraftRules::getValidBuildGene(const State& s
 	return bg;
 }
 
-std::vector<std::tr1::shared_ptr<const BWAPI::Type>> StarcraftRules::getValidUpgrades(const State& s)
+std::vector<BWAPI::UpgradeType> StarcraftRules::getValidUpgrades(const State& s)
 {
-	std::vector<std::tr1::shared_ptr<const BWAPI::Type>> validUpgrades;
+	std::vector<BWAPI::UpgradeType> validUpgrades;
 
 	// Loop through all buildings that has been build in order to determine which buildings are valid to build
 	for (int i = 0; i < s.getBuildingSequence().size(); i++)
@@ -121,57 +127,73 @@ std::vector<std::tr1::shared_ptr<const BWAPI::Type>> StarcraftRules::getValidUpg
 
 		if (ut == BWAPI::UnitTypes::Protoss_Forge )
 		{
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Protoss_Ground_Weapons));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Protoss_Ground_Armor));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Protoss_Plasma_Shields));
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Protoss_Ground_Weapons);
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Protoss_Ground_Armor);
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Protoss_Plasma_Shields);
 		}
 		else if (ut == BWAPI::UnitTypes::Protoss_Cybernetics_Core)
 		{
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Protoss_Air_Weapons));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Protoss_Air_Armor));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Singularity_Charge));
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Protoss_Air_Weapons);
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Protoss_Air_Armor);
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Singularity_Charge);
 		}
 		else if (ut == BWAPI::UnitTypes::Protoss_Robotics_Support_Bay)
 		{
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Reaver_Capacity));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Scarab_Damage));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Gravitic_Drive));
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Reaver_Capacity);
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Scarab_Damage);
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Gravitic_Drive);
 		}
 		else if (ut == BWAPI::UnitTypes::Protoss_Observatory)
 		{
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Gravitic_Boosters));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Sensor_Array));
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Gravitic_Boosters);
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Sensor_Array);
 		}
 		else if (ut == BWAPI::UnitTypes::Protoss_Citadel_of_Adun)
 		{
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Leg_Enhancements));
-		}
-		else if (ut == BWAPI::UnitTypes::Protoss_Templar_Archives)
-		{
-			
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Hallucination));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Psionic_Storm));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Maelstrom));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Mind_Control));
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Leg_Enhancements);
 		}
 		else if (ut == BWAPI::UnitTypes::Protoss_Arbiter_Tribunal)
 		{
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Khaydarin_Core));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Recall));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Stasis_Field));
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Khaydarin_Core);
 		}
 		else if (ut == BWAPI::UnitTypes::Protoss_Fleet_Beacon)
 		{
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Disruption_Web));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Apial_Sensors));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Gravitic_Thrusters));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Carrier_Capacity));
-			validUpgrades.push_back(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Argus_Jewel));
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Apial_Sensors);
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Gravitic_Thrusters);
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Carrier_Capacity);
+			validUpgrades.push_back(BWAPI::UpgradeTypes::Argus_Jewel);
 		}
 	}
 
 
 	return validUpgrades;
+}
+
+std::vector<BWAPI::TechType> StarcraftRules::getValidTechs(const State& s)
+{
+	std::vector<BWAPI::TechType> validTechs;
+
+	for (int i = 0; i < s.getBuildingSequence().size(); i++)
+	{
+		BWAPI::UnitType ut = s.getBuildingSequence().at(i);
+
+		if (ut == BWAPI::UnitTypes::Protoss_Templar_Archives)
+		{			
+			validTechs.push_back(BWAPI::TechTypes::Hallucination);
+			validTechs.push_back(BWAPI::TechTypes::Psionic_Storm);
+			validTechs.push_back(BWAPI::TechTypes::Maelstrom);
+			validTechs.push_back(BWAPI::TechTypes::Mind_Control);
+		}
+		else if (ut == BWAPI::UnitTypes::Protoss_Arbiter_Tribunal)
+		{
+			validTechs.push_back(BWAPI::TechTypes::Recall);
+			validTechs.push_back(BWAPI::TechTypes::Stasis_Field);
+		}
+		else if (ut == BWAPI::UnitTypes::Protoss_Fleet_Beacon)
+		{
+			validTechs.push_back(BWAPI::TechTypes::Disruption_Web);
+		}
+	}
 }
 
 std::vector<BWAPI::UnitType> StarcraftRules::getValidUnits(const State& s)

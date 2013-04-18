@@ -378,8 +378,10 @@
       <Filter>Squad Manager\Squads</Filter>
     </ClCompile>
     <ClCompile Include="Stats.cpp" />
-    <ClCompile Include="DbElement.cpp" />
     <ClCompile Include="Settings.cpp">
+      <Filter>GA</Filter>
+    </ClCompile>
+    <ClCompile Include="DbElement.cpp">
       <Filter>GA</Filter>
     </ClCompile>
   </ItemGroup>
@@ -750,8 +752,10 @@
       <Filter>Squad Manager\Squads</Filter>
     </ClInclude>
     <ClInclude Include="Stats.h" />
-    <ClInclude Include="DbElement.h" />
     <ClInclude Include="Settings.h">
+      <Filter>GA</Filter>
+    </ClInclude>
+    <ClInclude Include="DbElement.h">
       <Filter>GA</Filter>
     </ClInclude>
   </ItemGroup>
