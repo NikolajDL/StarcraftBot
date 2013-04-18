@@ -47,7 +47,8 @@ std::tr1::shared_ptr<CombatGene> StarcraftRules::getValidCombatGene(const State&
 std::tr1::shared_ptr<ResearchGene> StarcraftRules::getValidResearchGene(const State& s, bool& found)
 {
 	// Get all valid upgrades
-	std::vector<std::tr1::shared_ptr<const BWAPI::Type>> validUpgrades = getValidUpgrades(s);
+	//std::vector<std::tr1::shared_ptr<const BWAPI::Type>> validUpgrades = getValidUpgrades(s);
+	std::vector<std::tr1::shared_ptr<const BWAPI::Type>> validUpgrades;
 
 	// If no valid upgrades exists, we return NULL
 	if (validUpgrades.size() == 0)

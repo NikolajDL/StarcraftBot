@@ -226,20 +226,20 @@ void DatabaseManager::insertChromosome(Chromosome c)
 			}
 			else if(typeid(*g) == typeid(ResearchGene))
 			{
-				std::tr1::shared_ptr<BWAPI::Type> t = dynamic_cast<ResearchGene&>(*g).getUpgradeType();
+				std::tr1::shared_ptr<const BWAPI::Type> t = dynamic_cast<ResearchGene&>(*g).getUpgradeType();
 				if(typeid(*t) == typeid(BWAPI::UpgradeType))
 				{
-					ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
+					/*ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
 					<< geneID << ","
 					<< "\"" << dynamic_cast<BWAPI::UpgradeType&>(*t).getName() << "\""
-					<< ");";
+					<< ");";*/
 				}
 				else if(typeid(*t) == typeid(BWAPI::TechType))
 				{
-					ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
+					/*ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
 					<< geneID << ","
 					<< "\"" << dynamic_cast<BWAPI::TechType&>(*t).getName() << "\""
-					<< ");";
+					<< ");";*/
 				}
 				else
 				{
@@ -459,11 +459,15 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 						g->setId(geneID);
 						s.addGene(g);*/
 					}
+					else if(BWAPI::TechTypes::getTechType(upgradetype) != BWAPI::TechTypes::Unknown)
+					{
+						/*std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(std::tr1::shared_ptr<BWAPI::TechType>(&BWAPI::TechTypes::getTechType(upgradetype))));
+						g->setId(geneID);
+						s.addGene(g);*/
+					}
 					else
 					{
-						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(std::tr1::shared_ptr<BWAPI::TechType>(&BWAPI::TechTypes::getTechType(upgradetype))));
-						g->setId(geneID);
-						s.addGene(g);
+						std::cout << "DatabaseManager::selectAllChromosomes(): Unable to determine research type" << std::endl;
 					}
 					
 				} else if(sqlite3_step(buildgene_stmt) == SQLITE_ROW)
