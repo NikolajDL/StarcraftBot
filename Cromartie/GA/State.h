@@ -2,11 +2,12 @@
 #include <vector>
 #include <memory>
 #include "../Interface.h"
+#include "../DbElement.h"
 #include "Gene.h"
 
 using namespace std;
 
-class State
+class State : public DbElement
 {
 private:
 	std::vector<BWAPI::UnitType> buildingSequence;
