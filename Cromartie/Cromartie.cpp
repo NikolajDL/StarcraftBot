@@ -137,27 +137,36 @@ void Cromartie::onFrame()
 		/*EQUEUE( new UpgradeEvent( std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Hallucination) ) );
 		EQUEUE( new UpgradeEvent( std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Protoss_Air_Armor) ) );
 		*/
-		using namespace std::tr1;
-		shared_ptr<const BWAPI::Type> type(&BWAPI::UpgradeTypes::Protoss_Air_Weapons);
-		
-		BWAPI::UpgradeType upgradeType = dynamic_cast<const BWAPI::UpgradeType&>(*type);
-		BWAPI::TechType techType = dynamic_cast<const BWAPI::TechType&>(*type);
-		
-		BWAPI::Broodwar->sendText(typeid(type).name());
-		BWAPI::Broodwar->sendText(typeid(*type).name());
-		BWAPI::Broodwar->sendText(typeid(upgradeType).name());
-		BWAPI::Broodwar->sendText(typeid(techType).name());
+		//using namespace std::tr1;
 
-		if(typeid(*type) == typeid(BWAPI::UpgradeType))
-		{
-			BWAPI::Broodwar->sendText("Upgrade " + *upgradeType.getName().c_str());
-		}else if(typeid(*type) == typeid(BWAPI::TechType))
-		{
-			BWAPI::Broodwar->sendText("Tech " + *techType.getName().c_str());
-		}else if(typeid(*type) == typeid(BWAPI::Type))
-		{
-			BWAPI::Broodwar->sendText("Just type... awww ");
-		}
+		//std::vector<std::tr1::shared_ptr<const BWAPI::Type>> myVector;
+
+		//std::tr1::shared_ptr<const BWAPI::UpgradeType> upType(&BWAPI::UpgradeTypes::Protoss_Air_Weapons);
+		//std::tr1::shared_ptr<const BWAPI::TechType> tType(&BWAPI::TechTypes::Hallucination);
+		//
+		//myVector.push_back(upType);
+		//myVector.push_back(tType);
+		//
+		//for(int i=0;i<myVector.size();i++)
+		//{
+		//	BWAPI::Broodwar->sendText(typeid(*myVector.at(i)).name());
+		//}
+
+		
+		//BWAPI::Broodwar->sendText(typeid(*type).name());
+		//BWAPI::Broodwar->sendText(typeid(upgradeType).name());
+		//BWAPI::Broodwar->sendText(typeid(techType).name());
+
+		//if(typeid(*type) == typeid(BWAPI::UpgradeType))
+		//{
+		//	BWAPI::Broodwar->sendText("Upgrade " + *upgradeType.getName().c_str());
+		//}else if(typeid(*type) == typeid(BWAPI::TechType))
+		//{
+		//	BWAPI::Broodwar->sendText("Tech " + *techType.getName().c_str());
+		//}else if(typeid(*type) == typeid(BWAPI::Type))
+		//{
+		//	BWAPI::Broodwar->sendText("Just type... awww ");
+		//}
 		/*
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Assimilator) );
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );

@@ -13,7 +13,7 @@ ResearchGene::~ResearchGene(void)
 {
 }
 
-std::tr1::shared_ptr<BWAPI::Type> ResearchGene::getUpgradeType(void) const
+std::tr1::shared_ptr<const BWAPI::Type> ResearchGene::getUpgradeType(void)
 {
 	return this->upgradeType;
 }

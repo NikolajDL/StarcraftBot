@@ -455,9 +455,9 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 					std::string upgradetype = boost::lexical_cast<std::string>(sqlite3_column_text(researchgene_stmt,0));
 					if(BWAPI::UpgradeTypes::getUpgradeType(upgradetype) != BWAPI::UpgradeTypes::Unknown)
 					{
-						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(std::tr1::shared_ptr<BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::getUpgradeType(upgradetype))));
+						/*std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(std::tr1::shared_ptr<BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::getUpgradeType(upgradetype))));
 						g->setId(geneID);
-						s.addGene(g);
+						s.addGene(g);*/
 					}
 					else
 					{
