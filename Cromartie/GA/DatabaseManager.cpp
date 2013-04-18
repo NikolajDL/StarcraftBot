@@ -229,17 +229,17 @@ void DatabaseManager::insertChromosome(Chromosome c)
 				std::tr1::shared_ptr<const BWAPI::Type> t = dynamic_cast<ResearchGene&>(*g).getUpgradeType();
 				if(typeid(*t) == typeid(BWAPI::UpgradeType))
 				{
-					/*ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
+					ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
 					<< geneID << ","
-					<< "\"" << dynamic_cast<BWAPI::UpgradeType&>(*t).getName() << "\""
-					<< ");";*/
+					<< "\"" << dynamic_cast<const BWAPI::UpgradeType&>(*t).getName() << "\""
+					<< ");";
 				}
 				else if(typeid(*t) == typeid(BWAPI::TechType))
 				{
-					/*ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
+					ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
 					<< geneID << ","
-					<< "\"" << dynamic_cast<BWAPI::TechType&>(*t).getName() << "\""
-					<< ");";*/
+					<< "\"" << dynamic_cast<const BWAPI::TechType&>(*t).getName() << "\""
+					<< ");";
 				}
 				else
 				{
@@ -455,15 +455,15 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 					std::string upgradetype = boost::lexical_cast<std::string>(sqlite3_column_text(researchgene_stmt,0));
 					if(BWAPI::UpgradeTypes::getUpgradeType(upgradetype) != BWAPI::UpgradeTypes::Unknown)
 					{
-						/*std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(std::tr1::shared_ptr<BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::getUpgradeType(upgradetype))));
+						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::getUpgradeType(upgradetype))));
 						g->setId(geneID);
-						s.addGene(g);*/
+						s.addGene(g);
 					}
 					else if(BWAPI::TechTypes::getTechType(upgradetype) != BWAPI::TechTypes::Unknown)
 					{
-						/*std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(std::tr1::shared_ptr<BWAPI::TechType>(&BWAPI::TechTypes::getTechType(upgradetype))));
+						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::getTechType(upgradetype))));
 						g->setId(geneID);
-						s.addGene(g);*/
+						s.addGene(g);
 					}
 					else
 					{
