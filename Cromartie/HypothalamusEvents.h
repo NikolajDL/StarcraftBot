@@ -97,9 +97,7 @@ struct UpgradeEvent : public BaseEventData
     }
 
 	explicit UpgradeEvent( BWAPI::UpgradeType upgrade, int level)
-        : mType( &upgrade )
-		, mLevel(level)
-		, BaseEventData(BWAPI::Broodwar->getFrameCount())
+        : BaseEventData(BWAPI::Broodwar->getFrameCount())
     {
     }
 	explicit UpgradeEvent(std::tr1::shared_ptr<const BWAPI::Type> upgrade)

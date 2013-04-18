@@ -38,12 +38,36 @@ void HypothalamusClass::upgradeEvent(IEventDataPtr evnt)
 	std::tr1::shared_ptr<const BWAPI::Type> type = pEventData->mType;
 	int level = pEventData->mLevel;
 
-	if(typeid(type) == typeid(BWAPI::UpgradeType))
+	//BWAPI::Broodwar->sendText(typeid(type).name());
+	//BWAPI::Broodwar->sendText(typeid(*type).name());
+	
+	std::tr1::shared_ptr<const BWAPI::UpgradeType> upgradeTypeTmp = std::tr1::static_pointer_cast<const BWAPI::UpgradeType>(type);
+	std::tr1::shared_ptr<const BWAPI::TechType> techTypeTmp = std::tr1::static_pointer_cast<const BWAPI::TechType>(type);
+	
+
+	BWAPI::Broodwar->sendText(typeid(*type).name());
+	BWAPI::Broodwar->sendText(typeid(*upgradeTypeTmp).name());
+
+	if(upgradeTypeTmp!=0){
+		BWAPI::Broodwar->sendText(upgradeTypeTmp->getName().c_str());
+		upgrade(*upgradeTypeTmp, 1);
+	}
+	else if(techTypeTmp!=0){
+		BWAPI::Broodwar->sendText(techTypeTmp->getName().c_str());
+		upgrade(*techTypeTmp);
+	}
+
+
+
+
+	if(typeid(*type) == typeid(BWAPI::UpgradeType))
 	{
+		BWAPI::Broodwar->sendText("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!!!!!!!!!!!!!!!!!! 1111111111");
 		std::tr1::shared_ptr<const BWAPI::UpgradeType> upgradeType = std::tr1::static_pointer_cast<const BWAPI::UpgradeType>(type);
 		upgrade(*upgradeType, level);
-	}else if(typeid(type) == typeid(BWAPI::TechType))
+	}else if(typeid(*type) == typeid(BWAPI::TechType))
 	{
+		BWAPI::Broodwar->sendText("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!!!!!!!!!!!!!!!!!! 2222222222");
 		std::tr1::shared_ptr<const BWAPI::TechType> techType = std::tr1::static_pointer_cast<const BWAPI::TechType>(type);
 		upgrade(*techType);
 	}
