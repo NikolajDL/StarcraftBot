@@ -124,7 +124,7 @@ void Cromartie::onFrame()
 		EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
 		EQUEUE( new ToggleOrderEvent(Order::Scout) );
 		EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
-		*/
+		/**/
 		//EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
 
 		/*std::tr1::shared_ptr<const BWAPI::Type> tt = std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Hallucination);
@@ -137,8 +137,8 @@ void Cromartie::onFrame()
 		using namespace std::tr1;
 		shared_ptr<const BWAPI::Type> type(&BWAPI::UpgradeTypes::Protoss_Air_Weapons);
 		
-		BWAPI::UpgradeType upgradeType = static_cast<const BWAPI::UpgradeType&>(*type);
-		BWAPI::TechType techType = static_cast<const BWAPI::TechType&>(*type);
+		BWAPI::UpgradeType upgradeType = dynamic_cast<const BWAPI::UpgradeType&>(*type);
+		BWAPI::TechType techType = dynamic_cast<const BWAPI::TechType&>(*type);
 		
 		BWAPI::Broodwar->sendText(typeid(type).name());
 		BWAPI::Broodwar->sendText(typeid(*type).name());
@@ -162,7 +162,7 @@ void Cromartie::onFrame()
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Citadel_of_Adun) );
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Templar_Archives) );
 
-		EQUEUE( new ToggleDebugInfoEvent() );*/
+		EQUEUE( new ToggleDebugInfoEvent() );/**/
 	}
 	
 	/*
