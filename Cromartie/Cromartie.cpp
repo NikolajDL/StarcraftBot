@@ -61,8 +61,8 @@ void Cromartie::onStart()
 {
 	BWAPI::Broodwar->sendText("Cromartie 1.0 Operational");
 
-	//BWAPI::Broodwar->setLatCom(false);
-	//BWAPI::Broodwar->setCommandOptimizationLevel(1);
+	BWAPI::Broodwar->setLatCom(false);
+	BWAPI::Broodwar->setCommandOptimizationLevel(1);
 
 	if(BWAPI::Broodwar->self()->getRace() != BWAPI::Races::Protoss)
 		BWAPI::Broodwar->sendText("Cromartie is a Protoss only bot");
@@ -75,21 +75,21 @@ void Cromartie::onStart()
 
 	// Make it go faster! Faster I say! I wanna go faster than any man before me!
 	// I wanna look down at the light and laugh at its pitiful speed
-	//BWAPI::Broodwar->setLocalSpeed(0);
-	//BWAPI::Broodwar->setGUI(false);
+	BWAPI::Broodwar->setLocalSpeed(0);
+	BWAPI::Broodwar->setGUI(false);
 
 	//BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::CompleteMapInformation);
 
 	
-	//registerListeners();
+	registerListeners();
 }
 
 void Cromartie::onEnd(bool isWinner)
 {
-	//BWAPI::Broodwar->sendText("Ending GA...");
-	//_ga.onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 60*60*24);
-	//BWAPI::Broodwar->sendText("GA Ended");
+	BWAPI::Broodwar->sendText("Ending GA...");
+	_ga.onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 60*60*24);
+	BWAPI::Broodwar->sendText("GA Ended");
 
 	BuildOrderManager::Instance().onEnd(isWinner);
 	GameMemory::Instance().onEnd();
@@ -98,94 +98,47 @@ void Cromartie::onEnd(bool isWinner)
 void Cromartie::onFrame()
 {
 	// Enqueue bwapi events
-	//for each(BWAPI::Event bwapiEvent in BWAPI::Broodwar->getEvents())
-	//{
-	//	if(bwapiEvent.getType() == BWAPI::EventType::UnitDiscover)
-	//		EQUEUE( new UnitDiscoveredEvent(bwapiEvent.getUnit()));
-	//	if(bwapiEvent.getType() == BWAPI::EventType::UnitDestroy)
-	//		EQUEUE( new UnitDestroyedEvent(bwapiEvent.getUnit()));
-	//	if(bwapiEvent.getType() == BWAPI::EventType::UnitComplete)
-	//		EQUEUE( new UnitCompleteEvent(bwapiEvent.getUnit()));
-	//	if(bwapiEvent.getType() == BWAPI::EventType::UnitMorph)
-	//		EQUEUE( new UnitMorphEvent(bwapiEvent.getUnit()));
-	//}
+	for each(BWAPI::Event bwapiEvent in BWAPI::Broodwar->getEvents())
+	{
+		if(bwapiEvent.getType() == BWAPI::EventType::UnitDiscover)
+			EQUEUE( new UnitDiscoveredEvent(bwapiEvent.getUnit()));
+		if(bwapiEvent.getType() == BWAPI::EventType::UnitDestroy)
+			EQUEUE( new UnitDestroyedEvent(bwapiEvent.getUnit()));
+		if(bwapiEvent.getType() == BWAPI::EventType::UnitComplete)
+			EQUEUE( new UnitCompleteEvent(bwapiEvent.getUnit()));
+		if(bwapiEvent.getType() == BWAPI::EventType::UnitMorph)
+			EQUEUE( new UnitMorphEvent(bwapiEvent.getUnit()));
+	}
 
 	if(!mOnBegin)
 	{
 		//BWAPI::Broodwar->sendText("Starting GA...");
-		//_ga.onStarcraftStart();
+		_ga.onStarcraftStart();
 		//BWAPI::Broodwar->sendText("GA started!");
 		mOnBegin = true;
 		
-		/*
 		EQUEUE( new OnStartEvent() );
 		EQUEUE( new PauseBuildOrderEvent() );
 		//EQUEUE( new ChangeBuildOrderEvent(BuildOrderID::TwoGate));
 
 		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
 		EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
-		EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
+		//EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
 		EQUEUE( new ToggleOrderEvent(Order::Scout) );
-		EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
-		/**/
+		//EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
 		//EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
-
-		/*std::tr1::shared_ptr<const BWAPI::Type> tt = std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Hallucination);
-		std::tr1::shared_ptr<const BWAPI::TechType> tt2 = std::tr1::static_pointer_cast<const BWAPI::TechType>(tt);
-		TaskManager::Instance().research(*tt2, TaskType::Highest);*/
-
-		/*EQUEUE( new UpgradeEvent( std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Hallucination) ) );
-		EQUEUE( new UpgradeEvent( std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Protoss_Air_Armor) ) );
-		*/
-		//using namespace std::tr1;
-		//shared_ptr<BWAPI::Type> type(&const_cast<BWAPI::UpgradeType&>(BWAPI::UpgradeTypes::Protoss_Air_Weapons));
-
-		//BWAPI::UpgradeType upgradeType = dynamic_cast<BWAPI::UpgradeType&>(*type);
-		//BWAPI::TechType techType = dynamic_cast<BWAPI::TechType&>(*type);
-
-		//::Broodwar->sendText(typeid(type).name());
-		//BWAPI::Broodwar->sendText(typeid(*type).name());
-		//BWAPI::Broodwar->sendText(typeid(upgradeType).name());
-		//BWAPI::Broodwar->sendText(typeid(techType).name());
-		/*
-		//
-		//for(int i=0;i<myVector.size();i++)
-		//{
-		//	BWAPI::Broodwar->sendText(typeid(*myVector.at(i)).name());
-		//}
 		
-		//BWAPI::Broodwar->sendText(typeid(*type).name());
-		//BWAPI::Broodwar->sendText(typeid(upgradeType).name());
-		//BWAPI::Broodwar->sendText(typeid(techType).name());
-
-			//BWAPI::Broodwar->sendText("Tech " + *techType.getName().c_str());
-		//{
-		//	BWAPI::Broodwar->sendText("Upgrade " + *upgradeType.getName().c_str());
-		//}else if(typeid(*type) == typeid(BWAPI::TechType))
-		}*/
-		//	BWAPI::Broodwar->sendText("Tech " + *techType.getName().c_str());
-		//}else if(typeid(*type) == typeid(BWAPI::Type))
-		//{
-		//	BWAPI::Broodwar->sendText("Just type... awww ");
-		//}
-		/*
-		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Assimilator) );
-		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
-		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Cybernetics_Core) );
-		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Citadel_of_Adun) );
-		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Templar_Archives) );
-
-		EQUEUE( new ToggleDebugInfoEvent() );/**/
+		//EQUEUE( new ToggleDebugInfoEvent() );
 	}
 	
-	/*
+
 	EQUEUE( new OnUpdateEvent() );
 	EventManager::Instance().update();
 
-	if(GameProgressDetection::Instance().shouldGG())
+	/*if(GameProgressDetection::Instance().shouldGG())
 	{
-		//if(mLeavingGame == 0)
-			//mLeavingGame = BWAPI::Broodwar->getFrameCount();
+		if(mLeavingGame == 0)
+			mLeavingGame = BWAPI::Broodwar->getFrameCount();
 	}
 	else
 		mLeavingGame = 0;
@@ -279,6 +232,6 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::attack, AttackEvent::sk_EventType);
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::stop, StopAttackEvent::sk_EventType);
 
-	//ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
-	//ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 
+	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
+	ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 
 }

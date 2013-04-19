@@ -71,9 +71,9 @@ void GA::changeState()
 		changeState();
 }
 
-State GA::getCurrentState()
+State& GA::getCurrentState()
 {
-	return getCurrentChromosome().getStates().at(currentStateIndex);
+	return getCurrentChromosome().getState(currentStateIndex);
 }
 
 double GA::fitness(int score, int opponentScore)
@@ -163,9 +163,6 @@ void GA::onStarcraftStart()
 	}
 
 	BWAPI::Broodwar->sendText(static_cast<std::ostringstream*>( &(std::ostringstream() << currentChromosomeIndex) )->str().c_str());
-
-	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Probe, TaskType::Lowest));
-	EQUEUE(new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Probe, TaskType::Lowest));
 }
 
 Chromosome& GA::getCurrentChromosome()
@@ -175,7 +172,6 @@ Chromosome& GA::getCurrentChromosome()
 
 void GA::loadPopulation()
 {
-	//population = FlatFileSerializer::loadPop();
 	population = db.selectAllChromosomes();
 
 	if (population.size() == 0)
@@ -184,7 +180,6 @@ void GA::loadPopulation()
 
 void GA::savePopulation()
 {
-	//FlatFileSerializer::savePop(population);
 	if(status == 0) 
 	{ 
 		db.insertChromosomes(population); 

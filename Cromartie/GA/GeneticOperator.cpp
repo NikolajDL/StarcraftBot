@@ -21,7 +21,7 @@ boost::random::mt19937 randomGen;
 // the child chromosome inherits genetic material from both parents 
 // to prevent a parent from being copied completely onto the child chromosome. 
 // Between two matching states, all states and genes are copied from either parent
-Chromosome GeneticOperator::StateCrossover(const Chromosome& parent1, const Chromosome& parent2, bool* threeMatchesFound)
+Chromosome GeneticOperator::StateCrossover(const Chromosome& parent1, const Chromosome& parent2, bool& threeMatchesFound)
 {
 	std::vector<State> childStates;
 	bool takeFromParent1 = true;
@@ -40,11 +40,11 @@ Chromosome GeneticOperator::StateCrossover(const Chromosome& parent1, const Chro
 
 	if (matches < 3)
 	{
-		*threeMatchesFound = false;
+		threeMatchesFound = false;
 		return Chromosome(childStates);
 	}
 	else
-		*threeMatchesFound = true;
+		threeMatchesFound = true;
 
 	for(int i=0;i<stateSize;i++)
 	{
@@ -107,17 +107,12 @@ Chromosome GeneticOperator::RuleReplaceMutation(const Chromosome& parent)
 							std::tr1::shared_ptr<ResearchGene> gene = StarcraftRules::getValidResearchGene( s, found);
 							if (found == true)
 								s.replaceGeneAt(j,gene);
-							else
-								std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
 						}
 						else
 						{
 							bool found;
-							std::tr1::shared_ptr<AttackGene> gene = StarcraftRules::getValidAttackGene( s, found);
-							if (found == true)
-								s.replaceGeneAt(j,gene);
-							else
-								std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
+							std::tr1::shared_ptr<AttackGene> gene = StarcraftRules::getValidAttackGene(s);
+							s.replaceGeneAt(j,gene);
 						}
 					}
 					else if(typeid(*g) == typeid(ResearchGene))
@@ -125,11 +120,8 @@ Chromosome GeneticOperator::RuleReplaceMutation(const Chromosome& parent)
 						if (replaceNr == 1)
 						{
 							bool found;
-							std::tr1::shared_ptr<AttackGene> gene = StarcraftRules::getValidAttackGene( s, found);
-							if (found == true)
-								s.replaceGeneAt(j,gene);
-							else
-								std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
+							std::tr1::shared_ptr<AttackGene> gene = StarcraftRules::getValidAttackGene( s);
+							s.replaceGeneAt(j,gene);
 						}
 						else
 						{
@@ -137,8 +129,6 @@ Chromosome GeneticOperator::RuleReplaceMutation(const Chromosome& parent)
 							std::tr1::shared_ptr<CombatGene> gene = StarcraftRules::getValidCombatGene( s, found);
 							if (found == true)
 								s.replaceGeneAt(j,gene);
-							else
-								std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
 						}
 					}
 					else if(typeid(*g) == typeid(AttackGene))
@@ -149,8 +139,6 @@ Chromosome GeneticOperator::RuleReplaceMutation(const Chromosome& parent)
 							std::tr1::shared_ptr<ResearchGene> gene = StarcraftRules::getValidResearchGene( s, found);
 							if (found == true)
 								s.replaceGeneAt(j,gene);
-							else
-								std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
 						}
 						else
 						{
@@ -158,8 +146,6 @@ Chromosome GeneticOperator::RuleReplaceMutation(const Chromosome& parent)
 							std::tr1::shared_ptr<CombatGene> gene = StarcraftRules::getValidCombatGene( s, found);
 							if (found == true)
 								s.replaceGeneAt(j,gene);
-							else
-								std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
 						}
 					}
 
@@ -195,11 +181,8 @@ Chromosome GeneticOperator::RuleBiasedMutation(const Chromosome& parent)
 					{
 						// Mutate parameters of gene
 						bool found;
-						std::tr1::shared_ptr<AttackGene> gene = StarcraftRules::getValidAttackGene(s, found);
-						if (found)
-							s.replaceGeneAt(j, gene);
-						else
-							std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
+						std::tr1::shared_ptr<AttackGene> gene = StarcraftRules::getValidAttackGene(s);
+						s.replaceGeneAt(j, gene);
 					}
 					else if(typeid(*g) != typeid(CombatGene))
 					{
@@ -208,8 +191,6 @@ Chromosome GeneticOperator::RuleBiasedMutation(const Chromosome& parent)
 						std::tr1::shared_ptr<CombatGene> gene = StarcraftRules::getValidCombatGene(s, found);
 						if (found)
 							s.replaceGeneAt(j, gene);
-						else
-							std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
 					}
 				}
 			}
@@ -221,7 +202,7 @@ Chromosome GeneticOperator::RuleBiasedMutation(const Chromosome& parent)
 
 #define CHROMOSOME_LENGTH 50
 
-// Generate a complete new chromosome
+// Generate a completely new chromosome
 Chromosome GeneticOperator::RandomChromosome(void)
 {
 	
@@ -241,11 +222,8 @@ Chromosome GeneticOperator::RandomChromosome(void)
 			{
 				case 1:	
 					{
-						std::tr1::shared_ptr<AttackGene> gene = StarcraftRules::getValidAttackGene(s, found);
-						if (found == true)
-							s.addGene(gene);
-						else
-							std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
+						std::tr1::shared_ptr<AttackGene> gene = StarcraftRules::getValidAttackGene(s);
+						s.addGene(gene);
 					}
 					break;
 				case 2:
@@ -253,8 +231,6 @@ Chromosome GeneticOperator::RandomChromosome(void)
 						std::tr1::shared_ptr<CombatGene> gene = StarcraftRules::getValidCombatGene(s, found);
 						if (found == true)
 							s.addGene(gene);
-						else
-							std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
 					}
 					break;
 				case 3:	
@@ -262,20 +238,11 @@ Chromosome GeneticOperator::RandomChromosome(void)
 						std::tr1::shared_ptr<ResearchGene> gene = StarcraftRules::getValidResearchGene(s, found);
 						if (found == true)
 							s.addGene(gene);
-						else
-							std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
 					}
 					break;
 			}
 			randomNrGene = dist(randomGen);
 		}
-
-		bool found = false;
-		std::tr1::shared_ptr<CombatGene> gene = StarcraftRules::getValidCombatGene(s, found);
-			if (found == true)
-				s.addGene(gene);
-			else
-				std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
 
 		s.addGene(StarcraftRules::getValidBuildGene(s));
 		c.addState(s);
