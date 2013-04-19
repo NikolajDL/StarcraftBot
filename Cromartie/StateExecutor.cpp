@@ -16,53 +16,7 @@ StateExecutor::~StateExecutor(void)
 {
 }
 
-//void StateExecutor::executeNextGene()
-//{
-//	std::tr1::shared_ptr<Gene> g = currentState.getGenes().at(currentGene);
-//
-//	enquedUnits.clear();
-//	
-//		if(typeid(*g) == typeid(BuildGene))
-//		{
-//			BuildGene bg = dynamic_cast<BuildGene&>(*g);
-//
-//			EQUEUE(new BuildUnitEvent(bg.getBuildingType()));
-//		}
-//		else if (typeid(*g) == typeid(ResearchGene))
-//		{
-//			ResearchGene rg = dynamic_cast<ResearchGene&>(*g);
-//		}
-//		else if(typeid(*g) == typeid(AttackGene))
-//		{
-//			AttackGene ag = dynamic_cast<AttackGene&>(*g);
-//		}
-//		else if(typeid(*g) == typeid(CombatGene))
-//		{
-//			CombatGene cg = dynamic_cast<CombatGene&>(*g);
-//
-//			for (int j = 0; j < cg.getAmount(); j++)
-//			{
-//				enquedUnits.push_back(cg.getUnitType());
-//				EQUEUE(new BuildUnitEvent(cg.getUnitType()));
-//			}
-//		}
-//
-//	currentGene++;
-//}
-
-//bool StateExecutor::isStateFinish()
-//{
-//	if (currentGene == currentState.getGenes().size())
-//		return true;
-//	else
-//		return false;
-//}
-//
-//void StateExecutor::unitComplete(BWAPI::UnitType unit)
-//{
-//}
-
-bool StateExecutor::executeState(const State state)
+bool StateExecutor::executeState(const State& state)
 {
 	currentState = state;
 
@@ -80,12 +34,12 @@ bool StateExecutor::executeState(const State state)
 
 			BWAPI::Broodwar->sendText(name.c_str());
 			
-			if (unit.getName() == "Protoss Nexus")
+			if (unit == BWAPI::UnitTypes::Protoss_Nexus)
 			{
 				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::Expansion));
 				return true;
 			}
-			else if (unit.getName() == "Protoss Assimilator")
+			else if (unit == BWAPI::UnitTypes::Protoss_Assimilator)
 			{
 				if (assimilatorCount == 0)
 				{
@@ -115,7 +69,8 @@ bool StateExecutor::executeState(const State state)
 		else if(typeid(*g) == typeid(AttackGene))
 		{
 			AttackGene ag = dynamic_cast<AttackGene&>(*g);
-			EQUEUE(new AttackEvent());
+			if(ag.getAttack())
+				EQUEUE(new AttackEvent());
 		}
 		else if(typeid(*g) == typeid(CombatGene))
 		{

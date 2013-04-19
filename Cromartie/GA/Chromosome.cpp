@@ -1,11 +1,11 @@
 #include "Chromosome.h"
 
 
-Chromosome::Chromosome(void) : fitness(-999), nextStateIndex(0)
+Chromosome::Chromosome(void) : fitness(-999)
 {
 }
 
-Chromosome::Chromosome(std::vector<State> s) : fitness(-999), nextStateIndex(0), states(s)
+Chromosome::Chromosome(std::vector<State> s) : fitness(-999), states(s)
 {
 }
 
@@ -13,21 +13,19 @@ Chromosome::~Chromosome(void)
 {
 }
 
-State Chromosome::getNextState(void)
-{
-	State s = states.at(this->nextStateIndex++);
-
-	return s;
-}
-
 int Chromosome::getFitness(void) const
 {
 	return fitness;
 }
 
-std::vector<State> Chromosome::getStates(void) const 
+std::vector<State> Chromosome::getStates(void) const
 {
 	return this->states;
+}
+
+State& Chromosome::getState(int index)
+{
+	return this->states.at(index);
 }
 
 void Chromosome::addState(State s)

@@ -77,24 +77,22 @@ std::tr1::shared_ptr<ResearchGene> StarcraftRules::getValidResearchGene(const St
 	}
 }
 
-std::tr1::shared_ptr<AttackGene> StarcraftRules::getValidAttackGene(const State& s, bool& found)
+std::tr1::shared_ptr<AttackGene> StarcraftRules::getValidAttackGene(const State& s)
 {
+	
+
 	// Choose a random number between 0 and 9
-	boost::random::uniform_int_distribution<> dist(0, 9);
+	boost::random::uniform_int_distribution<> dist(0, 1);
 	int randomNrGene = dist(randomGen);
 
-	// If 0, 1 or 2, create an attack gene
-	if (randomNrGene < 3)
+	if (randomNrGene == 0)
 	{
-		std::tr1::shared_ptr<AttackGene> ag( new AttackGene() );
-		found = true;
+		std::tr1::shared_ptr<AttackGene> ag( new AttackGene(true) );
 		return ag;
 	}
-	// If not, do not create an attack gene
 	else
 	{
-		std::tr1::shared_ptr<AttackGene> ag( new AttackGene() );
-		found = false;
+		std::tr1::shared_ptr<AttackGene> ag( new AttackGene(false) );
 		return ag;
 	}
 }
@@ -194,6 +192,8 @@ std::vector<BWAPI::TechType> StarcraftRules::getValidTechs(const State& s)
 			validTechs.push_back(BWAPI::TechTypes::Disruption_Web);
 		}
 	}
+
+	return validTechs;
 }
 
 std::vector<BWAPI::UnitType> StarcraftRules::getValidUnits(const State& s)
@@ -350,16 +350,6 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		BWAPI::UnitType assimilator = BWAPI::UnitTypes::Protoss_Assimilator;
 		validBuildings.push_back(assimilator);
 	}
-	//if (forgeFound == false)
-	//{
-	//	BWAPI::UnitType forge = BWAPI::UnitTypes::Protoss_Forge;
-	//	validBuildings.push_back(forge);
-	//}
-	//if (nexusCounter < NEXUS_LIMIT)
-	//{
-	//	BWAPI::UnitType nexus = BWAPI::UnitTypes::Protoss_Nexus;
-	//	validBuildings.push_back(nexus);
-	//}
 
 	return validBuildings;
 }

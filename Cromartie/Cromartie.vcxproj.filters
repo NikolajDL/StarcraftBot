@@ -378,9 +378,6 @@
       <Filter>Squad Manager\Squads</Filter>
     </ClCompile>
     <ClCompile Include="Stats.cpp" />
-    <ClCompile Include="Settings.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
     <ClCompile Include="DbElement.cpp">
       <Filter>GA</Filter>
     </ClCompile>

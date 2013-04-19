@@ -113,79 +113,32 @@ void Cromartie::onFrame()
 	if(!mOnBegin)
 	{
 		//BWAPI::Broodwar->sendText("Starting GA...");
-		//_ga.onStarcraftStart();
+		_ga.onStarcraftStart();
 		//BWAPI::Broodwar->sendText("GA started!");
 		mOnBegin = true;
 		
-		/*
 		EQUEUE( new OnStartEvent() );
 		EQUEUE( new PauseBuildOrderEvent() );
 		//EQUEUE( new ChangeBuildOrderEvent(BuildOrderID::TwoGate));
 
 		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
 		EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
-		EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
+		//EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
 		EQUEUE( new ToggleOrderEvent(Order::Scout) );
-		EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
-		/**/
+		//EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
 		//EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
-
-		/*std::tr1::shared_ptr<const BWAPI::Type> tt = std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Hallucination);
-		std::tr1::shared_ptr<const BWAPI::TechType> tt2 = std::tr1::static_pointer_cast<const BWAPI::TechType>(tt);
-		TaskManager::Instance().research(*tt2, TaskType::Highest);*/
-
-		/*EQUEUE( new UpgradeEvent( std::tr1::shared_ptr<const BWAPI::TechType>(&BWAPI::TechTypes::Hallucination) ) );
-		EQUEUE( new UpgradeEvent( std::tr1::shared_ptr<const BWAPI::UpgradeType>(&BWAPI::UpgradeTypes::Protoss_Air_Armor) ) );
-		*/
-		//using namespace std::tr1;
-		//shared_ptr<BWAPI::Type> type(&const_cast<BWAPI::UpgradeType&>(BWAPI::UpgradeTypes::Protoss_Air_Weapons));
-
-		//BWAPI::UpgradeType upgradeType = dynamic_cast<BWAPI::UpgradeType&>(*type);
-		//BWAPI::TechType techType = dynamic_cast<BWAPI::TechType&>(*type);
-
-		//::Broodwar->sendText(typeid(type).name());
-		//BWAPI::Broodwar->sendText(typeid(*type).name());
-		//BWAPI::Broodwar->sendText(typeid(upgradeType).name());
-		//BWAPI::Broodwar->sendText(typeid(techType).name());
-		/*
-		//
-		//for(int i=0;i<myVector.size();i++)
-		//{
-		//	BWAPI::Broodwar->sendText(typeid(*myVector.at(i)).name());
-		//}
 		
-		//BWAPI::Broodwar->sendText(typeid(*type).name());
-		//BWAPI::Broodwar->sendText(typeid(upgradeType).name());
-		//BWAPI::Broodwar->sendText(typeid(techType).name());
-
-			//BWAPI::Broodwar->sendText("Tech " + *techType.getName().c_str());
-		//{
-		//	BWAPI::Broodwar->sendText("Upgrade " + *upgradeType.getName().c_str());
-		//}else if(typeid(*type) == typeid(BWAPI::TechType))
-		}*/
-		//	BWAPI::Broodwar->sendText("Tech " + *techType.getName().c_str());
-		//}else if(typeid(*type) == typeid(BWAPI::Type))
-		//{
-		//	BWAPI::Broodwar->sendText("Just type... awww ");
-		//}
-		/*
-		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Assimilator) );
-		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
-		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Cybernetics_Core) );
-		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Citadel_of_Adun) );
-		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Templar_Archives) );
-
-		EQUEUE( new ToggleDebugInfoEvent() );/**/
+		//EQUEUE( new ToggleDebugInfoEvent() );
 	}
 	
-	/*
+
 	EQUEUE( new OnUpdateEvent() );
 	EventManager::Instance().update();
 
-	if(GameProgressDetection::Instance().shouldGG())
+	/*if(GameProgressDetection::Instance().shouldGG())
 	{
-		//if(mLeavingGame == 0)
-			//mLeavingGame = BWAPI::Broodwar->getFrameCount();
+		if(mLeavingGame == 0)
+			mLeavingGame = BWAPI::Broodwar->getFrameCount();
 	}
 	else
 		mLeavingGame = 0;
@@ -279,6 +232,6 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::attack, AttackEvent::sk_EventType);
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::stop, StopAttackEvent::sk_EventType);
 
-	//ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
-	//ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 
+	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
+	ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 
 }
