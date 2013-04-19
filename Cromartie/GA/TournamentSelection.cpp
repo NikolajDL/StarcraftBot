@@ -113,7 +113,7 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 			for (int j = 0; j < population.size(); j++)
 			{
 				bool threeMatchesFound;
-				Chromosome child = GeneticOperator::StateCrossover(winners.at(i), population.at(0), didFindThreeMatches);
+				Chromosome child = GeneticOperator::StateCrossover(winners.at(i), population.at(0), threeMatchesFound);
 				if (threeMatchesFound == true)
 				{
 					population.push_back(child);
