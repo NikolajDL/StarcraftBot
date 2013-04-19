@@ -14,7 +14,7 @@ SquadManagerClass::SquadManagerClass()
 	: mCurrentBehaviour(ArmyBehaviour::Default)
 	, mDebugDraw(false)
 {
-	mDefaultSquad = createSquad(SquadType::DefaultSquad);
+	mDefaultSquad = createSquad(SquadType::AttackSquad);
 }
 
 void SquadManagerClass::attack()
