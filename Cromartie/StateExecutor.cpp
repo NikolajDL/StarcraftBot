@@ -18,7 +18,7 @@ StateExecutor::~StateExecutor(void)
 
 bool StateExecutor::executeState(const State& state)
 {
-	currentState = state;
+	//currentState = state;
 
 	for (int i = 0; i < state.getGenes().size();i ++)
 	{
@@ -37,7 +37,6 @@ bool StateExecutor::executeState(const State& state)
 			if (unit == BWAPI::UnitTypes::Protoss_Nexus)
 			{
 				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::Expansion));
-				return true;
 			}
 			else if (unit == BWAPI::UnitTypes::Protoss_Assimilator)
 			{
@@ -45,25 +44,31 @@ bool StateExecutor::executeState(const State& state)
 				{
 					assimilatorCount++;
 					EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::ExpansionGas));
-					return true;
 				}
 				else
+				{
 					return false;
+				}
 			}
 			else
 			{
 				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder));
-				return true;
 			}
 		}
 		else if (typeid(*g) == typeid(ResearchGene))
 		{
 			ResearchGene rg = dynamic_cast<ResearchGene&>(*g);
-			BWAPI::Broodwar->sendText("Executing ResearchGene");
+			
 			if(rg.getUpgradeType() != BWAPI::UpgradeTypes::None)
+			{
 				EQUEUE(new UpgradeEvent(rg.getUpgradeType(), 1));
+				BWAPI::Broodwar->sendText(rg.getUpgradeType().getName().c_str());
+			}
 			else if(rg.getTechType() != BWAPI::TechTypes::None)
+			{
 				EQUEUE(new UpgradeEvent(rg.getTechType()));
+				BWAPI::Broodwar->sendText(rg.getUpgradeType().getName().c_str());
+			}
 			else
 				std::cout << "StateExecutor::executeState(): Unable to determine upgrade type" << std::endl;
 		}
@@ -84,5 +89,5 @@ bool StateExecutor::executeState(const State& state)
 			}
 		}
 	}
-	return false;
+	return true;
 }
