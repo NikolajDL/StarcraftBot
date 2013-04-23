@@ -59,9 +59,10 @@ bool StateExecutor::executeState(const State& state)
 		else if (typeid(*g) == typeid(ResearchGene))
 		{
 			ResearchGene rg = dynamic_cast<ResearchGene&>(*g);
-			if(rg.getUpgradeType() != NULL)
+			BWAPI::Broodwar->sendText("Executing ResearchGene");
+			if(rg.getUpgradeType() != BWAPI::UpgradeTypes::None)
 				EQUEUE(new UpgradeEvent(rg.getUpgradeType(), 1));
-			else if(rg.getTechType() != NULL)
+			else if(rg.getTechType() != BWAPI::TechTypes::None)
 				EQUEUE(new UpgradeEvent(rg.getTechType()));
 			else
 				std::cout << "StateExecutor::executeState(): Unable to determine upgrade type" << std::endl;

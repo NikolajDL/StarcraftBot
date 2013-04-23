@@ -229,14 +229,14 @@ void DatabaseManager::insertChromosome(Chromosome c)
 				BWAPI::UpgradeType ut = dynamic_cast<ResearchGene&>(*g).getUpgradeType();
 				BWAPI::TechType tt = dynamic_cast<ResearchGene&>(*g).getTechType();
 
-				if(ut != NULL && tt == NULL)
+				if(ut != BWAPI::UpgradeTypes::None && tt == BWAPI::TechTypes::None)
 				{
 					ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
 					<< geneID << ","
 					<< "\"" << ut.getName() << "\""
 					<< ");";
 				}
-				else if(tt != NULL && ut == NULL)
+				else if(tt != BWAPI::TechTypes::None && ut == BWAPI::UpgradeTypes::None)
 				{
 					ss	<< "INSERT INTO research_genes(id, research_type) VALUES(" 
 					<< geneID << ","
