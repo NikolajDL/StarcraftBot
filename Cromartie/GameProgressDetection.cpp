@@ -38,7 +38,7 @@ void GameProgressDetectionClass::update()
 
 		if(buildingCount != 0)
 		{
-			if(enemyKnownSupply > mySupply*2 && ResourceTracker::Instance().getMineralRate() < 5.0)
+			/*if(enemyKnownSupply > mySupply*2 && ResourceTracker::Instance().getMineralRate() < 5.0)
 				mShouldGG = true;
 
 			if(enemyGuessSupply > mySupply*3 && ResourceTracker::Instance().getMineralRate() < 5.0)
@@ -46,6 +46,7 @@ void GameProgressDetectionClass::update()
 
 			if(enemyGuessSupply > mySupply*4 || enemyKnownSupply > mySupply*3)		
 				mShouldGG = true;
+
 
 			if(mShouldGG)
 			{
@@ -55,7 +56,11 @@ void GameProgressDetectionClass::update()
 					<< "| Known Supply: " << boost::lexical_cast<std::string>(enemyKnownSupply).c_str()
 					<< "| My Supply: " << boost::lexical_cast<std::string>(mySupply).c_str()).getString();
 				ETRIGGER( new DebugStringEvent(debugString, DebugStringEvent::Info));
-			}
+			}*/
+
+			if(enemyKnownSupply >= 100 && mySupply<=4)
+				mShouldGG = true;
+
 		}
 	}
 
