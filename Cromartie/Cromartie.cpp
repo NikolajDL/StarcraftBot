@@ -135,7 +135,7 @@ void Cromartie::onFrame()
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
 		EQUEUE( new UpgradeEvent(BWAPI::UpgradeTypes::Protoss_Air_Weapons, 1) );
-		EQUEUE( new UpgradeEvent(BWAPI::UpgradeTypes::Protoss_Air_Weapons, 1) );
+		EQUEUE( new UpgradeEvent(BWAPI::UpgradeTypes::Protoss_Air_Weapons, 2) );
 		
 		// Debug info please
 		EQUEUE( new ToggleDebugInfoEvent() );
