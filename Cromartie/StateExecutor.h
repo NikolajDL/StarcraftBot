@@ -4,9 +4,9 @@
 class StateExecutor
 {
 private:
-	int currentGene;
-	State currentState;
-	std::vector<BWAPI::UnitType> enquedUnits;
+	//int currentGene;
+	//State currentState;
+	//std::vector<BWAPI::UnitType> enquedUnits;
 	int assimilatorCount;
 public:
 	StateExecutor(void);

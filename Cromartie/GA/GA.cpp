@@ -28,8 +28,8 @@ void GA::onMorph(IEventDataPtr e)
 
 	if (unit->getType() == BWAPI::UnitTypes::Protoss_Assimilator)
 	{
-		BWAPI::Broodwar->sendText("Changing state");
-		BWAPI::Broodwar->sendText(unit->getType().getName().c_str());
+		/*BWAPI::Broodwar->sendText("Changing state");
+		BWAPI::Broodwar->sendText(unit->getType().getName().c_str());*/
 		changeState();
 	}
 }
@@ -53,8 +53,8 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 			return;
 		}
 
-		BWAPI::Broodwar->sendText("Changing state");
-		BWAPI::Broodwar->sendText(unit->getType().getName().c_str());
+		//BWAPI::Broodwar->sendText("Changing state");
+		//BWAPI::Broodwar->sendText(unit->getType().getName().c_str());
 		changeState();
 	}
 }
@@ -67,7 +67,7 @@ void GA::changeState()
 	if (currentStateIndex > 49)
 		return;
 
-	if (stateExecutor.executeState(getCurrentState()) == false)
+	if(!stateExecutor.executeState(getCurrentState()))
 		changeState();
 }
 

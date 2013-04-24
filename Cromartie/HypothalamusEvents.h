@@ -98,7 +98,7 @@ struct UpgradeEvent : public BaseEventData
 
 	explicit UpgradeEvent( BWAPI::UpgradeType upgrade, int level)
         : mUpgrade(upgrade)
-		, mTech(NULL)
+		, mTech(BWAPI::TechTypes::None)
 		, mLevel(level)
 		, BaseEventData(BWAPI::Broodwar->getFrameCount())
 		
@@ -106,7 +106,7 @@ struct UpgradeEvent : public BaseEventData
     }
 	explicit UpgradeEvent( BWAPI::TechType upgrade)
         : mTech( upgrade )
-		, mUpgrade(NULL)
+		, mUpgrade(BWAPI::UpgradeTypes::None)
 		, mLevel(0)
 		, BaseEventData(BWAPI::Broodwar->getFrameCount())
     {

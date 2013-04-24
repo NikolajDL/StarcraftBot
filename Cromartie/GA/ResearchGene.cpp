@@ -5,11 +5,11 @@ ResearchGene::ResearchGene(void)
 {
 }
 
-ResearchGene::ResearchGene(BWAPI::UpgradeType research) : m_upgradeType(research), m_techType(NULL)
+ResearchGene::ResearchGene(BWAPI::UpgradeType research) : m_upgradeType(research), m_techType(BWAPI::TechTypes::None)
 {
 }
 
-ResearchGene::ResearchGene(BWAPI::TechType research) : m_techType(research), m_upgradeType(NULL)
+ResearchGene::ResearchGene(BWAPI::TechType research) : m_techType(research), m_upgradeType(BWAPI::UpgradeTypes::None)
 {
 }
 

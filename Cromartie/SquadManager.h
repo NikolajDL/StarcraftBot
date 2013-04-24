@@ -14,6 +14,7 @@ public:
 
 	void update();
 
+
 	void onChangeBuild();
 	BaseSquadTaskPointer createSquad(SquadType type);
 
