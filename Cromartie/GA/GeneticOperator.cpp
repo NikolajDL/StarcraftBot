@@ -53,10 +53,12 @@ Chromosome GeneticOperator::StateCrossover(const Chromosome& parent1, const Chro
 			if(takeFromParent1)
 			{
 				std::copy(parent1.getStates().begin()+lastMatch, parent1.getStates().begin()+i,std::back_inserter(childStates));
+				takeFromParent1 = false;
 			}
 			else
 			{
 				std::copy(parent2.getStates().begin()+lastMatch, parent2.getStates().begin()+i,std::back_inserter(childStates));
+				takeFromParent1 = true;
 			}
 			lastMatch = i;
 		}
