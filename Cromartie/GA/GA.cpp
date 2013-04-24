@@ -41,7 +41,7 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 
 	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
 		unit->getType().isBuilding() == true &&
-		(unit->getType().isResourceContainer() == false) &&
+		unit->getType().isResourceContainer() == false &&
 		unit->getType() != BWAPI::UnitTypes::Protoss_Pylon)
 	{
 		if (stateChanges < 1)

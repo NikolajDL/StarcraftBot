@@ -5,6 +5,7 @@
 #include "GA/AttackGene.h"
 #include "EventManager.h"
 #include "HypothalamusEvents.h"
+#include "BaseTracker.h"
 #include <string>
 
 StateExecutor::StateExecutor(void) : assimilatorCount(0)
@@ -16,10 +17,23 @@ StateExecutor::~StateExecutor(void)
 {
 }
 
+int StateExecutor::getUpgradeLevel(BWAPI::UpgradeType up)
+{
+	for(int i=0;i<this->upgradeLevels.size();i++)
+	{
+		if(this->upgradeLevels.at(i).first == up)
+		{
+			return ++this->upgradeLevels.at(i).second;
+		}
+	}
+
+	// Didnt find the upgrade
+	this->upgradeLevels.push_back(std::pair<BWAPI::UpgradeType,int>(up,1));
+	return 1;
+}
+
 bool StateExecutor::executeState(const State& state)
 {
-	//currentState = state;
-
 	for (int i = 0; i < state.getGenes().size();i ++)
 	{
 		std::tr1::shared_ptr<Gene> g = state.getGenes().at(i);
@@ -40,15 +54,30 @@ bool StateExecutor::executeState(const State& state)
 			}
 			else if (unit == BWAPI::UnitTypes::Protoss_Assimilator)
 			{
-				if (assimilatorCount == 0)
+				// If the game has JUST started, the base tracker has not yet analyzed the map and thus we have 0 bases
+				if(BWAPI::Broodwar->getFrameCount() > 0)
 				{
-					assimilatorCount++;
-					EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::ExpansionGas));
+					// Tempting to use Base.getGeysers() but we cannot, due to the scenario of
+					// 1 assimilator has just been ordered to be built. The probe is moving towards the geyser,
+					// but has not yet built the assimilator. Then another assimilator gene is made but is ignored, 
+					// as getGeyser() returns 1 (the geyser does not have an assimilator yet). This means no building is under
+					// costruction, and the bot stalls forever in this state.
+					if(BaseTracker::Instance().getPlayerBases().size() > assimilatorCount)
+					{
+						EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::ExpansionGas));
+						assimilatorCount++;
+					}
+					else
+					{
+						return false;
+					}
 				}
 				else
 				{
-					return false;
+					EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::ExpansionGas));
+					assimilatorCount++;
 				}
+
 			}
 			else
 			{
@@ -61,13 +90,11 @@ bool StateExecutor::executeState(const State& state)
 			
 			if(rg.getUpgradeType() != BWAPI::UpgradeTypes::None)
 			{
-				EQUEUE(new UpgradeEvent(rg.getUpgradeType(), 1));
-				BWAPI::Broodwar->sendText(rg.getUpgradeType().getName().c_str());
+				EQUEUE(new UpgradeEvent(rg.getUpgradeType(), getUpgradeLevel(rg.getUpgradeType())));
 			}
 			else if(rg.getTechType() != BWAPI::TechTypes::None)
 			{
 				EQUEUE(new UpgradeEvent(rg.getTechType()));
-				BWAPI::Broodwar->sendText(rg.getUpgradeType().getName().c_str());
 			}
 			else
 				std::cout << "StateExecutor::executeState(): Unable to determine upgrade type" << std::endl;
