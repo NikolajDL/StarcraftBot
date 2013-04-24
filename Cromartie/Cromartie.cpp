@@ -76,9 +76,9 @@ void Cromartie::onStart()
 	// Make it go faster! Faster I say! I wanna go faster than any man before me!
 	// I wanna look down at the light and laugh at its pitiful speed
 	BWAPI::Broodwar->setLocalSpeed(0);
-	BWAPI::Broodwar->setGUI(false);
+	//BWAPI::Broodwar->setGUI(false);
 
-	//BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
+	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::CompleteMapInformation);
 
 	
@@ -112,9 +112,9 @@ void Cromartie::onFrame()
 
 	if(!mOnBegin)
 	{
-		//BWAPI::Broodwar->sendText("Starting GA...");
+		BWAPI::Broodwar->sendText("Starting GA...");
 		_ga.onStarcraftStart();
-		//BWAPI::Broodwar->sendText("GA started!");
+		BWAPI::Broodwar->sendText("GA started!");
 		mOnBegin = true;
 		
 		EQUEUE( new OnStartEvent() );
@@ -128,7 +128,7 @@ void Cromartie::onFrame()
 		//EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
 		//EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
 		
-		//EQUEUE( new ToggleDebugInfoEvent() );
+		EQUEUE( new ToggleDebugInfoEvent() );
 	}
 	
 
