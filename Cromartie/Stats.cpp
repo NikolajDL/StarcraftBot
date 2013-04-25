@@ -5,16 +5,6 @@
 #include <fstream>
 #include "ScoreHelper.h"
 
-Stats::Stats(void)
-{
-}
-
-
-Stats::~Stats(void)
-{
-}
-
-
 void Stats::logPop(vector<Chromosome> pop, int elabsedTime, bool winner)
 {
 	Sorting::sort(pop);
@@ -23,7 +13,7 @@ void Stats::logPop(vector<Chromosome> pop, int elabsedTime, bool winner)
 	double avgFitness = 0;
 	int count = 0;
 
-	for (int i = 0; i < pop.size(); i++)
+	for (size_t i = 0; i < pop.size(); i++)
 	{
 		if (pop.at(i).getFitness() != -999)
 		{
@@ -34,7 +24,7 @@ void Stats::logPop(vector<Chromosome> pop, int elabsedTime, bool winner)
 
 	avgFitness = avgFitness / (double) count;
 
-	writeToFile(bestFitness, avgFitness, elabsedTime, ScoreHelper::getUnitScore(), ScoreHelper::getKillScore(), ScoreHelper::getBuildingScore(), winner);
+	writeToFile(bestFitness, avgFitness, elabsedTime, BWAPI::Broodwar->enemy()->getUnitScore(), BWAPI::Broodwar->enemy()->getKillScore(), BWAPI::Broodwar->enemy()->getBuildingScore(), winner);
 }
 
 void Stats::writeToFile(double best, double avg, int elabsedTime, int unitScore, int killScore, int buildingScore, bool winner)

@@ -89,9 +89,9 @@ Chromosome GeneticOperator::RuleReplaceMutation(const Chromosome& parent)
 
 
 	// TODO: Only select activated states
-	for(int i=0;i<childStates.size();i++) {
+	for(size_t i=0;i<childStates.size();i++) {
 		State& s = childStates.at(i);
-		for (int j=0;j<s.getGenes().size(); j++){
+		for (size_t j=0;j<s.getGenes().size(); j++){
 			const std::tr1::shared_ptr<Gene> g = s.getGenes().at(j);
 			if(typeid(*g) != typeid(BuildGene))
 			{				 
@@ -112,7 +112,6 @@ Chromosome GeneticOperator::RuleReplaceMutation(const Chromosome& parent)
 						}
 						else
 						{
-							bool found;
 							std::tr1::shared_ptr<AttackGene> gene = StarcraftRules::getValidAttackGene(s);
 							s.replaceGeneAt(j,gene);
 						}
@@ -121,7 +120,6 @@ Chromosome GeneticOperator::RuleReplaceMutation(const Chromosome& parent)
 					{
 						if (replaceNr == 1)
 						{
-							bool found;
 							std::tr1::shared_ptr<AttackGene> gene = StarcraftRules::getValidAttackGene( s);
 							s.replaceGeneAt(j,gene);
 						}
@@ -168,9 +166,9 @@ Chromosome GeneticOperator::RuleReplaceMutation(const Chromosome& parent)
 Chromosome GeneticOperator::RuleBiasedMutation(const Chromosome& parent)
 {
 	std::vector<State> childStates = parent.getStates();
-	for(int i=0;i<childStates.size();i++) {
+	for(size_t i=0;i<childStates.size();i++) {
 		State& s = childStates.at(i);
-		for (int j=0;j<s.getGenes().size(); j++){
+		for (size_t j=0;j<s.getGenes().size(); j++){
 			const std::tr1::shared_ptr<Gene> g = s.getGenes().at(j);
 			if(typeid(*g) != typeid(BuildGene) && typeid(*g) != typeid(ResearchGene))
 			{				 
@@ -182,7 +180,6 @@ Chromosome GeneticOperator::RuleBiasedMutation(const Chromosome& parent)
 					if(typeid(*g) != typeid(AttackGene))
 					{
 						// Mutate parameters of gene
-						bool found;
 						std::tr1::shared_ptr<AttackGene> gene = StarcraftRules::getValidAttackGene(s);
 						s.replaceGeneAt(j, gene);
 					}

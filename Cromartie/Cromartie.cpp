@@ -76,7 +76,7 @@ void Cromartie::onStart()
 	// Make it go faster! Faster I say! I wanna go faster than any man before me!
 	// I wanna look down at the light and laugh at its pitiful speed
 	BWAPI::Broodwar->setLocalSpeed(0);
-	//BWAPI::Broodwar->setGUI(false);
+	BWAPI::Broodwar->setGUI(false);
 
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::CompleteMapInformation);
@@ -87,9 +87,7 @@ void Cromartie::onStart()
 
 void Cromartie::onEnd(bool isWinner)
 {
-	BWAPI::Broodwar->sendText("Ending GA...");
-	//_ga.onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 60*60*24);
-	BWAPI::Broodwar->sendText("GA Ended");
+	_ga.onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 60*60*24);
 
 	BuildOrderManager::Instance().onEnd(isWinner);
 	GameMemory::Instance().onEnd();
@@ -112,9 +110,7 @@ void Cromartie::onFrame()
 
 	if(!mOnBegin)
 	{
-		BWAPI::Broodwar->sendText("Starting GA...");
-		//_ga.onStarcraftStart();
-		BWAPI::Broodwar->sendText("GA started!");
+		_ga.onStarcraftStart();
 		mOnBegin = true;
 		
 		EQUEUE( new OnStartEvent() );
@@ -126,7 +122,7 @@ void Cromartie::onFrame()
 		EQUEUE( new ToggleOrderEvent(Order::Scout) );
 		
 		// Debug build
-		EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
+		/*EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
 		EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
 		EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Dragoon) );
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
@@ -135,7 +131,7 @@ void Cromartie::onFrame()
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
 		EQUEUE( new BuildUnitEvent(BWAPI::UnitTypes::Protoss_Gateway) );
 		EQUEUE( new UpgradeEvent(BWAPI::UpgradeTypes::Protoss_Air_Weapons, 1) );
-		EQUEUE( new UpgradeEvent(BWAPI::UpgradeTypes::Protoss_Air_Weapons, 2) );
+		EQUEUE( new UpgradeEvent(BWAPI::UpgradeTypes::Protoss_Air_Weapons, 2) );*/
 		
 		// Debug info please
 		EQUEUE( new ToggleDebugInfoEvent() );
@@ -242,6 +238,6 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::attack, AttackEvent::sk_EventType);
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::stop, StopAttackEvent::sk_EventType);
 
-	//ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
-	//ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 
+	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
+	ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 
 }

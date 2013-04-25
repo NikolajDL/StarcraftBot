@@ -8,7 +8,7 @@
 #include "BaseTracker.h"
 #include <string>
 
-StateExecutor::StateExecutor(void) : assimilatorCount(0)
+StateExecutor::StateExecutor(void) : assimilatorCount(0), nexusCount(1)
 {
 }
 
@@ -19,7 +19,7 @@ StateExecutor::~StateExecutor(void)
 
 int StateExecutor::getUpgradeLevel(BWAPI::UpgradeType up)
 {
-	for(int i=0;i<this->upgradeLevels.size();i++)
+	for(size_t i=0;i<this->upgradeLevels.size();i++)
 	{
 		if(this->upgradeLevels.at(i).first == up)
 		{
@@ -34,7 +34,7 @@ int StateExecutor::getUpgradeLevel(BWAPI::UpgradeType up)
 
 bool StateExecutor::executeState(const State& state)
 {
-	for (int i = 0; i < state.getGenes().size();i ++)
+	for (size_t i = 0; i < state.getGenes().size();i ++)
 	{
 		std::tr1::shared_ptr<Gene> g = state.getGenes().at(i);
 
@@ -51,6 +51,7 @@ bool StateExecutor::executeState(const State& state)
 			if (unit == BWAPI::UnitTypes::Protoss_Nexus)
 			{
 				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::Expansion));
+				this->nexusCount++;
 			}
 			else if (unit == BWAPI::UnitTypes::Protoss_Assimilator)
 			{
@@ -62,7 +63,7 @@ bool StateExecutor::executeState(const State& state)
 					// but has not yet built the assimilator. Then another assimilator gene is made but is ignored, 
 					// as getGeyser() returns 1 (the geyser does not have an assimilator yet). This means no building is under
 					// costruction, and the bot stalls forever in this state.
-					if(BaseTracker::Instance().getPlayerBases().size() > assimilatorCount)
+					if(nexusCount > assimilatorCount)
 					{
 						EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::ExpansionGas));
 						assimilatorCount++;

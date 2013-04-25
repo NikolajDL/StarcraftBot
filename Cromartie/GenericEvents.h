@@ -29,15 +29,15 @@ struct DebugStringEvent : public BaseEventData
 	{
 		switch( enumVal )
 		{
-		case DebugStringType::Info:
+		case Info:
 			return "Info";
-		case DebugStringType::Debug:
+		case Debug:
 			return "Debug";
-		case DebugStringType::Warning:
+		case Warning:
 			return "Warning" ;
-		case DebugStringType::Error:
+		case Error:
 			return "Error" ;
-		case DebugStringType::Fatal:
+		case Fatal:
 			return "Fatal" ;
 		default:
 			return "NA";

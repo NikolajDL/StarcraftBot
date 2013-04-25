@@ -381,7 +381,9 @@
     <ClCompile Include="DbElement.cpp">
       <Filter>GA</Filter>
     </ClCompile>
-    <ClCompile Include="RouletteSelection.cpp" />
+    <ClCompile Include="RouletteSelection.cpp">
+      <Filter>GA</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WallTracker.h">
@@ -756,6 +758,8 @@
     <ClInclude Include="DbElement.h">
       <Filter>GA</Filter>
     </ClInclude>
-    <ClInclude Include="RouletteSelection.h" />
+    <ClInclude Include="RouletteSelection.h">
+      <Filter>GA</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

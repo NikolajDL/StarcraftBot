@@ -23,7 +23,7 @@ DatabaseManager::~DatabaseManager(void)
 
 void DatabaseManager::insertChromosomes(std::vector<Chromosome> c)
 {
-	for(int i=0;i<c.size();i++)	{
+	for(size_t i=0;i<c.size();i++)	{
 		this->insertChromosome(c.at(i));
 	}
 }
@@ -172,7 +172,7 @@ void DatabaseManager::insertChromosome(Chromosome c)
 	sqlite3_finalize(chromosome_stmt);
 
 	int chromosomeID = sqlite3_last_insert_rowid(db);
-	for(int i=0;i<c.getStates().size();i++)
+	for(size_t i=0;i<c.getStates().size();i++)
 	{
 		ss.str("");
 		ss << "INSERT INTO states(chromosomes_id, fitness) VALUES(" << chromosomeID << ", " << c.getStates().at(i).getFitness() <<");";
@@ -186,7 +186,7 @@ void DatabaseManager::insertChromosome(Chromosome c)
 		sqlite3_finalize(state_stmt);
 		int stateID = sqlite3_last_insert_rowid(db);
 
-		for(int j=0;j<c.getStates().at(i).getGenes().size();j++)
+		for(size_t j=0;j<c.getStates().at(i).getGenes().size();j++)
 		{
 			ss.str("");
 			ss << "INSERT INTO genes(states_id) VALUES(" << stateID << ");";
@@ -291,7 +291,7 @@ void DatabaseManager::updateChromosomes(std::vector<Chromosome> c)
 	sqlite3_step(begin_stmt);
 	sqlite3_finalize(begin_stmt);
 
-	for(int i=0; i<c.size();i++)
+	for(size_t i=0; i<c.size();i++)
 	{
 		ss.str("");
 		ss	<< "UPDATE chromosomes "
@@ -306,7 +306,7 @@ void DatabaseManager::updateChromosomes(std::vector<Chromosome> c)
 		sqlite3_step(chromosome_stmt);
 		sqlite3_finalize(chromosome_stmt);
 
-		for(int j=0; j<c.at(i).getStates().size();j++)
+		for(size_t j=0; j<c.at(i).getStates().size();j++)
 		{
 			State s = c.at(i).getStates().at(j);
 

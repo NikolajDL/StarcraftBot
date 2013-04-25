@@ -17,6 +17,6 @@ public:
 	std::vector<State> getStates(void) const;
 	State& getState(int index);
 	void addState(State s);
-	int getFitness(void) const;
+	double getFitness(void) const;
 };
 

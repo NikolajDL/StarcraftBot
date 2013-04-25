@@ -21,7 +21,7 @@ void Sorting::sort(std::vector<Chromosome>& pop)
 		Chromosome bestChromosome;
 		int bestChromomeIndex = -1;
 
-		for (int i = 0; i < pop.size(); i++)
+		for (size_t i = 0; i < pop.size(); i++)
 		{
 			if (pop.at(i).getFitness() > bestFitness)
 			{
@@ -34,7 +34,7 @@ void Sorting::sort(std::vector<Chromosome>& pop)
 		pop.erase(pop.begin() + bestChromomeIndex);
 	}
 
-	for (int i = 0; i < sorted.size(); i++)
+	for (size_t i = 0; i < sorted.size(); i++)
 	{
 		pop.push_back(sorted.at(i));
 	}

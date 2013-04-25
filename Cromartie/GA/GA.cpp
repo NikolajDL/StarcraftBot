@@ -115,7 +115,7 @@ void GA::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, i
 	chromo.setFitness(fitness);
 
 	bool nonTestedChromosomeFound = false;
-	for (int i = 0; i < population.size(); i++)
+	for (size_t i = 0; i < population.size(); i++)
 	{
 		if (population.at(i).getFitness() == -999)
 		{
@@ -153,7 +153,7 @@ void GA::onStarcraftStart()
 		status = 1;
 	}
 
-	for (int i = 0; i < population.size(); i++)
+	for (size_t i = 0; i < population.size(); i++)
 	{
 		if (population.at(i).getFitness() == -999)
 		{

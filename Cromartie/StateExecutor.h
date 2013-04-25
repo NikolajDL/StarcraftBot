@@ -6,6 +6,7 @@ class StateExecutor
 {
 private:
 	int assimilatorCount;
+	int nexusCount;
 	std::vector<std::pair<BWAPI::UpgradeType,int>> upgradeLevels;
 	int getUpgradeLevel(BWAPI::UpgradeType up);
 public:

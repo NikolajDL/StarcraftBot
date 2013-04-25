@@ -25,7 +25,7 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 
 	if (population.size() < SAMPLE_SIZE)
 	{
-		std::cout<"Sample size bigger than pop size. This is not allowed\n";
+		std::cout << "Sample size bigger than pop size. This is not allowed\n";
 		return;
 	}
 
@@ -39,7 +39,7 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 		// Checks if chossenIndex already contains the chromosome
 		bool alreadyInSample = false;
 
-		for (int i = 0; i < sampleIndex.size(); i++)
+		for (size_t i = 0; i < sampleIndex.size(); i++)
 		{
 			if (random == sampleIndex.at(i))
 				alreadyInSample = true;
@@ -75,9 +75,9 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 
 
 	
-	for (int i =0; i < loosers.size(); i++)
+	for (size_t i =0; i < loosers.size(); i++)
 	{
-		for (int j = 0; i < population.size(); j++)
+		for (size_t j = 0; i < population.size(); j++)
 		{
 			if (population.at(j).temp == loosers.at(i).temp)
 			{
@@ -91,7 +91,7 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 
 
 	// For each winner we apply a genetic operator
-	for (int i = 0; i < winners.size(); i++)
+	for (size_t i = 0; i < winners.size(); i++)
 	{
 		boost::random::uniform_int_distribution<> dist2(0, 9);
 		int random = dist(randomGen);
@@ -110,7 +110,7 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 		else if (random < 4 && random > 0) // 30% chance
 		{
 			bool didFindThreeMatches = false;
-			for (int j = 0; j < population.size(); j++)
+			for (size_t j = 0; j < population.size(); j++)
 			{
 				bool threeMatchesFound;
 				Chromosome child = GeneticOperator::StateCrossover(winners.at(i), population.at(0), threeMatchesFound);

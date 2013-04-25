@@ -119,7 +119,7 @@ std::vector<BWAPI::UpgradeType> StarcraftRules::getValidUpgrades(const State& s)
 	std::vector<BWAPI::UpgradeType> validUpgrades;
 
 	// Loop through all buildings that has been build in order to determine which buildings are valid to build
-	for (int i = 0; i < s.getBuildingSequence().size(); i++)
+	for (size_t i = 0; i < s.getBuildingSequence().size(); i++)
 	{
 		BWAPI::UnitType ut = s.getBuildingSequence().at(i);
 
@@ -171,7 +171,7 @@ std::vector<BWAPI::TechType> StarcraftRules::getValidTechs(const State& s)
 {
 	std::vector<BWAPI::TechType> validTechs;
 
-	for (int i = 0; i < s.getBuildingSequence().size(); i++)
+	for (size_t i = 0; i < s.getBuildingSequence().size(); i++)
 	{
 		BWAPI::UnitType ut = s.getBuildingSequence().at(i);
 
@@ -201,7 +201,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidUnits(const State& s)
 	std::vector<BWAPI::UnitType> validUnits;
 
 	// Loop through all buildings that have been build in order to find out which units can be build
-	for (int i = 0; i < s.getBuildingSequence().size(); i++)
+	for (size_t i = 0; i < s.getBuildingSequence().size(); i++)
 	{
 		BWAPI::UnitType ut = s.getBuildingSequence().at(i);
 
@@ -266,7 +266,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	bool fleetBeaconFound = false;
 	int nexusCounter = 0;
 
-	for (int i = 0; i < s.getBuildingSequence().size(); i++)
+	for (size_t i = 0; i < s.getBuildingSequence().size(); i++)
 	{
 		BWAPI::UnitType ut = s.getBuildingSequence().at(i);
 
@@ -305,7 +305,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	}
 	// We loop through each building that has been build. 
 	// For each building, we add the buildings that, that building unlocks to the list of valid buildings.
-	for (int i = 0; i < s.getBuildingSequence().size(); i++)
+	for (size_t i = 0; i < s.getBuildingSequence().size(); i++)
 	{
 		BWAPI::UnitType ut = s.getBuildingSequence().at(i);
 

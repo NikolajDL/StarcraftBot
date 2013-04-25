@@ -13,7 +13,7 @@ Chromosome::~Chromosome(void)
 {
 }
 
-int Chromosome::getFitness(void) const
+double Chromosome::getFitness(void) const
 {
 	return fitness;
 }

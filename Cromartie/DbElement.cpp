@@ -1,6 +1,6 @@
 #include "DbElement.h"
 
-DbElement::DbElement(void)
+DbElement::DbElement(void) : m_id(0)
 {
 }
 
