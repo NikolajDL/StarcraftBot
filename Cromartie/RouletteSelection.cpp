@@ -24,7 +24,7 @@ void RouletteSelection::selectAndMutate(std::vector<Chromosome>& population)
 
 	if (population.size() < SAMPLE_SIZE)
 	{
-		std::cout << "Sample size bigger than pop size. This is not allowed\n";
+		BWAPI::Broodwar->sendText("Sample size bigger than pop size. This is not allowed\n");
 		return;
 	}
 
@@ -111,7 +111,8 @@ void RouletteSelection::selectAndMutate(std::vector<Chromosome>& population)
 			for (size_t j = 0; j < population.size(); j++)
 			{
 				bool threeMatchesFound;
-				Chromosome child = GeneticOperator::StateCrossover(winners.at(i), population.at(0), threeMatchesFound);
+				int parent2 = i+1 == winners.size() ? i-1 : i+1;
+				Chromosome child = GeneticOperator::StateCrossover(winners.at(i), winners.at(parent2), threeMatchesFound);
 				if (threeMatchesFound == true)
 				{
 					population.push_back(child);
@@ -119,14 +120,8 @@ void RouletteSelection::selectAndMutate(std::vector<Chromosome>& population)
 					break;
 				}
 			}
-			if (didFindThreeMatches == false)
-			{
-				i--;
-			}
-			if (didFindThreeMatches)
-				std::cout<<"Never found three state matches for State Crossover opperation\n";
-			else
-				std::cout<<"Found thre state matches for state crossover. This is very good\n";
+			if (!didFindThreeMatches)
+				BWAPI::Broodwar->sendText("Never found three state matches for State Crossover opperation");
 		}
 		else if (random == 0) // 10% chance
 		{

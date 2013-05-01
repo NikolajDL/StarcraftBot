@@ -349,9 +349,6 @@
     <ClCompile Include="GA\GeneticOperator.cpp">
       <Filter>GA</Filter>
     </ClCompile>
-    <ClCompile Include="GA\Main.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
     <ClCompile Include="GA\ResearchGene.cpp">
       <Filter>GA</Filter>
     </ClCompile>
