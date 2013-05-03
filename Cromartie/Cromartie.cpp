@@ -87,7 +87,7 @@ void Cromartie::onStart()
 
 void Cromartie::onEnd(bool isWinner)
 {
-	_ga.onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 60*60*24);
+	_ga.onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 24*60*30);
 
 	BuildOrderManager::Instance().onEnd(isWinner);
 	GameMemory::Instance().onEnd();
@@ -159,6 +159,10 @@ void Cromartie::onFrame()
 		}
 		else if(BWAPI::Broodwar->getFrameCount() - mLeavingGame > 80)
 			BWAPI::Broodwar->leaveGame();
+	}
+	if (BWAPI::Broodwar->getFrameCount() > 24 * 60 * 30)
+	{
+		BWAPI::Broodwar->leaveGame();
 	}
 }
 
