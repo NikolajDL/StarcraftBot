@@ -254,6 +254,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	
 	// These buildings are availabel at all time, so we add them to the list of valid buildings to build
 	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Gateway);
+	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Forge);
 	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Nexus);
 	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Assimilator); // Macro manager ignores 'too many' assimilators
 
