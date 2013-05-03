@@ -35,7 +35,7 @@ void State::addGene(std::tr1::shared_ptr<Gene> g)
 {
 	if(g == NULL)
 	{
-		std::cout << "State::addGene(): Trying to add NULL gene, ignoring it\n";
+		BWAPI::Broodwar->sendText("State::addGene(): Trying to add NULL gene, ignoring it\n");
 		return;
 	}
 

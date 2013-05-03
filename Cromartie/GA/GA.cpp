@@ -12,10 +12,9 @@
 #include "../Settings.h"
 
 
-GA::GA(void) : currentStateIndex(0), stateChanges(0)
+GA::GA(void) : currentChromosomeIndex(0), currentStateIndex(0), prev_score(0), stateChanges(0), prev_opponentScore(0)
 {
 }
-
 
 GA::~GA(void)
 {
@@ -61,11 +60,11 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 
 void GA::changeState()
 {
-	getCurrentState().setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
-	currentStateIndex++;
-
 	if (currentStateIndex > 49)
 		return;
+
+	getCurrentState().setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
+	currentStateIndex++;
 
 	if(!stateExecutor.executeState(getCurrentState()))
 		changeState();
@@ -216,7 +215,7 @@ void GA::makeGAStatusFile()
     myfile << "0\n"; // Status: FirstRun
     myfile.close();
   }
-  else std::cout << "Unable to open GA state file";
+  else BWAPI::Broodwar->sendText("Unable to open GA state file");
 }
 
 void GA::saveGAStatus()
@@ -229,7 +228,7 @@ void GA::saveGAStatus()
 	myfile << static_cast<std::ostringstream*>( &(std::ostringstream() << status) )->str() << "\n";
     myfile.close();
   }
-  else std::cout << "Unable to open GA state file";
+  else BWAPI::Broodwar->sendText("Unable to open GA state file");
 }
 
 void GA::loadGAStatus()
@@ -253,7 +252,7 @@ void GA::loadGAStatus()
 
       myfile.close();
   }
-  else std::cout << "Unable to open file"; 
+  else BWAPI::Broodwar->sendText("Unable to open file"); 
 
 	// Read next chromosome index
 	// Read status: FirstRun, Running, FinishedGeneration, Finished

@@ -76,7 +76,7 @@ void Cromartie::onStart()
 	// Make it go faster! Faster I say! I wanna go faster than any man before me!
 	// I wanna look down at the light and laugh at its pitiful speed
 	BWAPI::Broodwar->setLocalSpeed(0);
-	BWAPI::Broodwar->setGUI(false);
+	//BWAPI::Broodwar->setGUI(false);
 
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::CompleteMapInformation);
@@ -115,12 +115,13 @@ void Cromartie::onFrame()
 		
 		EQUEUE( new OnStartEvent() );
 		EQUEUE( new PauseBuildOrderEvent() );
-		//EQUEUE( new ChangeBuildOrderEvent(BuildOrderID::TwoGate));
+		
 
 		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
 		EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
 		EQUEUE( new ToggleOrderEvent(Order::Scout) );
 		
+		//EQUEUE( new ChangeBuildOrderEvent(BuildOrderID::TwoGate));
 		// Debug build
 		/*EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
 		EQUEUE( new AddProductionEvent(BWAPI::UnitTypes::Protoss_Zealot) );
