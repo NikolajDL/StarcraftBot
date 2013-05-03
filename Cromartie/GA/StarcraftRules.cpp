@@ -255,6 +255,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	// These buildings are availabel at all time, so we add them to the list of valid buildings to build
 	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Gateway);
 	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Nexus);
+	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Forge);
 	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Assimilator); // Macro manager ignores 'too many' assimilators
 
 	bool assimilatorFound = false;
@@ -304,10 +305,6 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		}
 	}
 
-	if (forgeFound == false)
-	{
-		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Forge);
-	}
 
 	// We loop through each building that has been build. 
 	// For each building, we add the buildings that, that building unlocks to the list of valid buildings.
