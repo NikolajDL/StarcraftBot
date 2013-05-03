@@ -60,11 +60,11 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 
 void GA::changeState()
 {
-	getCurrentState().setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
-	currentStateIndex++;
-
 	if (currentStateIndex > 49)
 		return;
+
+	getCurrentState().setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
+	currentStateIndex++;
 
 	if(!stateExecutor.executeState(getCurrentState()))
 		changeState();

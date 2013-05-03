@@ -23,7 +23,10 @@ int StateExecutor::getUpgradeLevel(BWAPI::UpgradeType up)
 	
 	if ( ! ins.second ) {
 		// Key already exists
-		return ++((ins.first)->second);
+		if( (ins.first)->second == 3 )
+			return 3;
+		else
+			return ++((ins.first)->second);
 	} else {
 		// Key is new, and was created
 		return 1;
@@ -32,20 +35,15 @@ int StateExecutor::getUpgradeLevel(BWAPI::UpgradeType up)
 
 bool StateExecutor::executeState(const State& state)
 {
-	for (size_t i = 0; i < state.getGenes().size();i ++)
+	for (size_t i = 0; i < state.getGenes().size(); i++)
 	{
 		std::tr1::shared_ptr<Gene> g = state.getGenes().at(i);
-
 		if(typeid(*g) == typeid(BuildGene))
 		{
 			BuildGene bg = dynamic_cast<BuildGene&>(*g);
-
 			std::string name = bg.getBuildingType().getName();
-
 			BWAPI::UnitType unit = bg.getBuildingType();
-
 			BWAPI::Broodwar->sendText(name.c_str());
-			
 			if (unit == BWAPI::UnitTypes::Protoss_Nexus)
 			{
 				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::Expansion));
@@ -87,11 +85,11 @@ bool StateExecutor::executeState(const State& state)
 		{
 			ResearchGene rg = dynamic_cast<ResearchGene&>(*g);
 			
-			if(rg.getUpgradeType() != BWAPI::UpgradeTypes::None)
+			if(rg.getUpgradeType() != BWAPI::UpgradeTypes::None && rg.getTechType() == BWAPI::TechTypes::None)
 			{
 				EQUEUE(new UpgradeEvent(rg.getUpgradeType(), getUpgradeLevel(rg.getUpgradeType())));
 			}
-			else if(rg.getTechType() != BWAPI::TechTypes::None)
+			else if(rg.getTechType() != BWAPI::TechTypes::None && rg.getUpgradeType() == BWAPI::UpgradeTypes::None)
 			{
 				EQUEUE(new UpgradeEvent(rg.getTechType()));
 			}
