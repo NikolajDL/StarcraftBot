@@ -386,7 +386,7 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 			State s(buildSequence);
 			int stateID = sqlite3_column_int(state_stmt, 0);
 			s.setId(stateID);
-			s.setFitness(sqlite3_column_int(state_stmt, 1));
+			s.setFitness(sqlite3_column_double(state_stmt, 1));
 
 			ss.str("");
 			ss << "SELECT id FROM genes WHERE states_id = " << stateID << ";";
