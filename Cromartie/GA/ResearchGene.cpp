@@ -1,10 +1,6 @@
 #include "ResearchGene.h"
 
 
-ResearchGene::ResearchGene(void)
-{
-}
-
 ResearchGene::ResearchGene(BWAPI::UpgradeType research) : m_upgradeType(research), m_techType(BWAPI::TechTypes::None)
 {
 }

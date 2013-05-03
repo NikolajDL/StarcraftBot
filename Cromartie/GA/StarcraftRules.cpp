@@ -53,7 +53,7 @@ std::tr1::shared_ptr<ResearchGene> StarcraftRules::getValidResearchGene(const St
 	// If no valid upgrades exists, we return NULL
 	if (validUpgrades.size() == 0 && validTechs.size() == 0)
 	{
-		std::tr1::shared_ptr<ResearchGene> rg( new ResearchGene() );
+		std::tr1::shared_ptr<ResearchGene> rg;
 		found = false;
 		return rg;
 	}

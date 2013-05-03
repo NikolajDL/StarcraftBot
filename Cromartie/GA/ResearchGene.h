@@ -9,7 +9,6 @@ private:
 	BWAPI::UpgradeType m_upgradeType;
 	BWAPI::TechType m_techType;
 public:
-	ResearchGene(void);
 	ResearchGene(BWAPI::UpgradeType research);
 	ResearchGene(BWAPI::TechType research);
 	~ResearchGene(void);
