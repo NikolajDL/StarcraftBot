@@ -76,7 +76,7 @@ void Cromartie::onStart()
 	// Make it go faster! Faster I say! I wanna go faster than any man before me!
 	// I wanna look down at the light and laugh at its pitiful speed
 	BWAPI::Broodwar->setLocalSpeed(0);
-	BWAPI::Broodwar->setGUI(false);
+	//BWAPI::Broodwar->setGUI(false);
 
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::CompleteMapInformation);
@@ -87,8 +87,7 @@ void Cromartie::onStart()
 
 void Cromartie::onEnd(bool isWinner)
 {
-	_ga.onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 24*60*30);
-
+	GA::Instance().onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 24*60*30);
 	BuildOrderManager::Instance().onEnd(isWinner);
 	GameMemory::Instance().onEnd();
 }
@@ -110,13 +109,10 @@ void Cromartie::onFrame()
 
 	if(!mOnBegin)
 	{
-		_ga.onStarcraftStart();
 		mOnBegin = true;
 		
 		EQUEUE( new OnStartEvent() );
 		EQUEUE( new PauseBuildOrderEvent() );
-		
-
 		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
 		EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
 		EQUEUE( new ToggleOrderEvent(Order::Scout) );
@@ -243,6 +239,9 @@ void Cromartie::registerListeners()
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::attack, AttackEvent::sk_EventType);
 	ADDLISTENER(&Hypothalamus::Instance(), &HypothalamusClass::stop, StopAttackEvent::sk_EventType);
 
-	ADDLISTENER(&_ga, &GA::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
-	ADDLISTENER(&_ga, &GA::onMorph, UnitMorphEvent::sk_EventType); 
+	// Genetic algorithms
+	ADDLISTENER(&GA::Instance(), &GAClass::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
+	ADDLISTENER(&GA::Instance(), &GAClass::onMorph, UnitMorphEvent::sk_EventType); 
+	ADDLISTENER(&GA::Instance(), &GAClass::onStarcraftStart, OnStartEvent::sk_EventType); 
+	ADDLISTENER(&GA::Instance(), &GAClass::update, OnUpdateEvent::sk_EventType); 
 }

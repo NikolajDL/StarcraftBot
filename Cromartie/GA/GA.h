@@ -6,36 +6,42 @@
 #include "../IEventData.h"
 #include "../StateExecutor.h"
 #include "DatabaseManager.h"
+#include "../Singleton.h"
 
-class GA
+class GAClass
 {
 private:
-	int currentChromosomeIndex;
+
 	int currentStateIndex;
 	int prev_score;
 	int stateChanges;
 	int prev_opponentScore;
 	StateExecutor stateExecutor;
-	std::vector<Chromosome> population;
+	
 	double fitness(int score, int opponentScore);
-	void loadGAStatus(void);
 	void saveGAStatus(void);
 	void makeGAStatusFile(void);
-	void generateInitialPopulation(int size);
-	void createNextGeneration(void);
 	void changeState(void);
 	Chromosome& getCurrentChromosome(void);
 	State& getCurrentState(void);
-	DatabaseManager db;
-	int status; // 0 = FirstRun 1 = Running 2 = FinishedGeneration 3 = Finished
-public:
-	GA(void);
-	~GA(void);
-	void onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, int maxElapsedTime);
-	void onStarcraftStart(void);
-	void loadPopulation(void);
 	void savePopulation(void);
+	
+	
+public:	
+	int status; // 0 = FirstRun 1 = Running 2 = FinishedGeneration 3 = Finished
+	bool threadFinished;
+	std::vector<Chromosome> population;
+	int currentChromosomeIndex;
+	DatabaseManager db;
+	void createNextGeneration(void);
+	void loadGAStatus(void);
+	void generateInitialPopulation(int size);
+
+	void update(IEventDataPtr e);
+	void onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, int maxElapsedTime);
+	void onStarcraftStart(IEventDataPtr e);
 	void onUnitCompleteEvent(IEventDataPtr e);
 	void onMorph(IEventDataPtr e);
 };
 
+typedef Singleton<GAClass> GA;

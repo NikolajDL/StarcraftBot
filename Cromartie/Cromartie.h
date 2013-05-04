@@ -24,7 +24,6 @@ public:
 
 private:
 	bool mOnBegin;
-	GA _ga;
 	BuildOrder loadedBO; 
 	int mLeavingGame;
 	bool mSaidGG;

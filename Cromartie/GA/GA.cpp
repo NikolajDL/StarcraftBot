@@ -12,15 +12,9 @@
 #include "../Settings.h"
 
 
-GA::GA(void) : currentChromosomeIndex(0), currentStateIndex(0), prev_score(0), stateChanges(0), prev_opponentScore(0)
-{
-}
+#include <windows.h>
 
-GA::~GA(void)
-{
-}
-
-void GA::onMorph(IEventDataPtr e)
+void GAClass::onMorph(IEventDataPtr e)
 {
 	std::tr1::shared_ptr<UnitMorphEvent> pEventData = std::tr1::static_pointer_cast<UnitMorphEvent>(e);
 	BWAPI::Unit* unit = pEventData->m_Unit;
@@ -33,7 +27,7 @@ void GA::onMorph(IEventDataPtr e)
 	}
 }
 
-void GA::onUnitCompleteEvent(IEventDataPtr e)
+void GAClass::onUnitCompleteEvent(IEventDataPtr e)
 {
 	std::tr1::shared_ptr<UnitCompleteEvent> pEventData = std::tr1::static_pointer_cast<UnitCompleteEvent>(e);
 	BWAPI::Unit* unit = pEventData->m_Unit;
@@ -41,41 +35,35 @@ void GA::onUnitCompleteEvent(IEventDataPtr e)
 	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
 		unit->getType().isBuilding() == true &&
 		unit->getType().isResourceContainer() == false &&
-		unit->getType() != BWAPI::UnitTypes::Protoss_Pylon)
+		unit->getType() != BWAPI::UnitTypes::Protoss_Pylon &&
+		threadFinished &&
+		currentStateIndex < 50)
 	{
-		if (stateChanges < 1)
-		{
-			stateChanges++;
-			BWAPI::Broodwar->sendText("Skipping state change");
-
-			stateExecutor.executeState(getCurrentState());
-			return;
-		}
-
-		//BWAPI::Broodwar->sendText("Changing state");
-		//BWAPI::Broodwar->sendText(unit->getType().getName().c_str());
 		changeState();
+	}
+	else if(currentStateIndex >= 50)
+	{
+		EQUEUE( new ChangeBuildOrderEvent(BuildOrderID::PvPEndGame));
+		EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
 	}
 }
 
-void GA::changeState()
+void GAClass::changeState()
 {
-	if (currentStateIndex > 49)
-		return;
-
 	getCurrentState().setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
 	currentStateIndex++;
+	stateChanges++;
 
 	if(!stateExecutor.executeState(getCurrentState()))
 		changeState();
 }
 
-State& GA::getCurrentState()
+State& GAClass::getCurrentState()
 {
 	return getCurrentChromosome().getState(currentStateIndex);
 }
 
-double GA::fitness(int score, int opponentScore)
+double GAClass::fitness(int score, int opponentScore)
 {
 	double fitness;
 
@@ -96,7 +84,7 @@ double GA::fitness(int score, int opponentScore)
 	return fitness;
 }
 
-void GA::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, int maxElapsedTime)
+void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, int maxElapsedTime)
 {
 	double fitness = 0;
 	if (winner)
@@ -132,52 +120,71 @@ void GA::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, i
 	Stats::logPop(population, elapsedTime, winner);
 }
 
-void GA::onStarcraftStart()
+static DWORD WINAPI GAThread(LPVOID lpParam)
 {
-	loadGAStatus();
-
-	if (status == 0) // 0 = FirstRun
+	GAClass* This = (GAClass*)lpParam;
+	if(!This->threadFinished)
 	{
-		generateInitialPopulation(POP_SIZE);
-		//status = 1; // 1 = running
-	}
-	else if (status == 1) // 1 = running
-	{
-		loadPopulation();
-	}
-	else if (status == 2) // 2 = finishedGeneration
-	{
-		loadPopulation();
-		createNextGeneration();
-		status = 1;
-	}
-
-	for (size_t i = 0; i < population.size(); i++)
-	{
-		if (population.at(i).getFitness() == -999)
+		This->loadGAStatus();
+		if (This->status == 0) // 0 = FirstRun
 		{
-			currentChromosomeIndex = i;
-			break;
+			This->generateInitialPopulation(POP_SIZE);
+			//status = 1; // 1 = running
+		}
+		else if (This->status == 1) // 1 = running
+		{
+			This->population = This->db.selectAllChromosomes();
+		}
+		else if (This->status == 2) // 2 = finishedGeneration
+		{
+			This->population = This->db.selectAllChromosomes();
+			This->createNextGeneration();
+			This->status = 1;
+		}
+
+		for (size_t i = 0; i < This->population.size(); i++)
+		{
+			if (This->population.at(i).getFitness() == -999)
+			{
+				This->currentChromosomeIndex = i;
+				break;
+			}
 		}
 	}
 
-	BWAPI::Broodwar->sendText(static_cast<std::ostringstream*>( &(std::ostringstream() << currentChromosomeIndex) )->str().c_str());
+	This->threadFinished = true;
+	return 0;
+};
+
+void GAClass::update(IEventDataPtr e)
+{
+	if (stateChanges < 1 && threadFinished)
+	{
+		stateChanges++;
+		BWAPI::Broodwar->sendText("Skipping state change");
+		stateExecutor.executeState(getCurrentState());
+	}
 }
 
-Chromosome& GA::getCurrentChromosome()
+void GAClass::onStarcraftStart(IEventDataPtr e)
+{
+	this->threadFinished = false;
+	HANDLE h = CreateThread( 
+            NULL,           // default security attributes
+            0,              // use default stack size  
+            GAThread,       // thread function name
+            (void*) this,   // argument to thread function 
+            0,              // use default creation flags 
+            NULL);			// returns the thread identifier 
+}
+
+Chromosome& GAClass::getCurrentChromosome()
 {
 	return population.at(currentChromosomeIndex);
 }
 
-void GA::loadPopulation()
-{
-	population = db.selectAllChromosomes();
 
-	if (population.size() == 0)
-		BWAPI::Broodwar->sendText("Could not load chromosomes");
-}
-
-void GA::savePopulation()
+void GAClass::savePopulation()
 {
 	if(status == 0) 
 	{ 
@@ -190,7 +197,7 @@ void GA::savePopulation()
 	}
 }
 
-void GA::createNextGeneration()
+void GAClass::createNextGeneration()
 {
 	// Replace this class if you want another selection aglorithm
 	TournamentSelection ts;
@@ -198,7 +205,7 @@ void GA::createNextGeneration()
 	db.insertAndReplaceChromosomes(population);
 }
 
-void GA::generateInitialPopulation(int size)
+void GAClass::generateInitialPopulation(int size)
 {
 	for (int i = 0; i < size; i++)
 	{
@@ -207,31 +214,29 @@ void GA::generateInitialPopulation(int size)
 	}
 }
 
-void GA::makeGAStatusFile()
+void GAClass::makeGAStatusFile()
 {
 	std::ofstream myfile ("status.txt");
-  if (myfile.is_open())
-  {
-    myfile << "0\n"; // Status: FirstRun
-    myfile.close();
-  }
-  else BWAPI::Broodwar->sendText("Unable to open GA state file");
+	if (myfile.is_open())
+	{
+		myfile << "0\n"; // Status: FirstRun
+		myfile.close();
+	}
 }
 
-void GA::saveGAStatus()
+void GAClass::saveGAStatus()
 {
 	std::ostringstream convert;
 
 	std::ofstream myfile ("status.txt");
-  if (myfile.is_open())
-  {
-	myfile << static_cast<std::ostringstream*>( &(std::ostringstream() << status) )->str() << "\n";
-    myfile.close();
-  }
-  else BWAPI::Broodwar->sendText("Unable to open GA state file");
+	if (myfile.is_open())
+	{
+		myfile << static_cast<std::ostringstream*>( &(std::ostringstream() << status) )->str() << "\n";
+		myfile.close();
+	}
 }
 
-void GA::loadGAStatus()
+void GAClass::loadGAStatus()
 {
 	// If there is no state.txt file, we make it
 	std::ifstream fileExists("status.txt");
@@ -242,17 +247,17 @@ void GA::loadGAStatus()
 
 	// Parsing the state.txt file
 	std::string line;
-  std::ifstream myfile ("status.txt");
-  if (myfile.is_open())
-  {
-	  // Read the status of the GA
-	  myfile.good();
-      std::getline (myfile,line);
-	   status = atoi(line.c_str());
+	std::ifstream myfile ("status.txt");
+	if (myfile.is_open())
+	{
+		// Read the status of the GA
+		myfile.good();
+		std::getline (myfile,line);
+		status = atoi(line.c_str());
 
-      myfile.close();
-  }
-  else BWAPI::Broodwar->sendText("Unable to open file"); 
+		myfile.close();
+	}
+	//else BWAPI::Broodwar->sendText("Unable to open file"); 
 
 	// Read next chromosome index
 	// Read status: FirstRun, Running, FinishedGeneration, Finished
