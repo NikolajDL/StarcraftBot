@@ -5,8 +5,6 @@
 #include "../DbElement.h"
 #include "Gene.h"
 
-using namespace std;
-
 class State : public DbElement
 {
 private:
@@ -26,18 +24,24 @@ public:
 };
 
 // Ignore genes
-inline bool operator==(const State& a, const State& b)
+inline bool operator==(State& a, State& b)
 {
-	bool match = true;
-	// TODO: Fix this
-	int seqSize = min(a.getBuildingSequence().size(), b.getBuildingSequence().size());
-	for(int j=0; j<seqSize; j++)
+	size_t seqSize = a.getBuildingSequence().size();
+	if(a.getBuildingSequence().size() != b.getBuildingSequence().size() )
+		return false;
+
+	size_t matchCtr = 0;
+	for(size_t i=0;i<seqSize;i++)
 	{
-		if(a.getBuildingSequence().at(j).getName() != b.getBuildingSequence().at(j).getName())
+		if(a.getBuildingSequence().at(i) == b.getBuildingSequence().at(i))
 		{
-			match = false;
+			matchCtr++;
 		}
 	}
-	return match;
+
+	if(matchCtr == seqSize)
+		return true;
+	else
+		return false;
 }
 

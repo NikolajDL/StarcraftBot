@@ -25,7 +25,7 @@ Chromosome GeneticOperator::StateCrossover(const Chromosome& parent1, const Chro
 {
 	std::vector<State> childStates;
 	bool takeFromParent1 = true;
-	int lastMatch = 0;
+	
 	int matches = 0;
 	int stateSize = std::min(parent1.getStates().size(),parent2.getStates().size());
 
@@ -41,23 +41,33 @@ Chromosome GeneticOperator::StateCrossover(const Chromosome& parent1, const Chro
 	if (matches < 3)
 	{
 		threeMatchesFound = false;
-		return Chromosome(childStates);
+		return Chromosome();
 	}
 	else
 		threeMatchesFound = true;
 
+	int lastMatch = 0;
 	for(int i=0;i<stateSize;i++)
 	{
 		if(parent1.getStates().at(i) == parent2.getStates().at(i))
 		{
+			// Alternate between copying states from parent1 and parent2
 			if(takeFromParent1)
 			{
-				std::copy(parent1.getStates().begin()+lastMatch, parent1.getStates().begin()+i,std::back_inserter(childStates));
+				for(int j=lastMatch;j<i;j++)
+				{
+					childStates.push_back(parent1.getStates().at(j));
+				}
+				//std::copy(parent1.getStates().begin()+lastMatch, parent1.getStates().begin()+i,std::back_inserter(childStates));
 				takeFromParent1 = false;
 			}
 			else
 			{
-				std::copy(parent2.getStates().begin()+lastMatch, parent2.getStates().begin()+i,std::back_inserter(childStates));
+				for(int j=lastMatch;j<i;j++)
+				{
+					childStates.push_back(parent2.getStates().at(j));
+				}
+				//std::copy(parent2.getStates().begin()+lastMatch, parent2.getStates().begin()+i,std::back_inserter(childStates));
 				takeFromParent1 = true;
 			}
 			lastMatch = i;
@@ -67,11 +77,19 @@ Chromosome GeneticOperator::StateCrossover(const Chromosome& parent1, const Chro
 	// Add remaining states after last matching state
 	if(takeFromParent1)
 	{
-		std::copy(parent1.getStates().begin()+lastMatch, parent1.getStates().end(),std::back_inserter(childStates));
+		for(int j=lastMatch;j<parent1.getStates().size();j++)
+		{
+			childStates.push_back(parent1.getStates().at(j));
+		}
+		//std::copy(parent1.getStates().begin()+lastMatch, parent1.getStates().end(),std::back_inserter(childStates));
 	}
 	else
 	{
-		std::copy(parent2.getStates().begin()+lastMatch, parent2.getStates().end(),std::back_inserter(childStates));
+		for(int j=lastMatch;j<parent2.getStates().size();j++)
+		{
+			childStates.push_back(parent2.getStates().at(j));
+		}
+		//std::copy(parent2.getStates().begin()+lastMatch, parent2.getStates().end(),std::back_inserter(childStates));
 	}
 
 	return Chromosome(childStates);

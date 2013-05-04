@@ -34,11 +34,11 @@ void HypothalamusClass::toggleOrderEvent(IEventDataPtr evnt)
 
 void HypothalamusClass::upgradeEvent(IEventDataPtr evnt)
 {
-	//std::tr1::shared_ptr<UpgradeEvent> pEventData = std::tr1::static_pointer_cast<UpgradeEvent>(evnt);
-	UpgradeEvent pEventData = dynamic_cast<UpgradeEvent&>(*evnt);
-	BWAPI::UpgradeType upgradeType = pEventData.mUpgrade;
-	BWAPI::TechType techType = pEventData.mTech;
-	int level = pEventData.mLevel;
+	std::tr1::shared_ptr<UpgradeEvent> pEventData = std::tr1::static_pointer_cast<UpgradeEvent>(evnt);
+	//UpgradeEvent pEventData = dynamic_cast<UpgradeEvent&>(*evnt);
+	BWAPI::UpgradeType upgradeType = pEventData->mUpgrade;
+	BWAPI::TechType techType = pEventData->mTech;
+	int level = pEventData->mLevel;
 
 	// Upgrade
 	if(upgradeType!=BWAPI::UpgradeTypes::None && techType==BWAPI::TechTypes::None){

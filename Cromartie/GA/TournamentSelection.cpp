@@ -109,21 +109,20 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 		}
 		else if (random < 4 && random > 0) // 30% chance
 		{
-			bool didFindThreeMatches = false;
-			for (size_t j = 0; j < population.size(); j++)
+			bool threeMatchesFound = false;
+			for(size_t j=0;j<winners.size(); i++)
 			{
-				bool threeMatchesFound;
-				int parent2 = i+1 == winners.size() ? i-1 : i+1;
-				Chromosome child = GeneticOperator::StateCrossover(winners.at(i), winners.at(parent2), threeMatchesFound);
-				if (threeMatchesFound == true)
+				if(j==i) continue;
+				Chromosome child = GeneticOperator::StateCrossover(winners.at(i), winners.at(j), threeMatchesFound);
+				if(threeMatchesFound) 
 				{
 					population.push_back(child);
-					didFindThreeMatches = true;
 					break;
 				}
 			}
-			if (!didFindThreeMatches)
-				BWAPI::Broodwar->sendText("Never found three state matches for State Crossover opperation\n");
+			// If the StateCrossover operator was unsuccesful, keep population size constant
+			if(!threeMatchesFound)
+				population.push_back(GeneticOperator::RandomChromosome());
 		}
 		else if (random == 0) // 10% chance
 		{

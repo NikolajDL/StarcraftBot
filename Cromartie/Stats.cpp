@@ -5,7 +5,7 @@
 #include <fstream>
 #include "ScoreHelper.h"
 
-void Stats::logPop(vector<Chromosome> pop, int elabsedTime, bool winner)
+void Stats::logPop(std::vector<Chromosome> pop, int elabsedTime, bool winner)
 {
 	Sorting::sort(pop);
 
@@ -37,8 +37,8 @@ void Stats::writeToFile(double best, double avg, int elabsedTime, int unitScore,
 	std::string ks = boost::lexical_cast<std::string>(killScore);
 	std::string bs = boost::lexical_cast<std::string>(buildingScore);
 
-	 ofstream myfile;
-	 myfile.open ("stats.txt", ios::app);
+	 std::ofstream myfile;
+	 myfile.open ("stats.txt", std::ios::app);
 	 myfile << bestStr << ";" << avgStr << ";" << et << ";" << us << ";" << ks << ";" << bs << ";";
 	 if (winner == true)
 	 {
