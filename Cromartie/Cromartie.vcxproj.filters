@@ -73,6 +73,12 @@
     <Filter Include="GA\sqlite">
       <UniqueIdentifier>{14687067-33d6-4cff-9d79-d53500c66a9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GA\encoding">
+      <UniqueIdentifier>{f2160672-0dd7-44f2-9fc9-b660185db8fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GA\operators">
+      <UniqueIdentifier>{92bfe84a-eb09-4b51-bd1a-26d6541d3b65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WallTracker.cpp">
@@ -321,21 +327,8 @@
     <ClCompile Include="Hypothalamus.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="ScoreHelper.cpp" />
     <ClCompile Include="HypothalamusEvents.cpp">
       <Filter>Event Manager\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\AttackGene.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\BuildGene.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\Chromosome.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\CombatGene.cpp">
-      <Filter>GA</Filter>
     </ClCompile>
     <ClCompile Include="GA\DatabaseManager.cpp">
       <Filter>GA</Filter>
@@ -343,43 +336,59 @@
     <ClCompile Include="GA\GA.cpp">
       <Filter>GA</Filter>
     </ClCompile>
-    <ClCompile Include="GA\Gene.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\GeneticOperator.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\ResearchGene.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
     <ClCompile Include="GA\Sorting.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\StarcraftRules.cpp">
       <Filter>GA</Filter>
     </ClCompile>
     <ClCompile Include="GA\State.cpp">
       <Filter>GA</Filter>
     </ClCompile>
-    <ClCompile Include="GA\TournamentSelection.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
-    <ClCompile Include="GA\UnitType.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
     <ClCompile Include="GA\sqlite\sqlite3.c">
       <Filter>GA\sqlite</Filter>
     </ClCompile>
-    <ClCompile Include="StateExecutor.cpp" />
     <ClCompile Include="AttackSquad.cpp">
       <Filter>Squad Manager\Squads</Filter>
     </ClCompile>
-    <ClCompile Include="Stats.cpp" />
     <ClCompile Include="DbElement.cpp">
       <Filter>GA</Filter>
     </ClCompile>
-    <ClCompile Include="RouletteSelection.cpp">
+    <ClCompile Include="ScoreHelper.cpp">
       <Filter>GA</Filter>
+    </ClCompile>
+    <ClCompile Include="StateExecutor.cpp">
+      <Filter>GA</Filter>
+    </ClCompile>
+    <ClCompile Include="Stats.cpp">
+      <Filter>GA</Filter>
+    </ClCompile>
+    <ClCompile Include="GA\AttackGene.cpp">
+      <Filter>GA\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="GA\BuildGene.cpp">
+      <Filter>GA\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="GA\Chromosome.cpp">
+      <Filter>GA\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="GA\CombatGene.cpp">
+      <Filter>GA\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="GA\Gene.cpp">
+      <Filter>GA\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="GA\ResearchGene.cpp">
+      <Filter>GA\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="GA\GeneticOperator.cpp">
+      <Filter>GA\operators</Filter>
+    </ClCompile>
+    <ClCompile Include="RouletteSelection.cpp">
+      <Filter>GA\operators</Filter>
+    </ClCompile>
+    <ClCompile Include="GA\TournamentSelection.cpp">
+      <Filter>GA\operators</Filter>
+    </ClCompile>
+    <ClCompile Include="GA\StarcraftRules.cpp">
+      <Filter>GA\encoding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -692,21 +701,8 @@
     <ClInclude Include="Hypothalamus.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="ScoreHelper.h" />
     <ClInclude Include="HypothalamusEvents.h">
       <Filter>Event Manager\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\AttackGene.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\BuildGene.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\Chromosome.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\CombatGene.h">
-      <Filter>GA</Filter>
     </ClInclude>
     <ClInclude Include="GA\DatabaseManager.h">
       <Filter>GA</Filter>
@@ -714,28 +710,10 @@
     <ClInclude Include="GA\GA.h">
       <Filter>GA</Filter>
     </ClInclude>
-    <ClInclude Include="GA\Gene.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\GeneticOperator.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\ResearchGene.h">
-      <Filter>GA</Filter>
-    </ClInclude>
     <ClInclude Include="GA\Sorting.h">
       <Filter>GA</Filter>
     </ClInclude>
-    <ClInclude Include="GA\StarcraftRules.h">
-      <Filter>GA</Filter>
-    </ClInclude>
     <ClInclude Include="GA\State.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\TournamentSelection.h">
-      <Filter>GA</Filter>
-    </ClInclude>
-    <ClInclude Include="GA\UnitType.h">
       <Filter>GA</Filter>
     </ClInclude>
     <ClInclude Include="GA\sqlite\sqlite3.h">
@@ -744,19 +722,53 @@
     <ClInclude Include="GA\sqlite\sqlite3ext.h">
       <Filter>GA\sqlite</Filter>
     </ClInclude>
-    <ClInclude Include="StateExecutor.h" />
     <ClInclude Include="AttackSquad.h">
       <Filter>Squad Manager\Squads</Filter>
     </ClInclude>
-    <ClInclude Include="Stats.h" />
     <ClInclude Include="Settings.h">
       <Filter>GA</Filter>
     </ClInclude>
     <ClInclude Include="DbElement.h">
       <Filter>GA</Filter>
     </ClInclude>
-    <ClInclude Include="RouletteSelection.h">
+    <ClInclude Include="ScoreHelper.h">
       <Filter>GA</Filter>
+    </ClInclude>
+    <ClInclude Include="StateExecutor.h">
+      <Filter>GA</Filter>
+    </ClInclude>
+    <ClInclude Include="Stats.h">
+      <Filter>GA</Filter>
+    </ClInclude>
+    <ClInclude Include="GA\AttackGene.h">
+      <Filter>GA\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="GA\BuildGene.h">
+      <Filter>GA\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="GA\Chromosome.h">
+      <Filter>GA\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="GA\CombatGene.h">
+      <Filter>GA\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="GA\Gene.h">
+      <Filter>GA\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="GA\ResearchGene.h">
+      <Filter>GA\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="GA\GeneticOperator.h">
+      <Filter>GA\operators</Filter>
+    </ClInclude>
+    <ClInclude Include="RouletteSelection.h">
+      <Filter>GA\operators</Filter>
+    </ClInclude>
+    <ClInclude Include="GA\TournamentSelection.h">
+      <Filter>GA\operators</Filter>
+    </ClInclude>
+    <ClInclude Include="GA\StarcraftRules.h">
+      <Filter>GA\encoding</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

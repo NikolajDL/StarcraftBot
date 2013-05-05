@@ -59,7 +59,6 @@
     <ClCompile Include="GA\StarcraftRules.cpp" />
     <ClCompile Include="GA\State.cpp" />
     <ClCompile Include="GA\TournamentSelection.cpp" />
-    <ClCompile Include="GA\UnitType.cpp" />
     <ClCompile Include="GenericEvents.cpp" />
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="GoalAction.cpp" />
@@ -177,7 +176,6 @@
     <ClInclude Include="GA\StarcraftRules.h" />
     <ClInclude Include="GA\State.h" />
     <ClInclude Include="GA\TournamentSelection.h" />
-    <ClInclude Include="GA\UnitType.h" />
     <ClInclude Include="GenericEvents.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="GoalAction.h" />

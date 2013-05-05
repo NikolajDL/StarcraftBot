@@ -3,7 +3,6 @@
 #include "CombatGene.h"
 #include "ResearchGene.h"
 #include "BuildGene.h"
-#include "UnitType.h"
 #include "StarcraftRules.h"
 #include "Gene.h"
 #include <typeinfo>
