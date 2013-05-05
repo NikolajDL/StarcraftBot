@@ -55,8 +55,9 @@ void GAClass::changeState()
 {
 	if(currentStateIndex < CHROMOSOME_LENGTH)
 	{
-		mChromosome.getState(currentStateIndex).setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
-		db.updateChromosome(mChromosome);
+		State s = mChromosome.getState(currentStateIndex);
+		s.setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
+		db.updateState(s);
 		currentStateIndex++;
 		stateChanges++;
 
@@ -70,11 +71,6 @@ void GAClass::changeState()
 		//EQUEUE( new ContinueBuildOrderEvent() );
 	}	
 }
-
-//State GAClass::getCurrentState()
-//{
-//	return db.getCurrentChromosome().getState(currentStateIndex);
-//}
 
 double GAClass::fitness(int score, int opponentScore)
 {
@@ -138,7 +134,6 @@ static DWORD WINAPI GAThread(LPVOID lpParam)
 	}
 	else if (This->status == 2) // 2 = finishedGeneration
 	{
-		//This->population = This->db.selectAllChromosomes();
 		This->createNextGeneration();
 		This->status = 1;
 	}

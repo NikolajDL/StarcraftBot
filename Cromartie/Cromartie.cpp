@@ -79,7 +79,7 @@ void Cromartie::onStart()
 	BWAPI::Broodwar->setLocalSpeed(0);
 	//BWAPI::Broodwar->setGUI(false);
 
-	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
+	//BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::CompleteMapInformation);
 
 	

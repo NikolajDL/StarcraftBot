@@ -16,22 +16,15 @@ private:
 	int stateChanges;
 	int prev_opponentScore;
 	StateExecutor stateExecutor;
-
-	
 	double fitness(int score, int opponentScore);
 	void saveGAStatus(void);
 	void makeGAStatusFile(void);
 	void changeState(void);
-	//Chromosome& getCurrentChromosome(void);
-	//State getCurrentState(void);
-	//Chromosome mChromosome;
 public:	
 	int status; // 0 = FirstRun 1 = Running 2 = FinishedGeneration 3 = Finished
 	bool threadFinished;
-	//int currentChromosomeID;
 	DatabaseManager db;
 	Chromosome mChromosome;
-	//std::vector<Chromosome> population;
 	void createNextGeneration(void);
 	void loadGAStatus(void);
 	std::vector<Chromosome> generateInitialPopulation(int size);
