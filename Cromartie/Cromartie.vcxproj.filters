@@ -339,9 +339,6 @@
     <ClCompile Include="GA\Sorting.cpp">
       <Filter>GA</Filter>
     </ClCompile>
-    <ClCompile Include="GA\State.cpp">
-      <Filter>GA</Filter>
-    </ClCompile>
     <ClCompile Include="GA\sqlite\sqlite3.c">
       <Filter>GA\sqlite</Filter>
     </ClCompile>
@@ -388,6 +385,9 @@
       <Filter>GA\operators</Filter>
     </ClCompile>
     <ClCompile Include="GA\StarcraftRules.cpp">
+      <Filter>GA\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="GA\State.cpp">
       <Filter>GA\encoding</Filter>
     </ClCompile>
   </ItemGroup>
@@ -713,9 +713,6 @@
     <ClInclude Include="GA\Sorting.h">
       <Filter>GA</Filter>
     </ClInclude>
-    <ClInclude Include="GA\State.h">
-      <Filter>GA</Filter>
-    </ClInclude>
     <ClInclude Include="GA\sqlite\sqlite3.h">
       <Filter>GA\sqlite</Filter>
     </ClInclude>
@@ -768,6 +765,9 @@
       <Filter>GA\operators</Filter>
     </ClInclude>
     <ClInclude Include="GA\StarcraftRules.h">
+      <Filter>GA\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="GA\State.h">
       <Filter>GA\encoding</Filter>
     </ClInclude>
   </ItemGroup>

@@ -109,7 +109,7 @@ std::tr1::shared_ptr<BuildGene> StarcraftRules::getValidBuildGene(const State& s
 
 	// Create the build gene and assign the random building to the gene
 	std::tr1::shared_ptr<BuildGene> bg( new BuildGene(randomBuilding) );
-	bg->name = randomBuilding.getName();
+	
 
 	return bg;
 }
@@ -251,20 +251,15 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidUnits(const State& s)
 std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 {
 	std::vector<BWAPI::UnitType> validBuildings;
-	
-	// These buildings are availabel at all time, so we add them to the list of valid buildings to build
-	
-	
-	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Assimilator); // Macro manager ignores 'too many' assimilators
-
-	bool assimilatorFound = false;
-	
 	bool cyberFound = false;
 	bool suportFound = false;
 	bool observatoryFound = false;
 	bool citadelFound = false;
 	bool fleetBeaconFound = false;
-	int nexusCounter = 0;
+	bool templarArchivesFound = false;
+	bool arbiterTribunalFound = false;
+	int assimilatorCounter = 0;
+	int nexusCounter = 1; // Starting game with 1 nexus
 	int forgeCounter = 0;
 	int gatewayCounter = 0;
 
@@ -274,7 +269,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 
 		if (ut == BWAPI::UnitTypes::Protoss_Assimilator)
 		{
-			assimilatorFound = true;
+			assimilatorCounter++;
 		}
 		else if (ut == BWAPI::UnitTypes::Protoss_Forge)
 		{
@@ -304,6 +299,10 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		{
 			citadelFound = true;
 		}
+		else if (ut == BWAPI::UnitTypes::Protoss_Templar_Archives)
+		{
+			templarArchivesFound = true;
+		}
 		else if(ut == BWAPI::UnitTypes::Protoss_Gateway)
 		{
 			gatewayCounter++;
@@ -322,6 +321,10 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	{
 		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Gateway);
 	}
+	if(assimilatorCounter < nexusCounter)
+	{
+		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Assimilator);
+	}
 
 	// We loop through each building that has been build. 
 	// For each building, we add the buildings that, that building unlocks to the list of valid buildings.
@@ -338,32 +341,34 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 			if (cyberFound == false)
 				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Cybernetics_Core);
 		}
-		else if (ut == BWAPI::UnitTypes::Protoss_Cybernetics_Core  && assimilatorFound == true)
+		else if (ut == BWAPI::UnitTypes::Protoss_Cybernetics_Core  && assimilatorCounter > 0)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Stargate);
 			if (citadelFound == false)
 				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Citadel_of_Adun);
 			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Robotics_Facility);
 		}
-		else if (ut == BWAPI::UnitTypes::Protoss_Robotics_Facility && assimilatorFound == true)
+		else if (ut == BWAPI::UnitTypes::Protoss_Robotics_Facility && assimilatorCounter > 0)
 		{
 			if (suportFound == false)
 				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Robotics_Support_Bay);
 			if (observatoryFound == false)
 				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Observatory);
 		}
-		else if (ut == BWAPI::UnitTypes::Protoss_Stargate  && assimilatorFound == true)
+		else if (ut == BWAPI::UnitTypes::Protoss_Stargate  && assimilatorCounter > 0)
 		{
 			if (fleetBeaconFound == false)
 				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Fleet_Beacon);
 		}
-		else if (ut == BWAPI::UnitTypes::Protoss_Citadel_of_Adun  && assimilatorFound == true)
+		else if (ut == BWAPI::UnitTypes::Protoss_Citadel_of_Adun  && assimilatorCounter > 0)
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Templar_Archives);
+			if(templarArchivesFound = false)
+				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Templar_Archives);
 		}
-		else if (ut == BWAPI::UnitTypes::Protoss_Templar_Archives  && assimilatorFound == true)
+		else if (ut == BWAPI::UnitTypes::Protoss_Templar_Archives  && assimilatorCounter > 0)
 		{
-			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Arbiter_Tribunal);
+			if(arbiterTribunalFound = false)
+				validBuildings.push_back(BWAPI::UnitTypes::Protoss_Arbiter_Tribunal);
 		}
 	}
 

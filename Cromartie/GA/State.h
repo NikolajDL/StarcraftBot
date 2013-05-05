@@ -20,11 +20,11 @@ public:
 	double getFitness(void) const;
 	void setFitness(double value);
 	std::vector<BWAPI::UnitType> getBuildingSequence(void) const;
-	const std::vector<std::tr1::shared_ptr<Gene>>& getGenes(void) const;
+	std::vector<std::tr1::shared_ptr<Gene>> getGenes(void) const;
 };
 
 // Ignore genes
-inline bool operator==(State& a, State& b)
+inline bool operator==(const State& a, const State& b)
 {
 	size_t seqSize = a.getBuildingSequence().size();
 	if(a.getBuildingSequence().size() != b.getBuildingSequence().size() )

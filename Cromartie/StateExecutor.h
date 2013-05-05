@@ -6,8 +6,6 @@ typedef std::map<BWAPI::UpgradeType,int> UpgradeMap;
 class StateExecutor
 {
 private:
-	int assimilatorCount;
-	int nexusCount;
 	UpgradeMap upgradeLevels;
 	int getUpgradeLevel(BWAPI::UpgradeType up);
 public:

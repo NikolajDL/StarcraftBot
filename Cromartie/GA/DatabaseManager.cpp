@@ -527,7 +527,7 @@ void DatabaseManager::updateChromosomes(std::vector<Chromosome> c)
 {
 	for(size_t i=0; i<c.size();i++)
 	{
-
+		updateChromosome(c.at(i));
 	}
 }
 

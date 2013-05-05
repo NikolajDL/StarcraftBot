@@ -25,7 +25,7 @@ std::vector<BWAPI::UnitType> State::getBuildingSequence(void) const
 	return this->buildingSequence;
 }
 
-const std::vector<std::tr1::shared_ptr<Gene>>& State::getGenes(void) const
+std::vector<std::tr1::shared_ptr<Gene>> State::getGenes(void) const
 {
 	return this->genes;
 }

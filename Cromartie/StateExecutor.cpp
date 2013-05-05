@@ -8,7 +8,7 @@
 #include "BaseTracker.h"
 #include <string>
 
-StateExecutor::StateExecutor(void) : assimilatorCount(0), nexusCount(1)
+StateExecutor::StateExecutor(void) 
 {
 }
 
@@ -47,34 +47,10 @@ bool StateExecutor::executeState(const State& state)
 			if (unit == BWAPI::UnitTypes::Protoss_Nexus)
 			{
 				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::Expansion));
-				this->nexusCount++;
 			}
 			else if (unit == BWAPI::UnitTypes::Protoss_Assimilator)
 			{
-				// If the game has JUST started, the base tracker has not yet analyzed the map and thus we have 0 bases
-				if(BWAPI::Broodwar->getFrameCount() > 0)
-				{
-					// Tempting to use Base.getGeysers() but we cannot, due to the scenario of
-					// 1 assimilator has just been ordered to be built. The probe is moving towards the geyser,
-					// but has not yet built the assimilator. Then another assimilator gene is made but is ignored, 
-					// as getGeyser() returns 1 (the geyser does not have an assimilator yet). This means no building is under
-					// costruction, and the bot stalls forever in this state.
-					if(nexusCount > assimilatorCount)
-					{
-						EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::ExpansionGas));
-						assimilatorCount++;
-					}
-					else
-					{
-						return false;
-					}
-				}
-				else
-				{
-					EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::ExpansionGas));
-					assimilatorCount++;
-				}
-
+				EQUEUE(new BuildUnitEvent(bg.getBuildingType(), TaskType::BuildOrder, 1, BuildingLocation::ExpansionGas));
 			}
 			else
 			{

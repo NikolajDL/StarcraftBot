@@ -9,7 +9,6 @@ class BuildGene :
 private:
 	BWAPI::UnitType buildingType;
 public:
-	std::string name;
 	BuildGene(void);
 	BuildGene(BWAPI::UnitType building);
 	~BuildGene(void);
