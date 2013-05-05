@@ -310,6 +310,18 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		}
 	}
 
+	if(forgeCounter < FORGE_LIMIT)
+	{
+		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Forge);
+	}
+	if(nexusCounter < NEXUS_LIMIT)
+	{
+		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Forge);
+	}
+	if(gatewayCounter < GATEWAY_LIMIT)
+	{
+		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Gateway);
+	}
 
 	// We loop through each building that has been build. 
 	// For each building, we add the buildings that, that building unlocks to the list of valid buildings.
@@ -353,19 +365,6 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		{
 			validBuildings.push_back(BWAPI::UnitTypes::Protoss_Arbiter_Tribunal);
 		}
-	}
-
-	if(forgeCounter < FORGE_LIMIT)
-	{
-		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Forge);
-	}
-	if(nexusCounter < NEXUS_LIMIT)
-	{
-		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Forge);
-	}
-	if(gatewayCounter < GATEWAY_LIMIT)
-	{
-		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Gateway);
 	}
 
 	return validBuildings;

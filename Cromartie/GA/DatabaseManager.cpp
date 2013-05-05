@@ -34,6 +34,190 @@ void DatabaseManager::insertAndReplaceChromosomes(std::vector<Chromosome> c)
 	this->insertChromosomes(c);
 }
 
+Chromosome DatabaseManager::getCurrentChromosome(void)
+{
+	return selectChromosome(getCurrentChromosomeID());
+}
+
+int DatabaseManager::getCurrentChromosomeID(void)
+{
+	sqlite3_open(SQLITE_FILENAME, &db);
+	std::stringstream ss;
+	ss.str("");
+	ss << "SELECT id FROM chromosomes WHERE fitness=-999;";
+
+	sqlite3_stmt* id_stmt;
+	sqlite3_prepare_v2(db,
+		ss.str().c_str(),
+		-1,
+		&id_stmt,
+		0);
+	
+	int id = 0;
+	if(sqlite3_step(id_stmt) == SQLITE_ROW)
+	{
+		id = sqlite3_column_int(id_stmt, 0);
+	}
+	sqlite3_finalize(id_stmt);
+	return id;
+}
+
+Chromosome DatabaseManager::selectChromosome(int id)
+{
+	sqlite3_open(SQLITE_FILENAME, &db);
+	std::vector<Chromosome> result;
+	std::stringstream ss;
+	ss.str("");
+	ss << "SELECT id, fitness FROM chromosomes WHERE id=" << id << ";";
+
+	sqlite3_stmt* chromosome_stmt;
+	sqlite3_prepare_v2(db,
+		ss.str().c_str(),
+		-1,
+		&chromosome_stmt,
+		0);
+
+	Chromosome c;
+	while(sqlite3_step(chromosome_stmt) == SQLITE_ROW)
+	{
+		std::vector<BWAPI::UnitType> buildSequence;
+		int chromosomeID = sqlite3_column_int(chromosome_stmt, 0);
+		c.setId(chromosomeID);
+		double chromosomeFitness = sqlite3_column_double(chromosome_stmt, 1);
+		c.setFitness(chromosomeFitness);
+
+		ss.str("");
+		ss << "SELECT id, fitness FROM states WHERE chromosomes_id = " << chromosomeID << ";";
+
+		sqlite3_stmt* state_stmt;
+		sqlite3_prepare_v2(db,
+			ss.str().c_str(),
+			-1,
+			&state_stmt,
+			0);
+
+		while(sqlite3_step(state_stmt) == SQLITE_ROW)
+		{
+			State s(buildSequence);
+			int stateID = sqlite3_column_int(state_stmt, 0);
+			s.setId(stateID);
+			s.setFitness(sqlite3_column_double(state_stmt, 1));
+
+			ss.str("");
+			ss << "SELECT id FROM genes WHERE states_id = " << stateID << ";";
+
+			sqlite3_stmt* gene_stmt;
+			sqlite3_prepare_v2(db,
+				ss.str().c_str(),
+				-1,
+				&gene_stmt,
+				0);
+
+			while(sqlite3_step(gene_stmt) == SQLITE_ROW)
+			{
+				int geneID = sqlite3_column_int(gene_stmt, 0);
+
+				// Determine which type of gene we are dealing with
+				ss.str("");
+				ss << "SELECT do_attack FROM attack_genes WHERE id = " << geneID << ";";
+				sqlite3_stmt* attackgene_stmt;
+				sqlite3_prepare_v2(db,
+					ss.str().c_str(),
+					-1,
+					&attackgene_stmt,
+					0);
+
+				ss.str("");
+				ss << "SELECT unit_type, unit_amount FROM combat_genes WHERE id = " << geneID << ";";
+				sqlite3_stmt* combatgene_stmt;
+				sqlite3_prepare_v2(db,
+					ss.str().c_str(),
+					-1,
+					&combatgene_stmt,
+					0);
+
+				ss.str("");
+				ss << "SELECT research_type FROM research_genes WHERE id = " << geneID << ";";
+				sqlite3_stmt* researchgene_stmt;
+				sqlite3_prepare_v2(db,
+					ss.str().c_str(),
+					-1,
+					&researchgene_stmt,
+					0);
+
+				ss.str("");
+				ss << "SELECT building_type FROM build_genes WHERE id = " << geneID << ";";
+				sqlite3_stmt* buildgene_stmt;
+				sqlite3_prepare_v2(db,
+					ss.str().c_str(),
+					-1,
+					&buildgene_stmt,
+					0);
+
+				if(sqlite3_step(attackgene_stmt) == SQLITE_ROW)
+				{
+					bool doAttack = sqlite3_column_int(attackgene_stmt, 0);
+					std::tr1::shared_ptr<AttackGene> g(new AttackGene(doAttack));
+					g->setId(geneID);
+					s.addGene(g);
+				} else if(sqlite3_step(combatgene_stmt) == SQLITE_ROW)
+				{
+					std::string unittype = boost::lexical_cast<std::string>(sqlite3_column_text(combatgene_stmt,0)); 
+					int unitamount = sqlite3_column_int(combatgene_stmt, 1);
+					std::tr1::shared_ptr<CombatGene> g(new CombatGene(BWAPI::UnitTypes::getUnitType(unittype), unitamount));
+					g->setId(geneID);
+					s.addGene(g);
+				} else if(sqlite3_step(researchgene_stmt) == SQLITE_ROW)
+				{
+					std::string upgradetype = boost::lexical_cast<std::string>(sqlite3_column_text(researchgene_stmt,0));
+					if(BWAPI::UpgradeTypes::getUpgradeType(upgradetype) != BWAPI::UpgradeTypes::Unknown)
+					{
+						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(BWAPI::UpgradeTypes::getUpgradeType(upgradetype)));
+						g->setId(geneID);
+						s.addGene(g);
+					}
+					else if(BWAPI::TechTypes::getTechType(upgradetype) != BWAPI::TechTypes::Unknown)
+					{
+						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(BWAPI::TechTypes::getTechType(upgradetype)));
+						g->setId(geneID);
+						s.addGene(g);
+					}
+					else
+					{
+						//BWAPI::Broodwar->sendText("DatabaseManager::selectAllChromosomes(): Unable to determine research type");
+					}
+					
+				} else if(sqlite3_step(buildgene_stmt) == SQLITE_ROW)
+				{
+					std::string buildingtype = boost::lexical_cast<std::string>(sqlite3_column_text(buildgene_stmt,0));
+					std::tr1::shared_ptr<BuildGene> g(new BuildGene(BWAPI::UnitTypes::getUnitType(buildingtype)));
+					g->setId(geneID);
+					s.addGene(g);
+				} else
+				{
+					//BWAPI::Broodwar->sendText("DatabaseManager::selectAllChromosomes(): Found unknown gene type in DB with ID = " + geneID);
+				}
+
+				sqlite3_finalize(attackgene_stmt);
+				sqlite3_finalize(combatgene_stmt);
+				sqlite3_finalize(researchgene_stmt);
+				sqlite3_finalize(buildgene_stmt);
+
+			}
+			c.addState(s);
+			buildSequence = s.getBuildingSequence();
+			sqlite3_finalize(gene_stmt);
+		}
+		sqlite3_finalize(state_stmt);
+		result.push_back(c);
+	}	
+	
+	sqlite3_finalize(chromosome_stmt);
+	sqlite3_close(db);
+
+	return c;
+}
+
 void DatabaseManager::eraseDatabaseContent(void)
 {
 	sqlite3_open(SQLITE_FILENAME, &db);
@@ -274,7 +458,7 @@ void DatabaseManager::insertChromosome(Chromosome c)
 	sqlite3_close(db);
 }
 
-void DatabaseManager::updateChromosomes(std::vector<Chromosome> c)
+void DatabaseManager::updateChromosome(Chromosome c)
 {
 	sqlite3_open(SQLITE_FILENAME, &db);
 
@@ -291,41 +475,38 @@ void DatabaseManager::updateChromosomes(std::vector<Chromosome> c)
 	sqlite3_step(begin_stmt);
 	sqlite3_finalize(begin_stmt);
 
-	for(size_t i=0; i<c.size();i++)
+	
+	ss.str("");
+	ss	<< "UPDATE chromosomes "
+		<< "SET fitness=" << c.getFitness() << " "
+		<< "WHERE id=" << c.getId() << ";";
+	sqlite3_stmt* chromosome_stmt;
+	sqlite3_prepare_v2(db,
+		ss.str().c_str(),
+		-1,
+		&chromosome_stmt,
+		0);
+	sqlite3_step(chromosome_stmt);
+	sqlite3_finalize(chromosome_stmt);
+
+	for(size_t j=0; j<c.getStates().size();j++)
 	{
+		State s = c.getStates().at(j);
+
 		ss.str("");
-		ss	<< "UPDATE chromosomes "
-			<< "SET fitness=" << c.at(i).getFitness() << " "
-			<< "WHERE id=" << c.at(i).getId() << ";";
-		sqlite3_stmt* chromosome_stmt;
+		ss	<< "UPDATE states "
+			<< "SET fitness=" << s.getFitness() << " "
+			<< "WHERE id=" << s.getId() << ";";
+		sqlite3_stmt* state_stmt;
 		sqlite3_prepare_v2(db,
 			ss.str().c_str(),
 			-1,
-			&chromosome_stmt,
+			&state_stmt,
 			0);
-		sqlite3_step(chromosome_stmt);
-		sqlite3_finalize(chromosome_stmt);
+		sqlite3_step(state_stmt);
+		sqlite3_finalize(state_stmt);
 
-		for(size_t j=0; j<c.at(i).getStates().size();j++)
-		{
-			State s = c.at(i).getStates().at(j);
-
-			ss.str("");
-			ss	<< "UPDATE states "
-				<< "SET fitness=" << s.getFitness() << " "
-				<< "WHERE id=" << s.getId() << ";";
-			sqlite3_stmt* state_stmt;
-			sqlite3_prepare_v2(db,
-				ss.str().c_str(),
-				-1,
-				&state_stmt,
-				0);
-			sqlite3_step(state_stmt);
-			sqlite3_finalize(state_stmt);
-
-		}
 	}
-	
 
 	ss.str("");
 	ss << "COMMIT;";
@@ -341,6 +522,15 @@ void DatabaseManager::updateChromosomes(std::vector<Chromosome> c)
 	sqlite3_close(db);
 }
 
+
+void DatabaseManager::updateChromosomes(std::vector<Chromosome> c)
+{
+	for(size_t i=0; i<c.size();i++)
+	{
+
+	}
+}
+
 // If you wanna avoid having a brain aneurysm, avoid reading this method. 
 // Multiple nested while-loops, no reuse of statements, lots of fun times to be had here.
 std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
@@ -352,7 +542,7 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 	std::stringstream ss;
 
 	ss.str("");
-	ss << "SELECT id, fitness FROM chromosomes;";
+	ss << "SELECT id FROM chromosomes;";
 
 	sqlite3_stmt* chromosome_stmt;
 	sqlite3_prepare_v2(db,
@@ -363,143 +553,10 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 
 	while(sqlite3_step(chromosome_stmt) == SQLITE_ROW)
 	{
-		Chromosome c;
-		std::vector<BWAPI::UnitType> buildSequence;
-
-		int chromosomeID = sqlite3_column_int(chromosome_stmt, 0);
-		c.setId(chromosomeID);
-		double chromosomeFitness = sqlite3_column_double(chromosome_stmt, 1);
-		c.setFitness(chromosomeFitness);
-
-		ss.str("");
-		ss << "SELECT id, fitness FROM states WHERE chromosomes_id = " << chromosomeID << ";";
-
-		sqlite3_stmt* state_stmt;
-		sqlite3_prepare_v2(db,
-			ss.str().c_str(),
-			-1,
-			&state_stmt,
-			0);
-
-		while(sqlite3_step(state_stmt) == SQLITE_ROW)
-		{
-			State s(buildSequence);
-			int stateID = sqlite3_column_int(state_stmt, 0);
-			s.setId(stateID);
-			s.setFitness(sqlite3_column_double(state_stmt, 1));
-
-			ss.str("");
-			ss << "SELECT id FROM genes WHERE states_id = " << stateID << ";";
-
-			sqlite3_stmt* gene_stmt;
-			sqlite3_prepare_v2(db,
-				ss.str().c_str(),
-				-1,
-				&gene_stmt,
-				0);
-
-			while(sqlite3_step(gene_stmt) == SQLITE_ROW)
-			{
-				int geneID = sqlite3_column_int(gene_stmt, 0);
-
-				// Determine which type of gene we are dealing with
-				ss.str("");
-				ss << "SELECT do_attack FROM attack_genes WHERE id = " << geneID << ";";
-				sqlite3_stmt* attackgene_stmt;
-				sqlite3_prepare_v2(db,
-					ss.str().c_str(),
-					-1,
-					&attackgene_stmt,
-					0);
-
-				ss.str("");
-				ss << "SELECT unit_type, unit_amount FROM combat_genes WHERE id = " << geneID << ";";
-				sqlite3_stmt* combatgene_stmt;
-				sqlite3_prepare_v2(db,
-					ss.str().c_str(),
-					-1,
-					&combatgene_stmt,
-					0);
-
-				ss.str("");
-				ss << "SELECT research_type FROM research_genes WHERE id = " << geneID << ";";
-				sqlite3_stmt* researchgene_stmt;
-				sqlite3_prepare_v2(db,
-					ss.str().c_str(),
-					-1,
-					&researchgene_stmt,
-					0);
-
-				ss.str("");
-				ss << "SELECT building_type FROM build_genes WHERE id = " << geneID << ";";
-				sqlite3_stmt* buildgene_stmt;
-				sqlite3_prepare_v2(db,
-					ss.str().c_str(),
-					-1,
-					&buildgene_stmt,
-					0);
-
-				if(sqlite3_step(attackgene_stmt) == SQLITE_ROW)
-				{
-					bool doAttack = sqlite3_column_int(attackgene_stmt, 0);
-					std::tr1::shared_ptr<AttackGene> g(new AttackGene(doAttack));
-					g->setId(geneID);
-					s.addGene(g);
-				} else if(sqlite3_step(combatgene_stmt) == SQLITE_ROW)
-				{
-					std::string unittype = boost::lexical_cast<std::string>(sqlite3_column_text(combatgene_stmt,0)); 
-					int unitamount = sqlite3_column_int(combatgene_stmt, 1);
-					std::tr1::shared_ptr<CombatGene> g(new CombatGene(BWAPI::UnitTypes::getUnitType(unittype), unitamount));
-					g->setId(geneID);
-					s.addGene(g);
-				} else if(sqlite3_step(researchgene_stmt) == SQLITE_ROW)
-				{
-					std::string upgradetype = boost::lexical_cast<std::string>(sqlite3_column_text(researchgene_stmt,0));
-					if(BWAPI::UpgradeTypes::getUpgradeType(upgradetype) != BWAPI::UpgradeTypes::Unknown)
-					{
-						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(BWAPI::UpgradeTypes::getUpgradeType(upgradetype)));
-						g->setId(geneID);
-						s.addGene(g);
-					}
-					else if(BWAPI::TechTypes::getTechType(upgradetype) != BWAPI::TechTypes::Unknown)
-					{
-						std::tr1::shared_ptr<ResearchGene> g(new ResearchGene(BWAPI::TechTypes::getTechType(upgradetype)));
-						g->setId(geneID);
-						s.addGene(g);
-					}
-					else
-					{
-						//BWAPI::Broodwar->sendText("DatabaseManager::selectAllChromosomes(): Unable to determine research type");
-					}
-					
-				} else if(sqlite3_step(buildgene_stmt) == SQLITE_ROW)
-				{
-					std::string buildingtype = boost::lexical_cast<std::string>(sqlite3_column_text(buildgene_stmt,0));
-					std::tr1::shared_ptr<BuildGene> g(new BuildGene(BWAPI::UnitTypes::getUnitType(buildingtype)));
-					g->setId(geneID);
-					s.addGene(g);
-				} else
-				{
-					//BWAPI::Broodwar->sendText("DatabaseManager::selectAllChromosomes(): Found unknown gene type in DB with ID = " + geneID);
-				}
-
-				sqlite3_finalize(attackgene_stmt);
-				sqlite3_finalize(combatgene_stmt);
-				sqlite3_finalize(researchgene_stmt);
-				sqlite3_finalize(buildgene_stmt);
-
-			}
-			c.addState(s);
-			buildSequence = s.getBuildingSequence();
-			sqlite3_finalize(gene_stmt);
-		}
-		sqlite3_finalize(state_stmt);
-		result.push_back(c);
+		result.push_back(selectChromosome(sqlite3_column_int(chromosome_stmt, 0)));
 	}	
 	
 	sqlite3_finalize(chromosome_stmt);
-
 	sqlite3_close(db);
-
 	return result;
 }

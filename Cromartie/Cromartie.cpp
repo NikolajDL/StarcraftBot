@@ -40,6 +40,7 @@
 #include "FastDelegate.h"
 #include "Hypothalamus.h"
 #include "HypothalamusEvents.h"
+#include "settings.h"
 
 using namespace fastdelegate;
 
@@ -156,7 +157,7 @@ void Cromartie::onFrame()
 		else if(BWAPI::Broodwar->getFrameCount() - mLeavingGame > 80)
 			BWAPI::Broodwar->leaveGame();
 	}
-	if (BWAPI::Broodwar->getFrameCount() > 24 * 60 * 30)
+	if (BWAPI::Broodwar->getFrameCount() > FRAMECOUNT_LIMIT)
 	{
 		BWAPI::Broodwar->leaveGame();
 	}

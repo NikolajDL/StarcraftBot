@@ -55,11 +55,12 @@ void GAClass::changeState()
 {
 	if(currentStateIndex < CHROMOSOME_LENGTH)
 	{
-		getCurrentState().setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
+		mChromosome.getState(currentStateIndex).setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
+		db.updateChromosome(mChromosome);
 		currentStateIndex++;
 		stateChanges++;
 
-		if(!stateExecutor.executeState(getCurrentState()))
+		if(!stateExecutor.executeState(mChromosome.getState(currentStateIndex)))
 			changeState();
 	}
 	else if(currentStateIndex >= CHROMOSOME_LENGTH)
@@ -70,15 +71,10 @@ void GAClass::changeState()
 	}	
 }
 
-Chromosome& GAClass::getCurrentChromosome()
-{
-	return population.at(currentChromosomeIndex);
-}
-
-State& GAClass::getCurrentState()
-{
-	return getCurrentChromosome().getState(currentStateIndex);
-}
+//State GAClass::getCurrentState()
+//{
+//	return db.getCurrentChromosome().getState(currentStateIndex);
+//}
 
 double GAClass::fitness(int score, int opponentScore)
 {
@@ -103,9 +99,6 @@ double GAClass::fitness(int score, int opponentScore)
 
 void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, int maxElapsedTime)
 {
-	// Avoid starting up new threads, before the current worker thread has completed
-	while(!threadFinished){ Sleep(1000); }
-
 	double fitness = 0;
 	if (winner)
 	{
@@ -117,61 +110,40 @@ void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTi
 	}
 
 	fitness *= 10000;
+	mChromosome.setFitness(fitness);
+	db.updateChromosome(mChromosome);
 
-	
-
-	bool nonTestedChromosomeFound = false;
-	for (size_t i = 0; i < population.size(); i++)
-	{
-		if (population.at(i).getFitness() == -999)
-		{
-			nonTestedChromosomeFound = true;
-			break;
-		}
-	}
-	if (nonTestedChromosomeFound == false)
+	if(db.getCurrentChromosome().getId() == 0)
 	{
 		status = 2; // 2 = finishedGeneration
 	}
-
-	getCurrentChromosome().setFitness(fitness);
-	savePopulation();
+	
 	saveGAStatus();
-	Stats::logPop(population, elapsedTime, winner);
 }
 
 static DWORD WINAPI GAThread(LPVOID lpParam)
 {
 	GAClass* This = (GAClass*)lpParam;
-	if(!This->threadFinished)
-	{
-		This->loadGAStatus();
-		if (This->status == 0) // 0 = FirstRun
-		{
-			This->generateInitialPopulation(POP_SIZE);
-			//status = 1; // 1 = running
-		}
-		else if (This->status == 1) // 1 = running
-		{
-			This->population = This->db.selectAllChromosomes();
-		}
-		else if (This->status == 2) // 2 = finishedGeneration
-		{
-			This->population = This->db.selectAllChromosomes();
-			This->createNextGeneration();
-			This->status = 1;
-		}
 
-		for (size_t i = 0; i < This->population.size(); i++)
-		{
-			if (This->population.at(i).getFitness() == -999)
-			{
-				This->currentChromosomeIndex = i;
-				break;
-			}
-		}
+	This->loadGAStatus();
+	if (This->status == 0) // 0 = FirstRun
+	{
+		std::vector<Chromosome> pop = This->generateInitialPopulation(POP_SIZE);
+		This->db.insertAndReplaceChromosomes(pop);
+		This->status = 1; // 1 = running
+	}
+	else if (This->status == 1) // 1 = running
+	{
+		//This->population = This->db.selectAllChromosomes();
+	}
+	else if (This->status == 2) // 2 = finishedGeneration
+	{
+		//This->population = This->db.selectAllChromosomes();
+		This->createNextGeneration();
+		This->status = 1;
 	}
 
+	This->mChromosome = This->db.getCurrentChromosome();
 	This->threadFinished = true;
 	return 0;
 };
@@ -182,7 +154,7 @@ void GAClass::update(IEventDataPtr e)
 	{
 		stateChanges++;
 		BWAPI::Broodwar->sendText("Skipping state change");
-		stateExecutor.executeState(getCurrentState());
+		stateExecutor.executeState(mChromosome.getState(currentStateIndex));
 	}
 }
 
@@ -198,33 +170,26 @@ void GAClass::onStarcraftStart(IEventDataPtr e)
             NULL);			// returns the thread identifier 
 }
 
-void GAClass::savePopulation()
-{
-	if(status == 0) 
-	{ 
-		db.insertChromosomes(population); 
-		status = 1; 
-	}
-	else 
-	{ 
-		db.updateChromosomes(population); 
-	}
-}
 
 void GAClass::createNextGeneration()
 {
+	std::vector<Chromosome> pop = db.selectAllChromosomes();
+	Stats::logPop(pop, 0, false);
+
 	// Replace this class if you want another selection aglorithm
 	TournamentSelection ts;
-	ts.selectAndMutate(population);
-	db.insertAndReplaceChromosomes(population);
+	ts.selectAndMutate(pop);
+	db.insertAndReplaceChromosomes(pop);
 }
 
-void GAClass::generateInitialPopulation(int size)
+std::vector<Chromosome> GAClass::generateInitialPopulation(int size)
 {
+	std::vector<Chromosome> result;
 	for (int i = 0; i < size; i++)
 	{
-		population.push_back(GeneticOperator::RandomChromosome());
+		result.push_back(GeneticOperator::RandomChromosome());
 	}
+	return result;
 }
 
 void GAClass::makeGAStatusFile()
