@@ -315,7 +315,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	}
 	if(nexusCounter < NEXUS_LIMIT)
 	{
-		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Forge);
+		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Nexus);
 	}
 	if(gatewayCounter < GATEWAY_LIMIT)
 	{
