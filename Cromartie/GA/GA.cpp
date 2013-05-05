@@ -20,9 +20,7 @@ void GAClass::onMorph(IEventDataPtr e)
 	BWAPI::Unit* unit = pEventData->m_Unit;
 
 	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
-		unit->getType().isBuilding() == true &&
-		unit->getType().isResourceContainer() == false &&
-		unit->getType() != BWAPI::UnitTypes::Protoss_Pylon &&
+		unit->getType() == BWAPI::UnitTypes::Protoss_Assimilator &&
 		threadFinished)
 	{
 		/*BWAPI::Broodwar->sendText("Changing state");

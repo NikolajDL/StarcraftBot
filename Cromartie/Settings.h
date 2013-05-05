@@ -1,8 +1,8 @@
 #pragma once
 
-#define POP_SIZE 20
-#define SAMPLE_SIZE 8
-#define WINNING_SIZE 4
-#define LOOSING_SIZE 4
+#define POP_SIZE 6
+#define SAMPLE_SIZE 4
+#define WINNING_SIZE 2
+#define LOOSING_SIZE 2
 #define NEXUS_LIMIT 4
-#define CHROMOSOME_LENGTH 50
+#define CHROMOSOME_LENGTH 5

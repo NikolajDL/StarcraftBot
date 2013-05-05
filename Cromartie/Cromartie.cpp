@@ -76,7 +76,7 @@ void Cromartie::onStart()
 	// Make it go faster! Faster I say! I wanna go faster than any man before me!
 	// I wanna look down at the light and laugh at its pitiful speed
 	BWAPI::Broodwar->setLocalSpeed(0);
-	BWAPI::Broodwar->setGUI(false);
+	//BWAPI::Broodwar->setGUI(false);
 
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
 	BWAPI::Broodwar->enableFlag(BWAPI::Flag::CompleteMapInformation);
