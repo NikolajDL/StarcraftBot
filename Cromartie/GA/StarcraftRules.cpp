@@ -253,8 +253,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	std::vector<BWAPI::UnitType> validBuildings;
 	
 	// These buildings are availabel at all time, so we add them to the list of valid buildings to build
-	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Gateway);
-	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Nexus);
+	
 	
 	validBuildings.push_back(BWAPI::UnitTypes::Protoss_Assimilator); // Macro manager ignores 'too many' assimilators
 
@@ -267,6 +266,7 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	bool fleetBeaconFound = false;
 	int nexusCounter = 0;
 	int forgeCounter = 0;
+	int gatewayCounter = 0;
 
 	for (size_t i = 0; i < s.getBuildingSequence().size(); i++)
 	{
@@ -303,6 +303,10 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 		else if (ut == BWAPI::UnitTypes::Protoss_Citadel_of_Adun)
 		{
 			citadelFound = true;
+		}
+		else if(ut == BWAPI::UnitTypes::Protoss_Gateway)
+		{
+			gatewayCounter++;
 		}
 	}
 
@@ -358,6 +362,10 @@ std::vector<BWAPI::UnitType> StarcraftRules::getValidBuildings(const State& s)
 	if(nexusCounter < NEXUS_LIMIT)
 	{
 		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Forge);
+	}
+	if(gatewayCounter < GATEWAY_LIMIT)
+	{
+		validBuildings.push_back(BWAPI::UnitTypes::Protoss_Gateway);
 	}
 
 	return validBuildings;
