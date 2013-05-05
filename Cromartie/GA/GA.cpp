@@ -23,12 +23,11 @@ void GAClass::onMorph(IEventDataPtr e)
 		unit->getType() == BWAPI::UnitTypes::Protoss_Assimilator &&
 		threadFinished)
 	{
-		/*BWAPI::Broodwar->sendText("Changing state");
-		BWAPI::Broodwar->sendText(unit->getType().getName().c_str());*/
 		changeState();
 	}
 }
 
+int pylonCtr = 0;
 void GAClass::onUnitCompleteEvent(IEventDataPtr e)
 {
 	std::tr1::shared_ptr<UnitCompleteEvent> pEventData = std::tr1::static_pointer_cast<UnitCompleteEvent>(e);
@@ -42,7 +41,14 @@ void GAClass::onUnitCompleteEvent(IEventDataPtr e)
 	{
 		changeState();
 	}
-
+	
+	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
+		unit->getType() == BWAPI::UnitTypes::Protoss_Pylon)
+	{
+		pylonCtr++;
+		if(pylonCtr > 1 && !threadFinished)
+			while(!threadFinished){ Sleep(1000); }
+	}
 }
 
 void GAClass::changeState()
@@ -97,6 +103,9 @@ double GAClass::fitness(int score, int opponentScore)
 
 void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, int maxElapsedTime)
 {
+	// Avoid starting up new threads, before the current worker thread has completed
+	while(!threadFinished){ Sleep(1000); }
+
 	double fitness = 0;
 	if (winner)
 	{
@@ -124,9 +133,6 @@ void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTi
 	{
 		status = 2; // 2 = finishedGeneration
 	}
-
-
-	while(!threadFinished){ Sleep(1000); }
 
 	getCurrentChromosome().setFitness(fitness);
 	savePopulation();
@@ -191,9 +197,6 @@ void GAClass::onStarcraftStart(IEventDataPtr e)
             0,              // use default creation flags 
             NULL);			// returns the thread identifier 
 }
-
-
-
 
 void GAClass::savePopulation()
 {
