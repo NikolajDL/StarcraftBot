@@ -19,7 +19,11 @@ void GAClass::onMorph(IEventDataPtr e)
 	std::tr1::shared_ptr<UnitMorphEvent> pEventData = std::tr1::static_pointer_cast<UnitMorphEvent>(e);
 	BWAPI::Unit* unit = pEventData->m_Unit;
 
-	if (unit->getType() == BWAPI::UnitTypes::Protoss_Assimilator)
+	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
+		unit->getType().isBuilding() == true &&
+		unit->getType().isResourceContainer() == false &&
+		unit->getType() != BWAPI::UnitTypes::Protoss_Pylon &&
+		threadFinished)
 	{
 		/*BWAPI::Broodwar->sendText("Changing state");
 		BWAPI::Broodwar->sendText(unit->getType().getName().c_str());*/
@@ -36,26 +40,35 @@ void GAClass::onUnitCompleteEvent(IEventDataPtr e)
 		unit->getType().isBuilding() == true &&
 		unit->getType().isResourceContainer() == false &&
 		unit->getType() != BWAPI::UnitTypes::Protoss_Pylon &&
-		threadFinished &&
-		currentStateIndex < 50)
+		threadFinished)
 	{
 		changeState();
 	}
-	else if(currentStateIndex >= 50)
-	{
-		EQUEUE( new ChangeBuildOrderEvent(BuildOrderID::PvPEndGame));
-		EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
-	}
+
 }
 
 void GAClass::changeState()
 {
-	getCurrentState().setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
-	currentStateIndex++;
-	stateChanges++;
+	if(currentStateIndex < CHROMOSOME_LENGTH)
+	{
+		getCurrentState().setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
+		currentStateIndex++;
+		stateChanges++;
 
-	if(!stateExecutor.executeState(getCurrentState()))
-		changeState();
+		if(!stateExecutor.executeState(getCurrentState()))
+			changeState();
+	}
+	else if(currentStateIndex >= CHROMOSOME_LENGTH)
+	{
+		//EQUEUE( new ChangeBuildOrderEvent(BuildOrderID::PvPEndGame));
+		//EQUEUE( new ToggleOrderEvent(Order::MacroArmyProduction) );
+		//EQUEUE( new ContinueBuildOrderEvent() );
+	}	
+}
+
+Chromosome& GAClass::getCurrentChromosome()
+{
+	return population.at(currentChromosomeIndex);
 }
 
 State& GAClass::getCurrentState()
@@ -98,8 +111,7 @@ void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTi
 
 	fitness *= 10000;
 
-	Chromosome& chromo = getCurrentChromosome();
-	chromo.setFitness(fitness);
+	
 
 	bool nonTestedChromosomeFound = false;
 	for (size_t i = 0; i < population.size(); i++)
@@ -115,6 +127,10 @@ void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTi
 		status = 2; // 2 = finishedGeneration
 	}
 
+
+	while(!threadFinished){ Sleep(1000); }
+
+	getCurrentChromosome().setFitness(fitness);
 	savePopulation();
 	saveGAStatus();
 	Stats::logPop(population, elapsedTime, winner);
@@ -169,7 +185,7 @@ void GAClass::update(IEventDataPtr e)
 void GAClass::onStarcraftStart(IEventDataPtr e)
 {
 	this->threadFinished = false;
-	HANDLE h = CreateThread( 
+	CreateThread( 
             NULL,           // default security attributes
             0,              // use default stack size  
             GAThread,       // thread function name
@@ -178,10 +194,7 @@ void GAClass::onStarcraftStart(IEventDataPtr e)
             NULL);			// returns the thread identifier 
 }
 
-Chromosome& GAClass::getCurrentChromosome()
-{
-	return population.at(currentChromosomeIndex);
-}
+
 
 
 void GAClass::savePopulation()
@@ -209,8 +222,7 @@ void GAClass::generateInitialPopulation(int size)
 {
 	for (int i = 0; i < size; i++)
 	{
-		Chromosome c =  GeneticOperator::RandomChromosome();
-		population.push_back(c);
+		population.push_back(GeneticOperator::RandomChromosome());
 	}
 }
 

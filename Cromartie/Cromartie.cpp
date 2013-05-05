@@ -131,7 +131,7 @@ void Cromartie::onFrame()
 		EQUEUE( new UpgradeEvent(BWAPI::UpgradeTypes::Protoss_Air_Weapons, 2) );*/
 		
 		// Debug info please
-		EQUEUE( new ToggleDebugInfoEvent() );
+		//EQUEUE( new ToggleDebugInfoEvent() );
 	}
 	
 

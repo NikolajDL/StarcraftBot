@@ -469,7 +469,7 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 					}
 					else
 					{
-						BWAPI::Broodwar->sendText("DatabaseManager::selectAllChromosomes(): Unable to determine research type");
+						//BWAPI::Broodwar->sendText("DatabaseManager::selectAllChromosomes(): Unable to determine research type");
 					}
 					
 				} else if(sqlite3_step(buildgene_stmt) == SQLITE_ROW)
@@ -480,7 +480,7 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 					s.addGene(g);
 				} else
 				{
-					BWAPI::Broodwar->sendText("DatabaseManager::selectAllChromosomes(): Found unknown gene type in DB with ID = " + geneID);
+					//BWAPI::Broodwar->sendText("DatabaseManager::selectAllChromosomes(): Found unknown gene type in DB with ID = " + geneID);
 				}
 
 				sqlite3_finalize(attackgene_stmt);

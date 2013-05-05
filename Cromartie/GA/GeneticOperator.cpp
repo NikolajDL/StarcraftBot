@@ -5,6 +5,7 @@
 #include "CombatGene.h"
 #include "State.h"
 #include "StarcraftRules.h"
+#include "../Settings.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -217,7 +218,7 @@ Chromosome GeneticOperator::RuleBiasedMutation(const Chromosome& parent)
 	return Chromosome(childStates);
 }
 
-#define CHROMOSOME_LENGTH 50
+
 
 // Generate a completely new chromosome
 Chromosome GeneticOperator::RandomChromosome(void)
