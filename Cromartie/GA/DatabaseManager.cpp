@@ -14,18 +14,45 @@
 
 DatabaseManager::DatabaseManager(void)
 {
+	
 }
 
 
 DatabaseManager::~DatabaseManager(void)
 {
+	
 }
 
 void DatabaseManager::insertChromosomes(std::vector<Chromosome> c)
 {
+	sqlite3_open(SQLITE_FILENAME, &db);
+	std::stringstream ss;
+	ss.str("");
+	ss << "BEGIN;";
+	sqlite3_stmt* begin_stmt;
+	sqlite3_prepare_v2(db,
+		ss.str().c_str(),
+		-1,
+		&begin_stmt,
+		0);
+	sqlite3_step(begin_stmt);
+	sqlite3_finalize(begin_stmt);
+
 	for(size_t i=0;i<c.size();i++)	{
-		this->insertChromosome(c.at(i));
+		this->insertChromosomeNoOpen(c.at(i));
 	}
+
+	ss.str("");
+	ss << "COMMIT;";
+	sqlite3_stmt* commit_stmt;
+	sqlite3_prepare_v2(db,
+		ss.str().c_str(),
+		-1,
+		&commit_stmt,
+		0);
+	sqlite3_step(commit_stmt);
+	sqlite3_finalize(commit_stmt);
+	sqlite3_close(db);
 }
 
 void DatabaseManager::insertAndReplaceChromosomes(std::vector<Chromosome> c)
@@ -36,7 +63,8 @@ void DatabaseManager::insertAndReplaceChromosomes(std::vector<Chromosome> c)
 
 Chromosome DatabaseManager::getCurrentChromosome(void)
 {
-	return selectChromosome(getCurrentChromosomeID());
+	Chromosome c = selectChromosome(getCurrentChromosomeID());
+	return c;
 }
 
 int DatabaseManager::getCurrentChromosomeID(void)
@@ -59,13 +87,14 @@ int DatabaseManager::getCurrentChromosomeID(void)
 		id = sqlite3_column_int(id_stmt, 0);
 	}
 	sqlite3_finalize(id_stmt);
+
+	sqlite3_close(db);
 	return id;
 }
 
 Chromosome DatabaseManager::selectChromosome(int id)
 {
 	sqlite3_open(SQLITE_FILENAME, &db);
-	std::vector<Chromosome> result;
 	std::stringstream ss;
 	ss.str("");
 	ss << "SELECT id, fitness FROM chromosomes WHERE id=" << id << ";";
@@ -209,12 +238,10 @@ Chromosome DatabaseManager::selectChromosome(int id)
 			sqlite3_finalize(gene_stmt);
 		}
 		sqlite3_finalize(state_stmt);
-		result.push_back(c);
 	}	
 	
 	sqlite3_finalize(chromosome_stmt);
 	sqlite3_close(db);
-
 	return c;
 }
 
@@ -326,22 +353,11 @@ void DatabaseManager::eraseDatabaseContent(void)
 	sqlite3_close(db);
 }
 
-void DatabaseManager::insertChromosome(Chromosome c)
+void DatabaseManager::insertChromosomeNoOpen(Chromosome c)
 {
-	sqlite3_open(SQLITE_FILENAME, &db);
+	//sqlite3_open(SQLITE_FILENAME, &db);
 
 	std::stringstream ss;
-
-	ss.str("");
-	ss << "BEGIN;";
-	sqlite3_stmt* begin_stmt;
-	sqlite3_prepare_v2(db,
-		ss.str().c_str(),
-		-1,
-		&begin_stmt,
-		0);
-	sqlite3_step(begin_stmt);
-	sqlite3_finalize(begin_stmt);
 
 	ss.str("");
 	ss << "INSERT INTO chromosomes(fitness) VALUES(" << c.getFitness() << ");";
@@ -443,19 +459,6 @@ void DatabaseManager::insertChromosome(Chromosome c)
 			sqlite3_finalize(derivedgene_stmt);
 		}
 	}
-
-	ss.str("");
-	ss << "COMMIT;";
-	sqlite3_stmt* commit_stmt;
-	sqlite3_prepare_v2(db,
-		ss.str().c_str(),
-		-1,
-		&commit_stmt,
-		0);
-	sqlite3_step(commit_stmt);
-	sqlite3_finalize(commit_stmt);
-
-	sqlite3_close(db);
 }
 
 void DatabaseManager::updateChromosome(Chromosome c)
@@ -464,18 +467,6 @@ void DatabaseManager::updateChromosome(Chromosome c)
 
 	std::stringstream ss;
 
-	//ss.str("");
-	//ss << "BEGIN;";
-	//sqlite3_stmt* begin_stmt;
-	//sqlite3_prepare_v2(db,
-	//	ss.str().c_str(),
-	//	-1,
-	//	&begin_stmt,
-	//	0);
-	//sqlite3_step(begin_stmt);
-	//sqlite3_finalize(begin_stmt);
-
-	
 	ss.str("");
 	ss	<< "UPDATE chromosomes "
 		<< "SET fitness=" << c.getFitness() << " "
@@ -489,27 +480,7 @@ void DatabaseManager::updateChromosome(Chromosome c)
 	sqlite3_step(chromosome_stmt);
 	sqlite3_finalize(chromosome_stmt);
 
-	//ss.str("");
-	//ss << "COMMIT;";
-	//sqlite3_stmt* commit_stmt;
-	//sqlite3_prepare_v2(db,
-	//	ss.str().c_str(),
-	//	-1,
-	//	&commit_stmt,
-	//	0);
-	//sqlite3_step(commit_stmt);
-	//sqlite3_finalize(commit_stmt);
-
 	sqlite3_close(db);
-}
-
-
-void DatabaseManager::updateChromosomes(std::vector<Chromosome> c)
-{
-	for(size_t i=0; i<c.size();i++)
-	{
-		updateChromosome(c.at(i));
-	}
 }
 
 void DatabaseManager::updateState(State s)
@@ -517,18 +488,6 @@ void DatabaseManager::updateState(State s)
 	sqlite3_open(SQLITE_FILENAME, &db);
 
 	std::stringstream ss;
-
-	//ss.str("");
-	//ss << "BEGIN;";
-	//sqlite3_stmt* begin_stmt;
-	//sqlite3_prepare_v2(db,
-	//	ss.str().c_str(),
-	//	-1,
-	//	&begin_stmt,
-	//	0);
-	//sqlite3_step(begin_stmt);
-	//sqlite3_finalize(begin_stmt);
-
 	
 	ss.str("");
 	ss	<< "UPDATE states "
@@ -542,17 +501,6 @@ void DatabaseManager::updateState(State s)
 		0);
 	sqlite3_step(state_stmt);
 	sqlite3_finalize(state_stmt);
-	
-	//ss.str("");
-	//ss << "COMMIT;";
-	//sqlite3_stmt* commit_stmt;
-	//sqlite3_prepare_v2(db,
-	//	ss.str().c_str(),
-	//	-1,
-	//	&commit_stmt,
-	//	0);
-	//sqlite3_step(commit_stmt);
-	//sqlite3_finalize(commit_stmt);
 
 	sqlite3_close(db);
 }

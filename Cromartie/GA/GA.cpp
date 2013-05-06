@@ -145,7 +145,7 @@ static DWORD WINAPI GAThread(LPVOID lpParam)
 
 void GAClass::update(IEventDataPtr e)
 {
-	if (stateChanges < 1 && threadFinished)
+	if (threadFinished && stateChanges < 1 )
 	{
 		stateChanges++;
 		BWAPI::Broodwar->sendText("Skipping state change");
