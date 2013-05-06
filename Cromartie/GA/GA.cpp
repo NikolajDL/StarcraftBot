@@ -174,6 +174,10 @@ void GAClass::createNextGeneration()
 	// Replace this class if you want another selection aglorithm
 	TournamentSelection ts;
 	ts.selectAndMutate(pop);
+	for(int i=0;i<pop.size();i++)
+	{
+		pop.at(i).setFitness(-999);
+	}
 	db.insertAndReplaceChromosomes(pop);
 }
 

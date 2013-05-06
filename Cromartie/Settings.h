@@ -10,4 +10,4 @@
 #define FORGE_LIMIT 2
 #define GATEWAY_LIMIT 50
 
-#define FRAMECOUNT_LIMIT 24 * 60 * 10
+#define FRAMECOUNT_LIMIT 24 * 60 * 8
