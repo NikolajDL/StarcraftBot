@@ -2,7 +2,9 @@
 #include "GA/GeneticOperator.h"
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
+#include <boost/random/uniform_real_distribution.hpp>
 #include "Settings.h"
+#include "GA/Sorting.h"
 
 extern boost::random::mt19937 randomGen;
 
@@ -17,62 +19,22 @@ RouletteSelection::~RouletteSelection(void)
 
 void RouletteSelection::selectAndMutate(std::vector<Chromosome>& population)
 {
-	boost::random::uniform_int_distribution<> dist(0, population.size()-1);
-	
-	std::vector<int> sampleIndex;
-	std::vector<Chromosome> sample;
+	// Removes the worst chromsomes from the population
+	Sorting::sort(population);
 
-	if (population.size() < SAMPLE_SIZE)
+	for (int i = 0; i < population.size(); i++)
 	{
-		BWAPI::Broodwar->sendText("Sample size bigger than pop size. This is not allowed\n");
-		return;
+		population.at(i).temp = i;
 	}
 
-	// We take a random sample of size sampleSize from the population
-	while (sample.size() < SAMPLE_SIZE)
-	{
-		int random = dist(randomGen);
-		Chromosome& randomChromosome = population.at(random);
-		// temp is used to store the index of the chromosome in population
-		randomChromosome.temp = random;
-		// Checks if chossenIndex already contains the chromosome
-		bool alreadyInSample = false;
-
-		for (size_t i = 0; i < sampleIndex.size(); i++)
-		{
-			if (random == sampleIndex.at(i))
-				alreadyInSample = true;
-		}
-		if(alreadyInSample == false)
-		{
-			sampleIndex.push_back(random);
-			sample.push_back(randomChromosome);
-		}
-		else
-		{
-			// The chromosome already exists in the sample, so no add
-		}
-	}
-
-	// Sorts the sample according to fitness value. We do this so that we can pick out the best from the sample
-	
-	std::vector<Chromosome> winners;
 	std::vector<Chromosome> loosers;
-
-	// We add the best chromosomes from the sample to winners
-	for (int i = 0; i < WINNING_SIZE; i++)
-	{
-		winners.push_back(sample.at(i));
-	}
 
 	// We add the worst chromosome from the sample to the loosers
 	for (int i = 0; i < LOOSING_SIZE; i++)
 	{
-		loosers.push_back(sample.at(sample.size() - 1 - i));
+		loosers.push_back(population.at(population.size() - 1 - i));
 	}
 
-
-	
 	for (size_t i =0; i < loosers.size(); i++)
 	{
 		for (size_t j = 0; i < population.size(); j++)
@@ -83,50 +45,85 @@ void RouletteSelection::selectAndMutate(std::vector<Chromosome>& population)
 				break;
 			}
 		}
-		
 	}
 
 
 
-	// For each winner we apply a genetic operator
-	for (size_t i = 0; i < winners.size(); i++)
-	{
-		boost::random::uniform_int_distribution<> dist2(0, 9);
-		int random = dist(randomGen);
 
-		if (random > 6) // 30% chance
+	
+	boost::random::uniform_real_distribution<> dist(0, 1);
+	
+	double totalFitness = 0;
+
+	for (int i = 0; i < population.size(); i++)
+	{
+		totalFitness += population.at(i).getFitness();
+	}
+
+	double sumProp = 0;
+
+	for (int i = 0; i < population.size(); i++)
+	{
+		double prop = sumProp + (population.at(i).getFitness() / totalFitness);
+		population.at(i).prop = prop;
+		sumProp += prop;
+	}
+
+	//std::vector<int> sampleIndex;
+	std::vector<Chromosome> sample;
+
+	for (int i = 0; i < WINNING_SIZE;i ++)
+	{
+		double random = dist(randomGen);
+		for (int j = 0; j < population.size(); j++)
 		{
-			 Chromosome child = GeneticOperator::RuleReplaceMutation(winners.at(i));
-			 population.push_back(child);
-			 
-		}
-		else if (random < 7 && random > 3) // 30% chance
-		{
-			Chromosome child = GeneticOperator::RuleBiasedMutation(winners.at(i));
-			population.push_back(child);
-		}
-		else if (random < 4 && random > 0) // 30% chance
-		{
-			bool didFindThreeMatches = false;
-			for (size_t j = 0; j < population.size(); j++)
+			if (j != 0)
 			{
-				bool threeMatchesFound;
-				int parent2 = i+1 == winners.size() ? i-1 : i+1;
-				Chromosome child = GeneticOperator::StateCrossover(winners.at(i), winners.at(parent2), threeMatchesFound);
-				if (threeMatchesFound == true)
+				if (random < population.at(j).prop && random > population.at(j-1).prop)
 				{
-					population.push_back(child);
-					didFindThreeMatches = true;
+					sample.push_back(population.at(j));
 					break;
 				}
 			}
-			if (!didFindThreeMatches)
-				BWAPI::Broodwar->sendText("Never found three state matches for State Crossover opperation");
-		}
-		else if (random == 0) // 10% chance
-		{
-			Chromosome child = GeneticOperator::RandomChromosome();
-			population.push_back(child);
+			else
+			{
+				if (random < population.at(j).prop)
+				{
+					sample.push_back(population.at(j));
+					break;
+				}
+			}
 		}
 	}
+
+//	for all members of population
+//    sum += fitness of this individual
+//end for
+//
+//for all members of population
+//    probability = sum of probabilities + (fitness / sum)
+//    sum of probabilities += probability
+//end for
+//
+//loop until new population is full
+//     do this twice
+//         number = Random between 0 and 1
+//       for all members of population
+//           if number > probability but less than next probability 
+//                then you have been selected
+//       end for
+//     end
+//     create offspring
+//end loop
 }
+
+//
+//template <typename N> N getRandom(N min, N max)
+//{
+//  timeval t;
+//  gettimeofday(&t,NULL);
+//  boost::mt19937 seed( (int)t.tv_sec );
+//  boost::uni dist(min,max);
+//  boost::variate_generator<boost::mt19937&, boost::uniform_real<> > random(seed,dist);
+//  return random(); 
+//}

@@ -94,7 +94,7 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 	for (size_t i = 0; i < winners.size(); i++)
 	{
 		boost::random::uniform_int_distribution<> dist2(0, 9);
-		int random = dist(randomGen);
+		int random = dist2(randomGen);
 
 		if (random > 6) // 30% chance
 		{

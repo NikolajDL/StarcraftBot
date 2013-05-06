@@ -13,6 +13,7 @@ public:
 	Chromosome(std::vector<State> s);
 	~Chromosome(void);
 	int temp;
+	double prop;
 	void setFitness(double value);
 	std::vector<State> getStates(void) const;
 	State& getState(int index);
