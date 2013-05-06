@@ -50,7 +50,6 @@ void RouletteSelection::selectAndMutate(std::vector<Chromosome>& population)
 
 
 
-	
 	boost::random::uniform_real_distribution<> dist(0, 1);
 	
 	double totalFitness = 0;
@@ -70,7 +69,7 @@ void RouletteSelection::selectAndMutate(std::vector<Chromosome>& population)
 	}
 
 	//std::vector<int> sampleIndex;
-	std::vector<Chromosome> sample;
+	std::vector<Chromosome> winners;
 
 	for (int i = 0; i < WINNING_SIZE;i ++)
 	{
@@ -81,7 +80,7 @@ void RouletteSelection::selectAndMutate(std::vector<Chromosome>& population)
 			{
 				if (random < population.at(j).prop && random > population.at(j-1).prop)
 				{
-					sample.push_back(population.at(j));
+					winners.push_back(population.at(j));
 					break;
 				}
 			}
@@ -89,10 +88,51 @@ void RouletteSelection::selectAndMutate(std::vector<Chromosome>& population)
 			{
 				if (random < population.at(j).prop)
 				{
-					sample.push_back(population.at(j));
+					winners.push_back(population.at(j));
 					break;
 				}
 			}
+		}
+	}
+
+		// For each winner we apply a genetic operator
+	for (size_t i = 0; i < winners.size(); i++)
+	{
+		boost::random::uniform_int_distribution<> dist2(0, 9);
+		int random = dist2(randomGen);
+
+		if (random > 6) // 30% chance
+		{
+			 Chromosome child = GeneticOperator::RuleReplaceMutation(winners.at(i));
+			 population.push_back(child);
+			 
+		}
+		else if (random < 7 && random > 3) // 30% chance
+		{
+			Chromosome child = GeneticOperator::RuleBiasedMutation(winners.at(i));
+			population.push_back(child);
+		}
+		else if (random < 4 && random > 0) // 30% chance
+		{
+			bool threeMatchesFound = false;
+			for(size_t j=0;j<winners.size(); j++)
+			{
+				if(j==i) continue;
+				Chromosome child = GeneticOperator::StateCrossover(winners.at(i), winners.at(j), threeMatchesFound);
+				if(threeMatchesFound) 
+				{
+					population.push_back(child);
+					break;
+				}
+			}
+			// If the StateCrossover operator was unsuccesful, keep population size constant
+			if(!threeMatchesFound)
+				population.push_back(GeneticOperator::RandomChromosome());
+		}
+		else if (random == 0) // 10% chance
+		{
+			Chromosome child = GeneticOperator::RandomChromosome();
+			population.push_back(child);
 		}
 	}
 
