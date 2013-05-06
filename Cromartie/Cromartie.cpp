@@ -88,7 +88,7 @@ void Cromartie::onStart()
 
 void Cromartie::onEnd(bool isWinner)
 {
-	GA::Instance().onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), 24*60*30);
+	GA::Instance().onGameEnd(isWinner, ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore(), BWAPI::Broodwar->getFrameCount(), FRAMECOUNT_LIMIT);
 	BuildOrderManager::Instance().onEnd(isWinner);
 	GameMemory::Instance().onEnd();
 }
