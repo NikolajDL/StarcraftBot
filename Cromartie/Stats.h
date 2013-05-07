@@ -4,7 +4,8 @@
 class Stats
 {
 public:
-	static void logPop(std::vector<Chromosome> pop, int elabsedTime, bool winner);
-	static void writeToFile(double best, double avgint, int elabsedTime, int unitScore, int killScore, int buildingScore, bool winner);
+	static void logPop(std::vector<Chromosome> pop);
+	static void writeToFile(double best, double avgint);
+	static void logInidivdualGame(bool winner, int elabsedTime, int unitScore, int killScore, int buildingScore);
 };
 

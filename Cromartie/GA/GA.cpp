@@ -114,7 +114,7 @@ void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTi
 		status = 2; // 2 = finishedGeneration
 	}
 	
-	saveGAStatus();
+	Stats::logInidivdualGame(winner, elapsedTime, BWAPI::Broodwar->self()->getUnitScore(), BWAPI::Broodwar->self()->getKillScore(), BWAPI::Broodwar->self()->getBuildingScore());
 }
 
 static DWORD WINAPI GAThread(LPVOID lpParam)
@@ -169,7 +169,7 @@ void GAClass::onStarcraftStart(IEventDataPtr e)
 void GAClass::createNextGeneration()
 {
 	std::vector<Chromosome> pop = db.selectAllChromosomes();
-	Stats::logPop(pop, 0, false);
+	Stats::logPop(pop);
 
 	// Replace this class if you want another selection aglorithm
 	TournamentSelection ts;

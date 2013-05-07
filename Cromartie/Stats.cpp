@@ -5,7 +5,7 @@
 #include <fstream>
 #include "ScoreHelper.h"
 
-void Stats::logPop(std::vector<Chromosome> pop, int elabsedTime, bool winner)
+void Stats::logPop(std::vector<Chromosome> pop)
 {
 	Sorting::sort(pop);
 
@@ -24,13 +24,11 @@ void Stats::logPop(std::vector<Chromosome> pop, int elabsedTime, bool winner)
 
 	avgFitness = avgFitness / (double) count;
 
-	writeToFile(bestFitness, avgFitness, elabsedTime, BWAPI::Broodwar->enemy()->getUnitScore(), BWAPI::Broodwar->enemy()->getKillScore(), BWAPI::Broodwar->enemy()->getBuildingScore(), winner);
+	writeToFile(bestFitness, avgFitness);
 }
 
-void Stats::writeToFile(double best, double avg, int elabsedTime, int unitScore, int killScore, int buildingScore, bool winner)
+void Stats::logInidivdualGame(bool winner, int elabsedTime, int unitScore, int killScore, int buildingScore)
 {
-	std::string bestStr = boost::lexical_cast<std::string>(best);
-	std::string avgStr = boost::lexical_cast<std::string>(avg);
 	std::string et = boost::lexical_cast<std::string>(elabsedTime);
 
 	std::string us = boost::lexical_cast<std::string>(unitScore);
@@ -38,8 +36,7 @@ void Stats::writeToFile(double best, double avg, int elabsedTime, int unitScore,
 	std::string bs = boost::lexical_cast<std::string>(buildingScore);
 
 	 std::ofstream myfile;
-	 myfile.open ("stats.txt", std::ios::app);
-	 myfile << bestStr << ";" << avgStr << ";" << et << ";" << us << ";" << ks << ";" << bs << ";";
+	 myfile.open ("statsForEachGame.txt", std::ios::app);
 	 if (winner == true)
 	 {
 		 myfile << "winner";
@@ -48,6 +45,19 @@ void Stats::writeToFile(double best, double avg, int elabsedTime, int unitScore,
 	 {
 		 myfile << "looser";
 	 }
+	 myfile << ";" << et << ";" << us << ";" << ks << ";" << bs << ";";
+	 myfile << "\n";
+	 myfile.close();
+}
+
+void Stats::writeToFile(double best, double avg)
+{
+	std::string bestStr = boost::lexical_cast<std::string>(best);
+	std::string avgStr = boost::lexical_cast<std::string>(avg);
+
+	 std::ofstream myfile;
+	 myfile.open ("statsForEachGeneration.txt", std::ios::app);
+	 myfile << bestStr << ";" << avgStr <<
 	 myfile << "\n";
 	 myfile.close();
 }
