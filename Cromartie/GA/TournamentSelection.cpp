@@ -124,7 +124,7 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 			if(!threeMatchesFound)
 				population.push_back(GeneticOperator::RandomChromosome());
 		}
-		else if (random == 0) // 10% chance
+		else // 10% chance
 		{
 			Chromosome child = GeneticOperator::RandomChromosome();
 			population.push_back(child);
