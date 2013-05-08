@@ -27,13 +27,15 @@ void Stats::logPop(std::vector<Chromosome> pop)
 	writeToFile(bestFitness, avgFitness);
 }
 
-void Stats::logInidivdualGame(bool winner, int elabsedTime, int unitScore, int killScore, int buildingScore)
+void Stats::logInidivdualGame(bool winner, double fitness, int elabsedTime, int unitScore, int killScore, int buildingScore)
 {
 	std::string et = boost::lexical_cast<std::string>(elabsedTime);
 
 	std::string us = boost::lexical_cast<std::string>(unitScore);
 	std::string ks = boost::lexical_cast<std::string>(killScore);
 	std::string bs = boost::lexical_cast<std::string>(buildingScore);
+
+	std::string fit = boost::lexical_cast<std::string>(fitness);
 
 	 std::ofstream myfile;
 	 myfile.open ("statsForEachGame.txt", std::ios::app);
@@ -45,7 +47,7 @@ void Stats::logInidivdualGame(bool winner, int elabsedTime, int unitScore, int k
 	 {
 		 myfile << "looser";
 	 }
-	 myfile << ";" << et << ";" << us << ";" << ks << ";" << bs << ";";
+	 myfile << ";" << fit << ";" << et << ";" << us << ";" << ks << ";" << bs << ";";
 	 myfile << "\n";
 	 myfile.close();
 }

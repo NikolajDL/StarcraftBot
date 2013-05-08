@@ -114,7 +114,7 @@ void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTi
 		status = 2; // 2 = finishedGeneration
 	}
 	
-	Stats::logInidivdualGame(winner, elapsedTime, BWAPI::Broodwar->self()->getUnitScore(), BWAPI::Broodwar->self()->getKillScore(), BWAPI::Broodwar->self()->getBuildingScore());
+	Stats::logInidivdualGame(winner, fitness, elapsedTime, BWAPI::Broodwar->self()->getUnitScore(), BWAPI::Broodwar->self()->getKillScore(), BWAPI::Broodwar->self()->getBuildingScore());
 	saveGAStatus();
 }
 

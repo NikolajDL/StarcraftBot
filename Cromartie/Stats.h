@@ -6,6 +6,6 @@ class Stats
 public:
 	static void logPop(std::vector<Chromosome> pop);
 	static void writeToFile(double best, double avgint);
-	static void logInidivdualGame(bool winner, int elabsedTime, int unitScore, int killScore, int buildingScore);
+	static void logInidivdualGame(bool winner, double fitness, int elabsedTime, int unitScore, int killScore, int buildingScore);
 };
 
