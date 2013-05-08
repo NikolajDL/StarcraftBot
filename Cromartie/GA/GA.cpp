@@ -115,6 +115,7 @@ void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTi
 	}
 	
 	Stats::logInidivdualGame(winner, elapsedTime, BWAPI::Broodwar->self()->getUnitScore(), BWAPI::Broodwar->self()->getKillScore(), BWAPI::Broodwar->self()->getBuildingScore());
+	saveGAStatus();
 }
 
 static DWORD WINAPI GAThread(LPVOID lpParam)
