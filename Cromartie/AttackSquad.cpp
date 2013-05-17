@@ -12,6 +12,7 @@
 AttackSquadTask::AttackSquadTask(ArmyBehaviour behaviour)
 	: BaseSquadTask(behaviour)
 	, mIsAttacking(false)
+	, mWasAttacking(false)
 {
 }
 
@@ -68,6 +69,16 @@ bool AttackSquadTask::update()
 {
 	Goal squadsGoal;
 
+	// Do not attack if we have too few units
+	if(mIsAttacking && mUnits.size() <= 4)
+		setIsAttacking(false);
+
+	// If we attacked earlier and isn't attacking anymore, move the saved units to the current units
+	if(mWasAttacking && !mIsAttacking)
+	{
+		mUnits += mSavedUnits;
+		mSavedUnits.clear();
+	}
 
 	// Just attack if its not mining anywhere
 	bool hasMiningBases = false;
@@ -105,6 +116,7 @@ bool AttackSquadTask::update()
 
 	if(baseUnderAttack)
 	{
+		setIsAttacking(false);
 		squadsGoal = Goal(ActionType::Defend, baseToDefend->getEnemyThreats(), avoidGroup);
 	}
 
@@ -133,7 +145,7 @@ bool AttackSquadTask::update()
 	if(squadsGoal.getGoalType() == GoalType::None && baseToDefend)
 		squadsGoal = Goal(ActionType::Defend, baseToDefend->getCenterLocation(), engageGroup, avoidGroup);
 
-	if(squadsGoal.getGoalType() == GoalType::None || mUnits.size()<=0)
+	if(squadsGoal.getGoalType() == GoalType::None || mUnits.size()<=4)
 	{
 		if(!BorderTracker::Instance().getBorderPositions(PositionType::TechDefenseChokepoint).empty())
 			squadsGoal = Goal(ActionType::Hold, getLargestChoke(BorderTracker::Instance().getBorderPositions(PositionType::TechDefenseChokepoint)).mChoke->getCenter(), engageGroup, avoidGroup);
@@ -145,8 +157,9 @@ bool AttackSquadTask::update()
 	{
 		if(squadsGoal.getActionType() != ActionType::Attack || (squadsGoal.getGoalType() == GoalType::Base && !squadsGoal.getBase()->isEnemyBase()))
 		{
-			mIsAttacking = false;
+			setIsAttacking(false);
 			mUnits += mSavedUnits;
+			mSavedUnits.clear();
 			LOGMESSAGEWARNING(String_Builder() << "Failed base attacks increased");
 		}
 	}

@@ -2,7 +2,7 @@
 boost/
 # ...and Starcraft
 Starcraft/
-
+BWAPI/
 
 # Vi gider ik de skide merge backup filer
 *.orig

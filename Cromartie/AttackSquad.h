@@ -35,13 +35,24 @@ public:
 
 	virtual void updateRequirements();
 
-	virtual void attack() { mIsAttacking = true; };
-	virtual void stop() { mIsAttacking = false; };
+	virtual void attack() { setIsAttacking(true); };
+	virtual void stop() { setIsAttacking(false); };
+
+	void setIsAttacking(bool value)
+	{
+		if(mIsAttacking && !value)
+			mWasAttacking = true;
+		else if(!mIsAttacking && value)
+			mWasAttacking = false;
+
+		mIsAttacking = value;
+	}
 
 	virtual const UnitGroup units() const { return mUnits; }
 
 private:
 	bool mIsAttacking;
+	bool mWasAttacking;
 	UnitGroup mUnits;
 	UnitGroup mSavedUnits;
 	std::map<Unit, Behaviour> mUnitBehaviours;
