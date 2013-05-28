@@ -169,13 +169,35 @@ void GAClass::onStarcraftStart(IEventDataPtr e)
 
 void GAClass::createNextGeneration()
 {
-	std::vector<Chromosome> pop = db.selectAllChromosomes();
-	Stats::logPop(pop);
+	static const std::string GENERATION_INPROGRESS_FILENAME = "generating.txt";
 
-	// Replace this class if you want another selection aglorithm
-	TournamentSelection ts;
-	ts.selectAndMutate(pop);
-	db.insertAndReplaceChromosomes(pop);
+	// Check if anybody else is generating a generation
+	std::ifstream fileExists(GENERATION_INPROGRESS_FILENAME.c_str());
+	if (!fileExists) {
+		std::ofstream myfile (GENERATION_INPROGRESS_FILENAME.c_str());
+		if (myfile.is_open())
+		{
+			myfile.close();
+		}
+
+		std::vector<Chromosome> pop = db.selectAllChromosomes();
+		Stats::logPop(pop);
+
+		// Replace this class if you want another selection aglorithm
+		TournamentSelection ts;
+		ts.selectAndMutate(pop);
+		db.insertAndReplaceChromosomes(pop);
+
+		remove(GENERATION_INPROGRESS_FILENAME.c_str());
+	}
+	else {
+		// Someone else is generating a generation, wait for them to finish
+		while(fileExists) 
+		{
+			Sleep( 1000 );
+			fileExists.open(GENERATION_INPROGRESS_FILENAME.c_str());
+		}
+	}
 }
 
 std::vector<Chromosome> GAClass::generateInitialPopulation(int size)
@@ -200,7 +222,7 @@ void GAClass::makeGAStatusFile()
 
 void GAClass::saveGAStatus()
 {
-	std::ostringstream convert;
+	//std::ostringstream convert;
 
 	std::ofstream myfile ("status.txt");
 	if (myfile.is_open())
