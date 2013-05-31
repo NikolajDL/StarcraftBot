@@ -21,7 +21,6 @@ private:
 	void changeState(void);
 public:	
 	int status; // 0 = FirstRun 1 = Running 2 = FinishedGeneration 3 = Finished
-	bool threadFinished;
 	DatabaseManager db;
 	Chromosome mChromosome;
 	void createNextGeneration(void);

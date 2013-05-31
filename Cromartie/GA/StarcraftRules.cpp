@@ -39,8 +39,7 @@ std::tr1::shared_ptr<CombatGene> StarcraftRules::getValidCombatGene(const State&
 		int randomAmount = dist2(randomGen);
 		// Create a CombatGene and set the unit type and amount
 		std::tr1::shared_ptr<CombatGene> cg( new CombatGene(randomUnit, randomAmount) );
-
-	return cg;
+		return cg;
 	}
 }
 
@@ -79,8 +78,6 @@ std::tr1::shared_ptr<ResearchGene> StarcraftRules::getValidResearchGene(const St
 
 std::tr1::shared_ptr<AttackGene> StarcraftRules::getValidAttackGene(const State& s)
 {
-	
-
 	// Choose a random number between 0 and 9
 	boost::random::uniform_int_distribution<> dist(0, 1);
 	int randomNrGene = dist(randomGen);
@@ -110,7 +107,6 @@ std::tr1::shared_ptr<BuildGene> StarcraftRules::getValidBuildGene(const State& s
 	// Create the build gene and assign the random building to the gene
 	std::tr1::shared_ptr<BuildGene> bg( new BuildGene(randomBuilding) );
 	
-
 	return bg;
 }
 

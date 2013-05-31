@@ -20,14 +20,12 @@ void GAClass::onMorph(IEventDataPtr e)
 	BWAPI::Unit* unit = pEventData->m_Unit;
 
 	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
-		unit->getType() == BWAPI::UnitTypes::Protoss_Assimilator &&
-		threadFinished)
+		unit->getType() == BWAPI::UnitTypes::Protoss_Assimilator)
 	{
 		changeState();
 	}
 }
 
-int pylonCtr = 0;
 void GAClass::onUnitCompleteEvent(IEventDataPtr e)
 {
 	std::tr1::shared_ptr<UnitCompleteEvent> pEventData = std::tr1::static_pointer_cast<UnitCompleteEvent>(e);
@@ -36,18 +34,9 @@ void GAClass::onUnitCompleteEvent(IEventDataPtr e)
 	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
 		unit->getType().isBuilding() == true &&
 		unit->getType().isResourceContainer() == false &&
-		unit->getType() != BWAPI::UnitTypes::Protoss_Pylon &&
-		threadFinished)
+		unit->getType() != BWAPI::UnitTypes::Protoss_Pylon)
 	{
 		changeState();
-	}
-	
-	if (unit->getPlayer() == BWAPI::Broodwar->self() &&
-		unit->getType() == BWAPI::UnitTypes::Protoss_Pylon)
-	{
-		pylonCtr++;
-		if(pylonCtr > 1 && !threadFinished)
-			while(!threadFinished){ Sleep(1000); }
 	}
 }
 
@@ -108,46 +97,20 @@ void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTi
 	mChromosome.setFitness(fitness);
 	db.updateChromosome(mChromosome);
 
+	Stats::logInidivdualGame(winner, fitness, elapsedTime, BWAPI::Broodwar->self()->getUnitScore(), BWAPI::Broodwar->self()->getKillScore(), BWAPI::Broodwar->self()->getBuildingScore());
+
 	if(db.getCurrentChromosome().getId() == 0)
 	{
-		status = 2; // 2 = finishedGeneration
+		createNextGeneration();
 	}
 	
-	Stats::logInidivdualGame(winner, fitness, elapsedTime, BWAPI::Broodwar->self()->getUnitScore(), BWAPI::Broodwar->self()->getKillScore(), BWAPI::Broodwar->self()->getBuildingScore());
+	
 	saveGAStatus();
 }
 
-static DWORD WINAPI GAThread(LPVOID lpParam)
-{
-	Sleep( 5000 );
-	GAClass* This = (GAClass*)lpParam;
-
-	This->loadGAStatus();
-	if (This->status == 0) // 0 = FirstRun
-	{
-		std::vector<Chromosome> pop = This->generateInitialPopulation(POP_SIZE);
-		This->db.insertAndReplaceChromosomes(pop);
-		This->status = 1; // 1 = running
-		This->saveGAStatus();
-	}
-	else if (This->status == 1) // 1 = running
-	{
-		//This->population = This->db.selectAllChromosomes();
-	}
-	else if (This->status == 2) // 2 = finishedGeneration
-	{
-		This->createNextGeneration();
-		This->status = 1;
-	}
-
-	This->mChromosome = This->db.getCurrentChromosome();
-	This->threadFinished = true;
-	return 0;
-};
-
 void GAClass::update(IEventDataPtr e)
 {
-	if (threadFinished && stateChanges < 1 )
+	if (stateChanges < 1 )
 	{
 		stateChanges++;
 		BWAPI::Broodwar->sendText("Skipping state change");
@@ -157,20 +120,21 @@ void GAClass::update(IEventDataPtr e)
 
 void GAClass::onStarcraftStart(IEventDataPtr e)
 {
-	this->threadFinished = false;
-	CreateThread( 
-            NULL,           // default security attributes
-            0,              // use default stack size  
-            GAThread,       // thread function name
-            (void*) this,   // argument to thread function 
-            0,              // use default creation flags 
-            NULL);			// returns the thread identifier 
+	this->loadGAStatus();
+	if (this->status == 0) // 0 = FirstRun
+	{
+		std::vector<Chromosome> pop = this->generateInitialPopulation(POP_SIZE);
+		this->db.insertAndReplaceChromosomes(pop);
+		this->status = 1; // 1 = running
+		this->saveGAStatus();
+	}
+
+	this->mChromosome = this->db.getCurrentChromosome();
 }
 
 
 void GAClass::createNextGeneration()
 {
-
 	// Check if anybody else is generating a generation
 	std::ifstream fileExists(GENERATION_PROGRESS.c_str());
 	if (!fileExists) {

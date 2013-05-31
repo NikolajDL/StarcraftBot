@@ -1,10 +1,10 @@
 #pragma once
 
-#define POP_SIZE 300
+#define POP_SIZE 10
 #define SAMPLE_SIZE 10
 #define WINNING_SIZE 2
 #define LOOSING_SIZE 2
-#define CHROMOSOME_LENGTH 50
+#define CHROMOSOME_LENGTH 5
 
 #define NEXUS_LIMIT 5
 #define FORGE_LIMIT 2
