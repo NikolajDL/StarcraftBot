@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include "ScoreHelper.h"
+#include "Settings.h"
 
 void Stats::logPop(std::vector<Chromosome> pop)
 {
@@ -38,7 +39,13 @@ void Stats::logInidivdualGame(bool winner, double fitness, int elabsedTime, int 
 	std::string fit = boost::lexical_cast<std::string>(fitness);
 
 	 std::ofstream myfile;
-	 myfile.open ("statsForEachGame.txt", std::ios::app);
+	 myfile.open (STATS_FOR_EACH_GAME, std::ios::app);
+
+	 while (myfile.is_open() == false)
+	 {
+		 	 myfile.open (STATS_FOR_EACH_GAME, std::ios::app);
+	 }
+
 	 if (winner == true)
 	 {
 		 myfile << "winner";
@@ -58,7 +65,13 @@ void Stats::writeToFile(double best, double avg)
 	std::string avgStr = boost::lexical_cast<std::string>(avg);
 
 	 std::ofstream myfile;
-	 myfile.open ("statsForEachGeneration.txt", std::ios::app);
+	 myfile.open (STATS_FOR_EACH_GENERATION, std::ios::app);
+
+	 while (myfile.is_open() == false)
+	 {
+		 	 myfile.open (STATS_FOR_EACH_GENERATION, std::ios::app);
+	 }
+
 	 myfile << bestStr << ";" << avgStr <<
 	 myfile << "\n";
 	 myfile.close();

@@ -94,7 +94,7 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 	for (size_t i = 0; i < winners.size(); i++)
 	{
 		boost::random::uniform_int_distribution<> dist2(0, 9);
-		int random = dist(randomGen);
+		int random = dist2(randomGen);
 
 		if (random > 6) // 30% chance
 		{
@@ -109,22 +109,22 @@ void TournamentSelection::selectAndMutate(std::vector<Chromosome>& population)
 		}
 		else if (random < 4 && random > 0) // 30% chance
 		{
-			Chromosome child = GeneticOperator::RuleReplaceMutation(winners.at(i));
-			 population.push_back(child);
-			//bool threeMatchesFound = false;
-			//for(size_t j=0;j<winners.size(); j++)
-			//{
-			//	if(j==i) continue;
-			//	Chromosome child = GeneticOperator::StateCrossover(winners.at(i), winners.at(j), threeMatchesFound);
-			//	if(threeMatchesFound) 
-			//	{
-			//		population.push_back(child);
-			//		break;
-			//	}
-			//}
-			//// If the StateCrossover operator was unsuccesful, keep population size constant
-			//if(!threeMatchesFound)
-			//	population.push_back(GeneticOperator::RandomChromosome());
+			//Chromosome child = GeneticOperator::RuleReplaceMutation(winners.at(i));
+			// population.push_back(child);
+			bool threeMatchesFound = false;
+			for(size_t j=0;j<winners.size(); j++)
+			{
+				if(j==i) continue;
+				Chromosome child = GeneticOperator::StateCrossover(winners.at(i), winners.at(j), threeMatchesFound);
+				if(threeMatchesFound) 
+				{
+					population.push_back(child);
+					break;
+				}
+			}
+			// If the StateCrossover operator was unsuccesful, keep population size constant
+			if(!threeMatchesFound)
+				population.push_back(GeneticOperator::RandomChromosome());
 		}
 		else // 10% chance
 		{

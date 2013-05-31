@@ -120,6 +120,7 @@ void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTi
 
 static DWORD WINAPI GAThread(LPVOID lpParam)
 {
+	Sleep( 5000 );
 	GAClass* This = (GAClass*)lpParam;
 
 	This->loadGAStatus();
@@ -128,6 +129,7 @@ static DWORD WINAPI GAThread(LPVOID lpParam)
 		std::vector<Chromosome> pop = This->generateInitialPopulation(POP_SIZE);
 		This->db.insertAndReplaceChromosomes(pop);
 		This->status = 1; // 1 = running
+		This->saveGAStatus();
 	}
 	else if (This->status == 1) // 1 = running
 	{
@@ -169,12 +171,11 @@ void GAClass::onStarcraftStart(IEventDataPtr e)
 
 void GAClass::createNextGeneration()
 {
-	static const std::string GENERATION_INPROGRESS_FILENAME = "generating.txt";
 
 	// Check if anybody else is generating a generation
-	std::ifstream fileExists(GENERATION_INPROGRESS_FILENAME.c_str());
+	std::ifstream fileExists(GENERATION_PROGRESS.c_str());
 	if (!fileExists) {
-		std::ofstream myfile (GENERATION_INPROGRESS_FILENAME.c_str());
+		std::ofstream myfile (GENERATION_PROGRESS.c_str());
 		if (myfile.is_open())
 		{
 			myfile.close();
@@ -188,14 +189,14 @@ void GAClass::createNextGeneration()
 		ts.selectAndMutate(pop);
 		db.insertAndReplaceChromosomes(pop);
 
-		remove(GENERATION_INPROGRESS_FILENAME.c_str());
+		remove(GENERATION_PROGRESS.c_str());
 	}
 	else {
 		// Someone else is generating a generation, wait for them to finish
 		while(fileExists) 
 		{
-			Sleep( 1000 );
-			fileExists.open(GENERATION_INPROGRESS_FILENAME.c_str());
+			Sleep( 100000 );
+			fileExists.open(GENERATION_PROGRESS.c_str());
 		}
 	}
 }
@@ -212,30 +213,36 @@ std::vector<Chromosome> GAClass::generateInitialPopulation(int size)
 
 void GAClass::makeGAStatusFile()
 {
-	std::ofstream myfile ("status.txt");
-	if (myfile.is_open())
+	std::ofstream myfile;
+	myfile.open(STATUS_FILE, std::ios::out);
+	while(myfile.is_open() == false)
 	{
+		myfile.open(STATUS_FILE, std::ios::out);
+	}
+
 		myfile << "0\n"; // Status: FirstRun
 		myfile.close();
-	}
 }
 
 void GAClass::saveGAStatus()
 {
 	//std::ostringstream convert;
-
-	std::ofstream myfile ("status.txt");
-	if (myfile.is_open())
+	std::ofstream myfile;
+	myfile.open(STATUS_FILE, std::ios::out);
+	while(myfile.is_open() == false)
 	{
+		myfile.open(STATUS_FILE, std::ios::out);
+	}
+
 		myfile << static_cast<std::ostringstream*>( &(std::ostringstream() << status) )->str() << "\n";
 		myfile.close();
-	}
+	
 }
 
 void GAClass::loadGAStatus()
 {
 	// If there is no state.txt file, we make it
-	std::ifstream fileExists("status.txt");
+	std::ifstream fileExists(STATUS_FILE);
 	if (!fileExists) {
 		makeGAStatusFile();
 	}
@@ -243,7 +250,7 @@ void GAClass::loadGAStatus()
 
 	// Parsing the state.txt file
 	std::string line;
-	std::ifstream myfile ("status.txt");
+	std::ifstream myfile (STATUS_FILE);
 	if (myfile.is_open())
 	{
 		// Read the status of the GA

@@ -10,7 +10,7 @@
 #include "sqlite\sqlite3.h"
 #include "boost/lexical_cast.hpp"
 
-#define SQLITE_FILENAME "sqlite.db"
+#define SQLITE_FILENAME "E:/sharedfolder/sqlite.db"
 
 DatabaseManager::DatabaseManager(void)
 {

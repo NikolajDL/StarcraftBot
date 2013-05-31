@@ -17,7 +17,6 @@ private:
 	int prev_opponentScore;
 	StateExecutor stateExecutor;
 	double fitness(int score, int opponentScore);
-	void saveGAStatus(void);
 	void makeGAStatusFile(void);
 	void changeState(void);
 public:	
@@ -27,6 +26,7 @@ public:
 	Chromosome mChromosome;
 	void createNextGeneration(void);
 	void loadGAStatus(void);
+	void saveGAStatus(void);
 	std::vector<Chromosome> generateInitialPopulation(int size);
 
 	void update(IEventDataPtr e);
