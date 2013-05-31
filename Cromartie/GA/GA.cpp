@@ -12,6 +12,7 @@
 #include "../Settings.h"
 
 
+
 #include <windows.h>
 
 void GAClass::onMorph(IEventDataPtr e)
@@ -99,7 +100,7 @@ void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTi
 
 	Stats::logInidivdualGame(winner, fitness, elapsedTime, BWAPI::Broodwar->self()->getUnitScore(), BWAPI::Broodwar->self()->getKillScore(), BWAPI::Broodwar->self()->getBuildingScore());
 
-	if(db.getCurrentChromosome().getId() == 0)
+	if(db.getCurrentChromosomeID() == 0)
 	{
 		createNextGeneration();
 	}
@@ -118,7 +119,7 @@ void GAClass::update(IEventDataPtr e)
 	}
 }
 
-void GAClass::onStarcraftStart(IEventDataPtr e)
+void GAClass::onStarcraftStart()
 {
 	this->loadGAStatus();
 	if (this->status == 0) // 0 = FirstRun
@@ -144,20 +145,19 @@ void GAClass::createNextGeneration()
 			myfile.close();
 		}
 
-		std::vector<Chromosome> pop = db.selectAllChromosomes();
-		Stats::logPop(pop);
+		// MUTATION STUFF HERE
 
-		// Replace this class if you want another selection aglorithm
-		TournamentSelection ts;
-		ts.selectAndMutate(pop);
-		db.insertAndReplaceChromosomes(pop);
+		while( remove( GENERATION_PROGRESS.c_str() ) != 0 )
+		{
+			Sleep( 1000 );
+		}
 
-		remove(GENERATION_PROGRESS.c_str());
 	}
 	else {
 		// Someone else is generating a generation, wait for them to finish
-		while(fileExists) 
+		while(fileExists.good()) 
 		{
+			fileExists.close();
 			Sleep( 1000 );
 			fileExists.open(GENERATION_PROGRESS.c_str());
 		}

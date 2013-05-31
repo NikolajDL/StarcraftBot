@@ -117,6 +117,8 @@ void Cromartie::onFrame()
 		EQUEUE( new ToggleOrderEvent(Order::SupplyManager) );
 		EQUEUE( new ToggleOrderEvent(Order::TrainWorkers) );
 		EQUEUE( new ToggleOrderEvent(Order::Scout) );
+
+		GA::Instance().onStarcraftStart();
 		
 		//EQUEUE( new ChangeBuildOrderEvent(BuildOrderID::TwoGate));
 		// Debug build
@@ -243,6 +245,6 @@ void Cromartie::registerListeners()
 	// Genetic algorithms
 	ADDLISTENER(&GA::Instance(), &GAClass::onUnitCompleteEvent, UnitCompleteEvent::sk_EventType);
 	ADDLISTENER(&GA::Instance(), &GAClass::onMorph, UnitMorphEvent::sk_EventType); 
-	ADDLISTENER(&GA::Instance(), &GAClass::onStarcraftStart, OnStartEvent::sk_EventType); 
+	//ADDLISTENER(&GA::Instance(), &GAClass::onStarcraftStart, OnStartEvent::sk_EventType); 
 	ADDLISTENER(&GA::Instance(), &GAClass::update, OnUpdateEvent::sk_EventType); 
 }

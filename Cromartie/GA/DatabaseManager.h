@@ -26,11 +26,12 @@ public:
 	void eraseDatabaseContent(void);
 	std::vector<Chromosome> selectAllChromosomes(void);
 	Chromosome getCurrentChromosome(void);
+	int getCurrentChromosomeID(void);
 private:
 	void insertChromosomeNoOpen(Chromosome c);
 	void updateStateNoOpen(State s);
 	Chromosome selectChromosome(int id);
-	int getCurrentChromosomeID(void);
+	
 	sqlite3* db;
 };
 

@@ -30,7 +30,7 @@ public:
 
 	void update(IEventDataPtr e);
 	void onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, int maxElapsedTime);
-	void onStarcraftStart(IEventDataPtr e);
+	void onStarcraftStart();
 	void onUnitCompleteEvent(IEventDataPtr e);
 	void onMorph(IEventDataPtr e);
 };
