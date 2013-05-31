@@ -64,12 +64,18 @@ void DatabaseManager::insertAndReplaceChromosomes(std::vector<Chromosome> c)
 Chromosome DatabaseManager::getCurrentChromosome(void)
 {
 	Chromosome c = selectChromosome(getCurrentChromosomeID());
+	// Ensure that noone else can get OUR chromosome as their chromosome (i.e. avoid multiple executions of the same chromosome)
+	if(c.getId() != 0)
+	{
+		c.setFitness(0);
+		updateChromosome(c);
+	}
 	return c;
 }
 
 int DatabaseManager::getCurrentChromosomeID(void)
 {
-	sqlite3_open(SQLITE_FILENAME, &db);
+	sqlite3_open_v2(SQLITE_FILENAME, &db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, NULL);
 	std::stringstream ss;
 	ss.str("");
 	ss << "SELECT id FROM chromosomes WHERE fitness=-999;";
@@ -88,13 +94,13 @@ int DatabaseManager::getCurrentChromosomeID(void)
 	}
 	sqlite3_finalize(id_stmt);
 
-	sqlite3_close(db);
+	sqlite3_close_v2(db);
 	return id;
 }
 
 Chromosome DatabaseManager::selectChromosome(int id)
 {
-	sqlite3_open(SQLITE_FILENAME, &db);
+	sqlite3_open_v2(SQLITE_FILENAME, &db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, NULL);
 	std::stringstream ss;
 	ss.str("");
 	ss << "SELECT id, fitness FROM chromosomes WHERE id=" << id << ";";
@@ -241,7 +247,7 @@ Chromosome DatabaseManager::selectChromosome(int id)
 	}	
 	
 	sqlite3_finalize(chromosome_stmt);
-	sqlite3_close(db);
+	sqlite3_close_v2(db);
 	return c;
 }
 
@@ -468,6 +474,17 @@ void DatabaseManager::updateChromosome(Chromosome c)
 	std::stringstream ss;
 
 	ss.str("");
+	ss << "BEGIN;";
+	sqlite3_stmt* begin_stmt;
+	sqlite3_prepare_v2(db,
+		ss.str().c_str(),
+		-1,
+		&begin_stmt,
+		0);
+	sqlite3_step(begin_stmt);
+	sqlite3_finalize(begin_stmt);
+
+	ss.str("");
 	ss	<< "UPDATE chromosomes "
 		<< "SET fitness=" << c.getFitness() << " "
 		<< "WHERE id=" << c.getId() << ";";
@@ -480,12 +497,28 @@ void DatabaseManager::updateChromosome(Chromosome c)
 	sqlite3_step(chromosome_stmt);
 	sqlite3_finalize(chromosome_stmt);
 
+	for(int i=0;i<c.getStates().size();i++)
+	{
+		updateStateNoOpen(c.getState(i));
+	}
+
+	ss.str("");
+	ss << "COMMIT;";
+	sqlite3_stmt* commit_stmt;
+	sqlite3_prepare_v2(db,
+		ss.str().c_str(),
+		-1,
+		&commit_stmt,
+		0);
+	sqlite3_step(commit_stmt);
+	sqlite3_finalize(commit_stmt);
+
 	sqlite3_close(db);
 }
 
-void DatabaseManager::updateState(State s)
+void DatabaseManager::updateStateNoOpen(State s)
 {
-	sqlite3_open(SQLITE_FILENAME, &db);
+	//sqlite3_open(SQLITE_FILENAME, &db);
 
 	std::stringstream ss;
 	
@@ -502,7 +535,7 @@ void DatabaseManager::updateState(State s)
 	sqlite3_step(state_stmt);
 	sqlite3_finalize(state_stmt);
 
-	sqlite3_close(db);
+	//sqlite3_close(db);
 }
 
 // If you wanna avoid having a brain aneurysm, avoid reading this method. 

@@ -57,7 +57,6 @@ void GAClass::changeState()
 	{
 		State s = mChromosome.getState(currentStateIndex);
 		s.setFitness(fitness(ScoreHelper::getPlayerScore(), ScoreHelper::getOpponentScore()));
-		db.updateState(s);
 		currentStateIndex++;
 		stateChanges++;
 
@@ -195,10 +194,11 @@ void GAClass::createNextGeneration()
 		// Someone else is generating a generation, wait for them to finish
 		while(fileExists) 
 		{
-			Sleep( 100000 );
+			Sleep( 1000 );
 			fileExists.open(GENERATION_PROGRESS.c_str());
 		}
 	}
+	fileExists.close();
 }
 
 std::vector<Chromosome> GAClass::generateInitialPopulation(int size)

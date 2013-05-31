@@ -23,12 +23,12 @@ public:
 	void insertChromosomes(std::vector<Chromosome> c);
 	void insertAndReplaceChromosomes(std::vector<Chromosome> c);
 	void updateChromosome(Chromosome c);
-	void updateState(State s);
 	void eraseDatabaseContent(void);
 	std::vector<Chromosome> selectAllChromosomes(void);
 	Chromosome getCurrentChromosome(void);
 private:
 	void insertChromosomeNoOpen(Chromosome c);
+	void updateStateNoOpen(State s);
 	Chromosome selectChromosome(int id);
 	int getCurrentChromosomeID(void);
 	sqlite3* db;
