@@ -9,6 +9,7 @@
 #include <iostream>
 #include "sqlite\sqlite3.h"
 #include "boost/lexical_cast.hpp"
+#include <windows.h>
 
 #define SQLITE_FILENAME "E:/sharedfolder/sqlite.db"
 
@@ -25,7 +26,11 @@ DatabaseManager::~DatabaseManager(void)
 
 void DatabaseManager::insertChromosomes(std::vector<Chromosome> c)
 {
-	sqlite3_open(SQLITE_FILENAME, &db);
+	while(sqlite3_open(SQLITE_FILENAME, &db) != SQLITE_OK)
+	{
+		Sleep(1000);
+	}
+
 	std::stringstream ss;
 	ss.str("");
 	ss << "BEGIN;";
@@ -75,7 +80,10 @@ Chromosome DatabaseManager::getCurrentChromosome(void)
 
 int DatabaseManager::getCurrentChromosomeID(void)
 {
-	sqlite3_open_v2(SQLITE_FILENAME, &db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, NULL);
+	while( sqlite3_open_v2(SQLITE_FILENAME, &db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, NULL) != SQLITE_OK)
+	{
+		Sleep(1000);
+	}
 	std::stringstream ss;
 	ss.str("");
 	ss << "SELECT id FROM chromosomes WHERE fitness=-999;";
@@ -100,7 +108,10 @@ int DatabaseManager::getCurrentChromosomeID(void)
 
 Chromosome DatabaseManager::selectChromosome(int id)
 {
-	sqlite3_open_v2(SQLITE_FILENAME, &db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, NULL);
+	while( sqlite3_open_v2(SQLITE_FILENAME, &db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, NULL) != SQLITE_OK)
+	{
+		Sleep(1000);
+	}
 	std::stringstream ss;
 	ss.str("");
 	ss << "SELECT id, fitness FROM chromosomes WHERE id=" << id << ";";
@@ -253,7 +264,10 @@ Chromosome DatabaseManager::selectChromosome(int id)
 
 void DatabaseManager::eraseDatabaseContent(void)
 {
-	sqlite3_open(SQLITE_FILENAME, &db);
+	while( sqlite3_open(SQLITE_FILENAME, &db) != SQLITE_OK)
+	{
+		Sleep(1000);
+	}
 
 	std::stringstream ss;
 
@@ -469,7 +483,10 @@ void DatabaseManager::insertChromosomeNoOpen(Chromosome c)
 
 void DatabaseManager::updateChromosome(Chromosome c)
 {
-	sqlite3_open(SQLITE_FILENAME, &db);
+	while(sqlite3_open(SQLITE_FILENAME, &db) != SQLITE_OK)
+	{
+		Sleep(1000);
+	}
 
 	std::stringstream ss;
 
@@ -542,7 +559,10 @@ void DatabaseManager::updateStateNoOpen(State s)
 // Multiple nested while-loops, no reuse of statements, lots of fun times to be had here.
 std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 {
-	sqlite3_open(SQLITE_FILENAME, &db);
+	while( sqlite3_open(SQLITE_FILENAME, &db) != SQLITE_OK)
+	{
+		Sleep(1000);
+	}
 
 	std::vector<Chromosome> result;
 
