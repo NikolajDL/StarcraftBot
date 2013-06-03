@@ -11,7 +11,7 @@
 #include "boost/lexical_cast.hpp"
 #include <windows.h>
 
-#define SQLITE_FILENAME "E:/sharedfolder/sqlite.db"
+#define SQLITE_FILENAME "C:/sharedfolder/sqlite.db"
 
 DatabaseManager::DatabaseManager(void)
 {

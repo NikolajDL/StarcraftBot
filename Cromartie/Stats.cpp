@@ -16,7 +16,7 @@ void Stats::logPop(std::vector<Chromosome> pop)
 
 	for (size_t i = 0; i < pop.size(); i++)
 	{
-		if (pop.at(i).getFitness() != -999)
+		if (pop.at(i).getFitness() != -999 && pop.at(i).getFitness() != 0)
 		{
 			avgFitness += pop.at(i).getFitness();
 			count++;

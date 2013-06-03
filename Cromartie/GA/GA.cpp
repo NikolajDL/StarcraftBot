@@ -17,6 +17,9 @@
 
 void GAClass::onMorph(IEventDataPtr e)
 {
+	if (dead_run == true)
+		return;
+
 	std::tr1::shared_ptr<UnitMorphEvent> pEventData = std::tr1::static_pointer_cast<UnitMorphEvent>(e);
 	BWAPI::Unit* unit = pEventData->m_Unit;
 
@@ -29,6 +32,9 @@ void GAClass::onMorph(IEventDataPtr e)
 
 void GAClass::onUnitCompleteEvent(IEventDataPtr e)
 {
+	if (dead_run == true)
+		return;
+
 	std::tr1::shared_ptr<UnitCompleteEvent> pEventData = std::tr1::static_pointer_cast<UnitCompleteEvent>(e);
 	BWAPI::Unit* unit = pEventData->m_Unit;
 
@@ -43,6 +49,9 @@ void GAClass::onUnitCompleteEvent(IEventDataPtr e)
 
 void GAClass::changeState()
 {
+	if (dead_run == true)
+		return;
+
 	if(currentStateIndex < CHROMOSOME_LENGTH)
 	{
 		State s = mChromosome.getState(currentStateIndex);
@@ -84,6 +93,9 @@ double GAClass::fitness(int score, int opponentScore)
 
 void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTime, int maxElapsedTime)
 {
+	if (dead_run == true)
+		return;
+
 	double fitness = 0;
 	if (winner)
 	{
@@ -111,6 +123,9 @@ void GAClass::onGameEnd(bool winner, int score, int scoreOpponent, int elapsedTi
 
 void GAClass::update(IEventDataPtr e)
 {
+	if (dead_run == true)
+		return;
+
 	if (stateChanges < 1 )
 	{
 		stateChanges++;
@@ -119,18 +134,40 @@ void GAClass::update(IEventDataPtr e)
 	}
 }
 
+
+
 void GAClass::onStarcraftStart()
 {
-	this->loadGAStatus();
-	if (this->status == 0) // 0 = FirstRun
+	//Sleep(5000);
+	//if(db.getCurrentChromosomeID() == 0)
+	//{
+	//	createNextGeneration();
+	//}
+	std::ifstream fileExists(GENERATION_PROGRESS.c_str());
+	
+	if(fileExists.good()) 
 	{
-		std::vector<Chromosome> pop = this->generateInitialPopulation(POP_SIZE);
-		this->db.insertAndReplaceChromosomes(pop);
-		this->status = 1; // 1 = running
-		this->saveGAStatus();
+		dead_run = true;
 	}
+	fileExists.close();
 
-	this->mChromosome = this->db.getCurrentChromosome();
+	if (dead_run == false)
+	{
+		this->loadGAStatus();
+		if (this->status == 0) // 0 = FirstRun
+		{
+			std::vector<Chromosome> pop = this->generateInitialPopulation(POP_SIZE);
+			this->db.insertAndReplaceChromosomes(pop);
+			this->status = 1; // 1 = running
+				this->saveGAStatus();
+		}
+
+		this->mChromosome = this->db.getCurrentChromosome();
+		//if (this->mChromosome.getStates().size() == 0)
+		//{
+		//	dead_run = true;
+		//}
+	}
 }
 
 
@@ -145,7 +182,13 @@ void GAClass::createNextGeneration()
 			myfile.close();
 		}
 
-		// MUTATION STUFF HERE
+		std::vector<Chromosome> pop = db.selectAllChromosomes();
+		Stats::logPop(pop);
+
+		// Replace this class if you want another selection aglorithm
+		TournamentSelection ts;
+		ts.selectAndMutate(pop);
+		db.insertAndReplaceChromosomes(pop);
 
 		while( remove( GENERATION_PROGRESS.c_str() ) != 0 )
 		{

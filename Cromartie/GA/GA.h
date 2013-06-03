@@ -15,6 +15,7 @@ private:
 	int prev_score;
 	int stateChanges;
 	int prev_opponentScore;
+	bool dead_run;
 	StateExecutor stateExecutor;
 	double fitness(int score, int opponentScore);
 	void makeGAStatusFile(void);
