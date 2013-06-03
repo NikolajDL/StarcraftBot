@@ -12,10 +12,10 @@
 
 #define FRAMECOUNT_LIMIT 24 * 60 * 60
 
-static const std::string GENERATION_PROGRESS = "C:/sharedfolder/generating.txt";
+static const std::string GENERATION_PROGRESS = "E:/sharedfolder/generating.txt";
 
-#define STATUS_FILE  "C:/sharedfolder/status.txt"
+#define STATUS_FILE  "E:/sharedfolder/status.txt"
 
-#define STATS_FOR_EACH_GAME "C:/sharedfolder/statsForEachGame.txt"
+#define STATS_FOR_EACH_GAME "E:/sharedfolder/statsForEachGame.txt"
 
-#define STATS_FOR_EACH_GENERATION "C:/sharedfolder/statsForEachGeneration.txt"
+#define STATS_FOR_EACH_GENERATION "E:/sharedfolder/statsForEachGeneration.txt"

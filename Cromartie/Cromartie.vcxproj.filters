@@ -390,6 +390,7 @@
     <ClCompile Include="GA\State.cpp">
       <Filter>GA\encoding</Filter>
     </ClCompile>
+    <ClCompile Include="FlatFileSerializer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WallTracker.h">
@@ -770,5 +771,6 @@
     <ClInclude Include="GA\State.h">
       <Filter>GA\encoding</Filter>
     </ClInclude>
+    <ClInclude Include="FlatFileSerializer.h" />
   </ItemGroup>
 </Project>

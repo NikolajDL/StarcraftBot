@@ -42,6 +42,7 @@
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="EventRecorder.cpp" />
     <ClCompile Include="ExpansionManager.cpp" />
+    <ClCompile Include="FlatFileSerializer.cpp" />
     <ClCompile Include="GameMemory.cpp" />
     <ClCompile Include="GameProgressDetection.cpp" />
     <ClCompile Include="GatherTask.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="ExpansionManager.h" />
     <ClInclude Include="FastDelegate.h" />
     <ClInclude Include="FastDelegateBind.h" />
+    <ClInclude Include="FlatFileSerializer.h" />
     <ClInclude Include="GameMemory.h" />
     <ClInclude Include="GameProgressDetection.h" />
     <ClInclude Include="GatherTask.h" />
@@ -297,12 +299,12 @@ copy /Y "$(TargetDir)$(TargetName).pdb" "../Starcraft/bwapi-data/AI/$(TargetName
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(BWAPI_DIR)\include\;$(BOOST_DIR)\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
