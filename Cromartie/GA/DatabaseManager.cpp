@@ -26,7 +26,7 @@ DatabaseManager::~DatabaseManager(void)
 
 void DatabaseManager::insertChromosomes(std::vector<Chromosome> c)
 {
-	while(sqlite3_open(SQLITE_FILENAME, &db) != SQLITE_OK)
+	while( sqlite3_open_v2(SQLITE_FILENAME, &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX, NULL) != SQLITE_OK)
 	{
 		Sleep(1000);
 	}
@@ -57,7 +57,7 @@ void DatabaseManager::insertChromosomes(std::vector<Chromosome> c)
 		0);
 	sqlite3_step(commit_stmt);
 	sqlite3_finalize(commit_stmt);
-	sqlite3_close(db);
+	sqlite3_close_v2(db);
 }
 
 void DatabaseManager::insertAndReplaceChromosomes(std::vector<Chromosome> c)
@@ -264,7 +264,7 @@ Chromosome DatabaseManager::selectChromosome(int id)
 
 void DatabaseManager::eraseDatabaseContent(void)
 {
-	while( sqlite3_open(SQLITE_FILENAME, &db) != SQLITE_OK)
+	while( sqlite3_open_v2(SQLITE_FILENAME, &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX, NULL) != SQLITE_OK)
 	{
 		Sleep(1000);
 	}
@@ -370,7 +370,7 @@ void DatabaseManager::eraseDatabaseContent(void)
 	sqlite3_step(commit_stmt);
 	sqlite3_finalize(commit_stmt);
 
-	sqlite3_close(db);
+	sqlite3_close_v2(db);
 }
 
 void DatabaseManager::insertChromosomeNoOpen(Chromosome c)
@@ -483,7 +483,7 @@ void DatabaseManager::insertChromosomeNoOpen(Chromosome c)
 
 void DatabaseManager::updateChromosome(Chromosome c)
 {
-	while(sqlite3_open(SQLITE_FILENAME, &db) != SQLITE_OK)
+	while( sqlite3_open_v2(SQLITE_FILENAME, &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX, NULL) != SQLITE_OK)
 	{
 		Sleep(1000);
 	}
@@ -530,7 +530,7 @@ void DatabaseManager::updateChromosome(Chromosome c)
 	sqlite3_step(commit_stmt);
 	sqlite3_finalize(commit_stmt);
 
-	sqlite3_close(db);
+	sqlite3_close_v2(db);
 }
 
 void DatabaseManager::updateStateNoOpen(State s)
