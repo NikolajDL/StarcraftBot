@@ -559,7 +559,7 @@ void DatabaseManager::updateStateNoOpen(State s)
 // Multiple nested while-loops, no reuse of statements, lots of fun times to be had here.
 std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 {
-	while( sqlite3_open(SQLITE_FILENAME, &db) != SQLITE_OK)
+	while( sqlite3_open_v2(SQLITE_FILENAME, &db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, NULL) != SQLITE_OK)
 	{
 		Sleep(1000);
 	}
@@ -577,13 +577,20 @@ std::vector<Chromosome> DatabaseManager::selectAllChromosomes(void)
 		-1,
 		&chromosome_stmt,
 		0);
-
+		
+	std::vector<int> chromIds;
 	while(sqlite3_step(chromosome_stmt) == SQLITE_ROW)
 	{
-		result.push_back(selectChromosome(sqlite3_column_int(chromosome_stmt, 0)));
-	}	
+		chromIds.push_back(sqlite3_column_int(chromosome_stmt, 0));
+	}
 	
 	sqlite3_finalize(chromosome_stmt);
-	sqlite3_close(db);
+	sqlite3_close_v2(db);
+
+	for(int i=0;i<chromIds.size();i++)
+	{
+		result.push_back(selectChromosome(chromIds.at(i)));
+	}
+
 	return result;
 }
